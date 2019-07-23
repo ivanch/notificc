@@ -1,0 +1,22 @@
+#registry {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control {
+    padding-top: 0.5em;
+}
+
+.submit {
+    padding-top: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
