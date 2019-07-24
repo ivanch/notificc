@@ -16,11 +16,14 @@ There's an API made with Flask which uses Python to check the websites.
 Simply go to the `api` folder and run `python api.py`.
 
 ## to-do:
-* [ ] Improve design
-* [ ] Auto-refresh tags (api and checker)
-* [ ] More checker options
-* [ ] Set credentials and IMAP server within the website
-* [ ] Make it CRUD with SQLite
+* Improve design
+* Ensure integers were put on inputs
+* Make it CRUD with SQLite (50% done)
+* Handle high ping
+* Handle no internet connection
+* Make checker an Object Oriented Thread with Threading Module
+* Auth page
+* Handle errors on the checker thread
 
 
 ###### No danger, it's intended to be self-hosted.

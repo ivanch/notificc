@@ -1,8 +1,12 @@
 {
   "name": "notify-change",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
+    "bloomer-extensions": "0.0.3",
+    "bulma-extensions": "^6.2.7",
+    "bulma-slider": "^2.0.0",
+    "bulma-tooltip": "^2.0.2",
     "react": "^16.8.6",
     "react-bulma-components": "^2.3.0",
     "react-dom": "^16.8.6",

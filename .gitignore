@@ -22,4 +22,6 @@ yarn-error.log*
 
 # API related
 *.log
+*.db
+screenshots
 __pycache__

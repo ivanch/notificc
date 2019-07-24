@@ -7,14 +7,16 @@ import glob
 import sys
 import os
 import configparser
+import urllib.request, json
 
 EMAIL_USER = ""
 EMAIL_PASS = ""
 
-IMAP_SERVER = ""
-IMAP_PORT = -1
+SMTP_SERVER = ""
+SMTP_PORT = -1
+SMTP_TTLS = True
 
-DELAY = -1 # 1 day by default if config doesn't load
+DELAY = 120 # 1 day by default if config doesn't load
 THRESHOLD_PC = 0.05 # difference percentage on the images
 
 def message(title, link):
@@ -24,18 +26,18 @@ def message(title, link):
     # Prepare actual message
     message = """From: %s\r\nTo: %s\r\nSubject: %s\r\n\
 
-    URL aparenta ter mudado:
+    URL seems to have changed:
     %s
 
-    Mensagem Automatica.
-    """ % (FROM, ", ".join(TO), f"Alteracao em '{title}'", link)
+    Automatic Message.
+    """ % (FROM, ", ".join(TO), f"Change in '{title}'", link)
 
     # Send the mail
 
     message = message.encode("ascii", errors="ignore")
 
-    server = smtplib.SMTP(IMAP_SERVER, IMAP_PORT)
-    server.starttls()
+    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    if(SMTP_TTLS): server.starttls()
     server.ehlo()
     server.login(EMAIL_USER, EMAIL_PASS)
     server.sendmail(FROM, TO, message)
@@ -66,12 +68,14 @@ def compare(index):
     # It's not different (or not too different)
     return False
 
-def loop():
+def loop(stop_checker):
     while True:
         try:
             start = time() # to "normalize" time
-            with open("links","r") as file:
-                lines = file.readlines()
+            if(not stop_checker()):
+                data = ""
+                with urllib.request.urlopen("http://localhost:5000/api") as url:
+                    data = json.loads(url.read().decode())
 
                 chrome_options = Options()
                 chrome_options.add_argument("--headless")
@@ -79,18 +83,19 @@ def loop():
                 chrome_options.add_argument("--window-size=1920x1080")
                 driver = webdriver.Chrome(chrome_options=chrome_options)
 
-                for i,link in enumerate(lines):
-                    if(link.startswith("#")): continue
+                for url in data['urls']:
+                    id = url['id']
+                    link = url['url']
 
                     driver.get(link)
                     sleep(1)
-                    driver.get_screenshot_as_file('screenshots/ss-%d.png' % (i))
+                    driver.get_screenshot_as_file('screenshots/ss-%d.png' % (id))
 
-                    r = compare(i)
+                    r = compare(id)
                     if(r): # has changed
                         message(driver.title, link)
 
-                    os.rename("screenshots/ss-%d.png" % (i), "screenshots/old-ss-%d.png" % (i))
+                    os.rename("screenshots/ss-%d.png" % (id), "screenshots/old-ss-%d.png" % (id))
 
                 driver.close()
             t = DELAY - (time() - start)
@@ -99,28 +104,22 @@ def loop():
         except KeyboardInterrupt:
             break
 
-def run():
-    global EMAIL_USER, EMAIL_PASS, IMAP_SERVER, IMAP_PORT, DELAY, THRESHOLD_PC
-    config = configparser.ConfigParser()
-    config.read("config.ini")
+def run(_EMAIL_USER, _EMAIL_PASS, _SMTP_SERVER, _SMTP_PORT, _SMTP_TTLS, stop_checker):
+    global EMAIL_USER, EMAIL_PASS, SMTP_SERVER, SMTP_PORT, SMTP_TTLS
 
     # Load email credentials
-    EMAIL_USER = config['Credentials']['user']
-    EMAIL_PASS = config['Credentials']['password']
-    if(EMAIL_USER == "" or EMAIL_PASS == ""):
+    EMAIL_USER = _EMAIL_USER
+    EMAIL_PASS = _EMAIL_PASS
+    if(EMAIL_USER == "example@example.com" and EMAIL_PASS == "password"):
         print("Credentials not properly set.")
         sys.exit(1)
 
-    # Load IMAP server configuration
-    IMAP_SERVER = config['IMAP']['server']
-    IMAP_PORT = int(config['IMAP']['port'])
-    if(IMAP_SERVER == "" or IMAP_PORT == -1):
-        print("IMAP server not properly set.")
+    SMTP_SERVER = _SMTP_SERVER
+    SMTP_PORT = _SMTP_PORT
+    SMTP_TTLS = True if _SMTP_TTLS == 1 else False
+    if(SMTP_SERVER == "SMTP.server.com" or SMTP_PORT == 80):
+        print("SMTP server not properly set.")
         sys.exit(1)
-    
-    # Load checker configuration
-    DELAY = float(config['Checker']['delay'])
-    THRESHOLD_PC = float(config['Checker']['threshold'])
 
     # Process files
     if(not os.path.isdir("screenshots")):
@@ -129,4 +128,4 @@ def run():
         os.remove(file)
 
     # Start the main loop on a new thread
-    loop()
+    loop(stop_checker)

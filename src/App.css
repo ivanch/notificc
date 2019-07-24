@@ -2,3 +2,12 @@ body {
     color: white;
     background-color: #202020;
 }
+
+.status {
+    padding: 1em;
+    margin-bottom: 0em !important;
+}
+
+#settings {
+    color: white !important;
+}

@@ -2,3 +2,7 @@
     max-width: 50em;
     background-color: white;
 }
+
+.control {
+    text-align: right;
+}
