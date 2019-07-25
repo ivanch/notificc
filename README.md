@@ -24,5 +24,14 @@ Simply go to the `api` folder and run `python api.py`.
 * Handle errors on the checker thread
 * Documentation
 
+## Running
+1. Clone this repo and go to its folder
+2. Run `npm run build` to build the website
+3. Go to the `api` folder, run `python -r requirements.txt`
+4. Run `python api.py` to run the API server. Note that this is required to keep the server running.
+5. Login with `password`.
+6. Once in the index page, go to *Checker Settings* and set everything properly.
+7. Add websites in the *Register a website* form.
+8. Wait until something changes :^)
 
-###### No danger, it's intended to be self-hosted.
+###### It's intended to be self-hosted.

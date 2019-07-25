@@ -1,6 +1,6 @@
 {
   "name": "notify-change",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "bloomer-extensions": "0.0.3",

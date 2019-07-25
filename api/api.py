@@ -126,16 +126,15 @@ def test_email():
     json = request.get_json()
     response_message = "Success"
     response_code = 200
+
     # Prepare the message
     message = """From: %s\r\nTo: %s\r\nSubject: %s\r\n\
 
-    If you're seeing it from your email, everything is properly defined!
+    If you're seeing this from your email, everything is properly defined!
 
     Automatic Message.
     """ % (json['user'], json['user'], "Notify Change email test!")
     message = message.encode("ascii", errors="ignore")
-
-    print(message)
 
     # Configure SMTP server
     try:
@@ -257,9 +256,7 @@ def setup():
 if __name__ == "__main__":
     setup()
 
-    if(checker_thread is not None):
-        checker_thread.start()
-        pass
+    checker_thread.start()
     app.run()
     
     conn.close()

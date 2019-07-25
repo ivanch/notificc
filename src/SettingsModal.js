@@ -73,6 +73,12 @@ export default class SettingsModal extends Component {
                 SMTP_ttls: this.state.SMTP_ttls,
             })
         })
+        .then(_response => _response.json())
+        .then(response => {
+            if(response['message'] !== 'Success'){
+                alert("Server has returned an error: " + response['message'] + "("+response['statusCode']+")");
+            }
+        })
         .catch(() => {
             alert("Some undefined error has occurred.");
         });
