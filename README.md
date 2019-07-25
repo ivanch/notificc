@@ -18,12 +18,11 @@ Simply go to the `api` folder and run `python api.py`.
 ## to-do:
 * Improve design
 * Ensure integers were put on inputs
-* Make it CRUD with SQLite (50% done)
 * Handle high ping
 * Handle no internet connection
 * Make checker an Object Oriented Thread with Threading Module
-* Auth page
 * Handle errors on the checker thread
+* Documentation
 
 
 ###### No danger, it's intended to be self-hosted.

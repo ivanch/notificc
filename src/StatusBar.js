@@ -8,11 +8,31 @@ export default class StatusBar extends Component {
 
         this.state = {
             settings: false,
+            auth: false,
         };
     };
 
+    handleLogout() {
+        fetch('http://localhost:5000/api/auth/token', {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: localStorage.getItem('@notify-change/access_token'),
+            })
+        });
+        localStorage.removeItem('@notify-change/access_token');
+        window.location.reload(false);
+    }
+
     handleClick = (event) => {
-        this.setState({[event.target.name]: true});
+        if([event.target.name] === 'logout'){
+            window.location.reload(false);
+        }else{
+            this.setState({[event.target.name]: true});   
+        }
     }
 
     handleClose = () => {
@@ -69,7 +89,13 @@ export default class StatusBar extends Component {
                 </div>
         
                 <div className="level-right">
-                    <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.api_status === 'offline' ? true : false}>Checker Settings</button>
+                    <div className="level-item">
+                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.api_status === 'offline' ? true : false}>Logout</button>
+                    </div>
+
+                    <div className="level-item">
+                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.api_status === 'offline' ? true : false}>Checker Settings</button>
+                    </div>
                 </div>
 
                 <SettingsModal active={this.state.settings} handleClose={this.handleClose} api_status={this.props.api_status}/>

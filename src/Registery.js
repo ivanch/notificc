@@ -16,7 +16,7 @@ export default class Registery extends Component {
     handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
 
-        if([event.target.name] == 'url'){
+        if([event.target.name] === 'url'){
             this.setState({
                 wrong_url: !(event.target.value.startsWith("http://") ||
                             event.target.value.startsWith("https://") ||

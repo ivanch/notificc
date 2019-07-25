@@ -9,6 +9,8 @@ import sqlite3
 import os
 import glob
 import smtplib
+import string
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -25,6 +27,12 @@ def exists(url):
         if(len(cursor.fetchall()) > 0):
             return True
         return False
+
+def register_token(token):
+    with sqlite3.connect('data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO tokens (token) VALUES (?);", (token,))
+        conn.commit()
   
 @app.route('/api', methods=['GET'])
 def main():
@@ -150,8 +158,59 @@ def test_email():
     return jsonify(message=response_message,
                 statusCode=response_code), response_code
 
+@app.route('/api/auth/token', methods=['POST'])
+def token_is_valid():
+    json = request.get_json()
+
+    with sqlite3.connect('data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tokens WHERE token = ?;", (json['token'],))
+        result = cursor.fetchone()
+
+        if(result == None):
+            return jsonify(message="Unauthorized",
+                    statusCode=200), 200
+        else:
+            return jsonify(message="Authorized",
+                        statusCode=200), 200
+
+@app.route('/api/auth/token', methods=['DELETE'])
+def token_delete():
+    json = request.get_json()
+
+    with sqlite3.connect('data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM tokens WHERE token = ?;", (json['token'],))
+        conn.commit()
+
+    return jsonify(message="Success",
+                statusCode=200), 200
+
+@app.route('/api/auth/password', methods=['POST'])
+def password_is_valid():
+    json = request.get_json()
+
+    with sqlite3.connect('data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM config;")
+        result = cursor.fetchone()
+
+        letters = string.ascii_lowercase
+        token = ''.join(random.choice(letters) for i in range(10))
+
+        register_token(token)
+
+        if(result[6] == json['password']):
+            return jsonify(message="Authorized",
+                            token=token,
+                            statusCode=200), 200
+        else:
+            return jsonify(message="Unauthorized",
+                            statusCode=200), 200
+
 def setup():
     global checker_thread
+
     # Setup databaset, if new
     if(not os.path.isfile("data.db")):
         conn = sqlite3.connect('data.db')
@@ -170,12 +229,22 @@ def setup():
                 password TEXT,\
                 SMTP_server TEXT,\
                 SMTP_port INTEGER,\
-                SMTP_ttls INTEGER);")
+                SMTP_ttls INTEGER,\
+                auth_pass TEXT);")
         
-        cursor.execute("INSERT INTO config  (id, user, password, SMTP_server , SMTP_port, SMTP_ttls) \
-                        VALUES              (0 , 'example@example.com', 'password', 'SMTP.server.com', 80, 1);")
+        cursor.execute("CREATE TABLE tokens (\
+                token TEXT NOT NULL PRIMARY KEY);")
+        
+        cursor.execute("INSERT INTO config  (id, user, password, SMTP_server , SMTP_port, SMTP_ttls, auth_pass) \
+                        VALUES              (0 , 'example@example.com', 'password', 'SMTP.server.com', 80, 1, 'password');")
         conn.commit()
-
+    else:
+        # Reset all access tokens
+        with sqlite3.connect('data.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM tokens;")
+            conn.commit()
+    
     # Setup checker variables
     with sqlite3.connect('data.db') as conn:
         cursor = conn.cursor()

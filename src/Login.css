@@ -1,0 +1,29 @@
+#auth {
+    background-color: white;
+    border-radius: 5px;
+    padding: 2em;
+    color: black;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    max-width: 30%;
+    margin: 10em auto;
+}
+
+#head {
+    text-align: center;
+    font-size: 2em;
+}
+
+.tag-compact {
+    max-height: 1.5em;
+    margin-bottom: -1em !important;
+}
+
+.tags-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
