@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom'
 import "react-bulma-components/full";
 import "bloomer-extensions";
 
+import API_URL from './config';
+
 import './App.css'
 import List from './List.js'
 import Registery from './Registery.js'
@@ -13,7 +15,6 @@ export default class App extends Component {
         super(props);
 
         this.state = {
-            data: null,
             api_status: 'offline',
             checker_status: 'offline',
             settings: false,
@@ -24,7 +25,6 @@ export default class App extends Component {
 
     componentDidMount() {
         this.fetch_api();
-        this.fetch_auth();
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -34,7 +34,7 @@ export default class App extends Component {
     }
 
     fetch_auth() {
-        fetch('http://localhost:5000/api/auth/token', {
+        fetch(API_URL + '/api/auth/token', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -44,29 +44,28 @@ export default class App extends Component {
                 token: localStorage.getItem('@notify-change/access_token'),
             })
         })
-            .then(_response => _response.json())
-            .then(response => {
-                this.setState({auth: response['message'] === 'Authorized'});
-            });
+        .then(_response => _response.json())
+        .then(response => {
+            this.setState({auth: response['message'] === 'Authorized'});
+        });
     }
 
     async fetch_api() {
-        fetch('http://localhost:5000/api')
-            .then(_response => _response.json())
-            .then(response => {
-                this.setState({ data: response['urls'] });
-                if(response != null){
-                    this.setState({api_status: 'online'});
-                    this.setState({checker_status: response['checker_status']});
-                }else{
-                    this.setState({api_status: 'offline'});
-                    this.setState({checker_status: 'offline'});
-                }
-            })
-            .catch(() => {
+        fetch(API_URL + '/api/status')
+        .then(_response => _response.json())
+        .then(response => {
+            if(response != null){
+                this.setState({api_status: 'online'});
+                this.setState({checker_status: response['checker_status']});
+            }else{
                 this.setState({api_status: 'offline'});
                 this.setState({checker_status: 'offline'});
-            });
+            }
+        })
+        .catch(() => {
+            this.setState({api_status: 'error'});
+            this.setState({checker_status: 'offline'});
+        });
     }
 
     render() {
@@ -80,12 +79,10 @@ export default class App extends Component {
                 <StatusBar api_status={this.state.api_status} checker_status={this.state.checker_status}/>
                 <div className="columns is-multiline">
                     <div className="column is-half">
-                        <Registery api_status={this.state.api_status === 'online' ? true : false}/>
+                        <Registery api_status={this.state.api_status}/>
                     </div>
                     <div className="column is-half">
-                        {this.state.api_status === 'online' ? 
-                            <List data={this.state.data}/> : null
-                        }
+                        <List api_status={this.state.api_status}/>
                     </div>
                 </div>
             </div>

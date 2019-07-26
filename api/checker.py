@@ -1,7 +1,7 @@
 from time import sleep, time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import smtplib
+import sqlite3
 import cv2
 import glob
 import sys
@@ -30,7 +30,7 @@ def message(title, link):
     %s
 
     Automatic Message.
-    """ % (FROM, ", ".join(TO), f"Change in '{title}'", link)
+    """ % (FROM, ", ".join(TO), "Change in '%s'" % (title), link)
 
     # Send the mail
 
@@ -42,6 +42,17 @@ def message(title, link):
     server.login(EMAIL_USER, EMAIL_PASS)
     server.sendmail(FROM, TO, message)
     server.close()
+
+def get_websites():
+    urls = []
+    with sqlite3.connect('data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM urls")
+        results = cursor.fetchall()
+        
+        for result in results:
+            urls.append({'id':result[0], 'url':result[1], 'enabled': True if result[4] == 1 else False})
+    return urls
 
 # Check if 2 images are different
 def compare(index):
@@ -73,9 +84,7 @@ def loop(stop_checker):
         try:
             start = time() # to "normalize" time
             if(not stop_checker()):
-                data = ""
-                with urllib.request.urlopen("http://localhost:5000/api") as url:
-                    data = json.loads(url.read().decode())
+                urls = get_websites()
 
                 chrome_options = Options()
                 chrome_options.add_argument("--headless")
@@ -83,7 +92,7 @@ def loop(stop_checker):
                 chrome_options.add_argument("--window-size=1920x1080")
                 driver = webdriver.Chrome(chrome_options=chrome_options)
 
-                for url in data['urls']:
+                for url in urls:
                     id = url['id']
                     link = url['url']
 

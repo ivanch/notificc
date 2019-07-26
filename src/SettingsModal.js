@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import API_URL from './config';
 
 import './SettingsModal.css';
 
@@ -22,14 +23,14 @@ export default class SettingsModal extends Component {
     }
       
     fetchData() {
-        fetch('http://localhost:5000/api/config')
-            .then(_response => _response.json())
-            .then(response => {
-                if(response != null){
-                    this.setState({user: response['user'], SMTP_server: response['SMTP_server'], SMTP_port: response['SMTP_port']})
-                }
-                console.log(response);
-            });
+        fetch(API_URL + '/api/config')
+        .then(_response => _response.json())
+        .then(response => {
+            if(response != null){
+                this.setState({user: response['user'], SMTP_server: response['SMTP_server'], SMTP_port: response['SMTP_port']})
+            }
+            console.log(response);
+        });
     }   
 
     handleChange = (event) => {
@@ -41,7 +42,7 @@ export default class SettingsModal extends Component {
     }
 
     handleSubmit = () => {
-        fetch('http://localhost:5000/api/config', {
+        fetch(API_URL + '/api/config', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -54,12 +55,13 @@ export default class SettingsModal extends Component {
                 SMTP_port: this.state.SMTP_port,
                 SMTP_ttls: this.state.SMTP_ttls,
             })
+        }).then().then(() => {
+            this.props.handleClose();
         });
-        this.props.handleClose();
     }
 
     handleTest = () => {
-        fetch('http://localhost:5000/api/test', {
+        fetch(API_URL + '/api/config/test', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -132,7 +134,6 @@ export default class SettingsModal extends Component {
                                                 className="button is-info tooltip is-tooltip-left"
                                                 data-tooltip="Test your configuration before submitting it."
                                                 onClick={this.handleTest}
-                                                disabled={this.props.api_status === 'offline' ? true : false}
                                             >
                                                 Email test
                                             </button>
@@ -142,7 +143,7 @@ export default class SettingsModal extends Component {
                             </div>
                             
                             <div className="submit control">
-                                <button className="button is-primary" onClick={this.handleSubmit} disabled={this.props.api_status === 'offline' ? true : false}>Submit</button>
+                                <button className="button is-primary" onClick={this.handleSubmit}>Submit</button>
                             </div>
                         </div>
                     </div>

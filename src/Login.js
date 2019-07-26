@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
+import API_URL from './config';
 
-import './Login.css'
+import './Login.css';
 
 export default class Login extends Component {
     constructor(props) {
@@ -20,18 +21,16 @@ export default class Login extends Component {
     };
 
     async fetch_api() {
-        fetch('http://localhost:5000/api')
-            .then(_response => _response.json())
-            .then(response => {
-                if(response != null){
-                    this.setState({api_status: true});
-                }else{
-                    this.setState({api_status: false});
-                }
-            })
-            .catch(() => {
-                this.setState({api_status: false});
-            });
+        fetch(API_URL + '/api/status')
+        .then(_response => _response.json())
+        .then(response => {
+            if(response != null){
+                this.setState({api_status: 'online'});
+            }else{
+                this.setState({api_status: 'offline'});
+            }
+        })
+        .catch(error => console.error(error));
     }
 
     handleChange = (event) => {
@@ -39,7 +38,7 @@ export default class Login extends Component {
     }
 
     handleLogin = () => {
-        fetch('http://localhost:5000/api/auth/password', {
+        fetch(API_URL + '/api/auth/password', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -67,10 +66,12 @@ export default class Login extends Component {
         }
 
         let api_tag;
-        if(this.state.api_status){
+        if(this.state.api_status === 'online'){
             api_tag = <span className="tag is-success tag-compact">online</span>;
-        }else{
+        }else if(this.state.api_status === 'offline'){
             api_tag = <span className="tag is-danger tag-compact">offline</span>;
+        }else{
+            api_tag = <span className="tag is-black tag-compact">error</span>;
         }
 
         return (
@@ -88,7 +89,7 @@ export default class Login extends Component {
                     </div>
 
                     <div className="submit control">
-                        <button className="button is-primary" onClick={this.handleLogin} disabled={!this.state.api_status}>Login</button>
+                        <button className="button is-primary" onClick={this.handleLogin} disabled={this.state.api_status !== 'online'}>Login</button>
                     </div>
                 </div>
             </div>

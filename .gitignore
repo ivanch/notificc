@@ -25,3 +25,4 @@ yarn-error.log*
 *.db
 screenshots
 __pycache__
+*.sock

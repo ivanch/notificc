@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import API_URL from './config';
 
 import SettingsModal from './SettingsModal.js'
+
 
 export default class StatusBar extends Component {
     constructor(props) {
@@ -13,7 +15,7 @@ export default class StatusBar extends Component {
     };
 
     handleLogout() {
-        fetch('http://localhost:5000/api/auth/token', {
+        fetch(API_URL + '/api/auth/token', {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -22,9 +24,10 @@ export default class StatusBar extends Component {
             body: JSON.stringify({
                 token: localStorage.getItem('@notify-change/access_token'),
             })
+        }).then().then(() => {
+            localStorage.removeItem('@notify-change/access_token');
+            window.location.reload(false);
         });
-        localStorage.removeItem('@notify-change/access_token');
-        window.location.reload(false);
     }
 
     handleClick = (event) => {
@@ -39,32 +42,38 @@ export default class StatusBar extends Component {
         this.setState({settings: false});
     }
 
-    handleClickChecker = () => {
-        fetch('http://localhost:5000/api/turn_checker', {
+    handleClickChecker() {
+        fetch(API_URL + '/api/checker', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-        }).catch(() => {
-            alert("Error while trying to turn the checker on/off.");
+        })
+        .then()
+        .then(() => {
+            window.location.reload(false);
+        })
+        .catch(error => {
+            alert("Error: " + error);
         });
-        window.location.reload(false);
     };
 
     render(){
         let api_tag;
         if(this.props.api_status === 'online'){
             api_tag = <span className="tag is-success">online</span>;
-        }else{
+        }else if(this.props.api_status === 'offline'){
             api_tag = <span className="tag is-danger">offline</span>;
+        }else{
+            api_tag = <span className="tag is-black">error</span>;
         }
 
         let checker_tag;
         if(this.props.checker_status === 'error'){
             checker_tag = <span className="tag is-black">error</span>;
         }else if(this.props.checker_status === 'offline'){
-            checker_tag = <span className="tag is-danger">offline</span>;
+            checker_tag = <span className="tag is-danger" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>offline</span>;
         }else if(this.props.checker_status === 'stopped'){
             checker_tag = <span className="tag is-light" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>stopped</span>;
         }else if(this.props.checker_status === 'online'){
@@ -90,15 +99,15 @@ export default class StatusBar extends Component {
         
                 <div className="level-right">
                     <div className="level-item">
-                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.api_status === 'offline' ? true : false}>Logout</button>
+                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.api_status === 'online' ? false : true}>Logout</button>
                     </div>
 
                     <div className="level-item">
-                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.api_status === 'offline' ? true : false}>Checker Settings</button>
+                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.api_status === 'online' ? false : true}>Checker Settings</button>
                     </div>
                 </div>
 
-                <SettingsModal active={this.state.settings} handleClose={this.handleClose} api_status={this.props.api_status}/>
+                <SettingsModal active={this.state.settings} handleClose={this.handleClose}/>
             </nav>
         )
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import API_URL from './config';
 
-import './Registery.css'
+import './Registery.css';
 
 export default class Registery extends Component {
     constructor(props) {
@@ -11,22 +12,22 @@ export default class Registery extends Component {
             thresh: '5',
             wrong_url: false,
         };
-    };
+    }
 
     handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
 
-        if([event.target.name] === 'url'){
+        if(event.target.name === 'url'){
             this.setState({
                 wrong_url: !(event.target.value.startsWith("http://") ||
                             event.target.value.startsWith("https://") ||
                             event.target.value.includes(" "))
             });
         }
-    };
+    }
   
     handleSubmit = (event) => {
-        fetch('http://localhost:5000/api', {
+        fetch(API_URL + '/api/websites', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -36,17 +37,28 @@ export default class Registery extends Component {
                 url: this.state.url,
                 threshold: parseInt(this.state.thresh),
             })
-        }).then(response => response.json())
-          .then(response => {
-                if(response['message'] === 'Success'){
-                    window.location.reload(false);
-                }else if(response['message'] === 'Exists'){
-                    alert("Website is already registered!");
-                }else{
-                    alert("Unknown error.");
-                }
-          });
-    };
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response['message'] === 'Success'){
+                window.location.reload(false);
+            }else if(response['message'] === 'Exists'){
+                alert("Website is already registered!");
+            }else{
+                alert("Unknown error.");
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
+
+    is_valid() {
+        if(this.state.wrong_url === true) return false;
+        if(this.state.url === '') return false;
+        if(this.props.api_status !== 'online') return false;
+        return true;
+    }
 
     render() {
         return (
@@ -74,7 +86,7 @@ export default class Registery extends Component {
                     </div>
                     
                     <div className="submit control">
-                        <button className="button is-primary" onClick={this.handleSubmit} disabled={(!this.props.api_status || this.state.wrong_url)}>Submit</button>
+                        <button className="button is-primary" onClick={this.handleSubmit} disabled={!(this.is_valid())}>Submit</button>
                     </div>
                 </div>
             </div>
