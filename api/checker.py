@@ -2,6 +2,7 @@ from time import sleep, time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import sqlite3
+import smtplib
 import cv2
 import glob
 import sys
@@ -20,6 +21,9 @@ DELAY = 120 # 1 day by default if config doesn't load
 THRESHOLD_PC = 0.05 # difference percentage on the images
 
 def message(title, link):
+    if(EMAIL_USER == "example@example.com"):
+        return
+
     FROM = EMAIL_USER
     TO = [EMAIL_USER] # must be a list
 
@@ -119,16 +123,10 @@ def run(_EMAIL_USER, _EMAIL_PASS, _SMTP_SERVER, _SMTP_PORT, _SMTP_TTLS, stop_che
     # Load email credentials
     EMAIL_USER = _EMAIL_USER
     EMAIL_PASS = _EMAIL_PASS
-    if(EMAIL_USER == "example@example.com" and EMAIL_PASS == "password"):
-        print("Credentials not properly set.")
-        sys.exit(1)
 
     SMTP_SERVER = _SMTP_SERVER
     SMTP_PORT = _SMTP_PORT
     SMTP_TTLS = True if _SMTP_TTLS == 1 else False
-    if(SMTP_SERVER == "SMTP.server.com" or SMTP_PORT == 80):
-        print("SMTP server not properly set.")
-        sys.exit(1)
 
     # Process files
     if(not os.path.isdir("screenshots")):

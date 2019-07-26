@@ -47,15 +47,15 @@ export default class Login extends Component {
             body: JSON.stringify({
                 password: this.state.password,
             })
-        }).then(_response => _response.json())
-          .then(data => {
-                console.log(data);
-                if(data['message'] === 'Authorized'){
-                    localStorage.setItem('@notify-change/access_token', data['token']);
-                    this.setState({auth: true});
-                }else{
-                    alert("Wrong password!");
-                }
+        })
+        .then(_response => _response.json())
+        .then(data => {
+            if(data['message'] === 'Authorized'){
+                localStorage.setItem('@notify-change/access_token', data['token']);
+                this.setState({auth: true});
+            }else{
+                alert("Wrong password!");
+            }
         });
     }
 

@@ -23,19 +23,6 @@ checker_thread = None
 stop_checker = True
 
 
-def setup_checker():
-    global checker_thread
-
-    # Setup checker variables
-    with sqlite3.connect('data.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM config;")
-        result = cursor.fetchone()
-        
-        checker_thread = threading.Thread(target=checker.run, args=(result[1], result[2], result[3], result[4], result[5], lambda : stop_checker))
-        checker_thread.daemon = True
-
-
 @app.route('/api/status', methods=['GET'])
 def main():
     global stop_checker
@@ -62,7 +49,12 @@ def turn_checker():
     return jsonify(message="Success",
                 statusCode=200), 200
 
+@app.before_first_request
 def setup():
+    setup_db()
+    setup_checker()
+
+def setup_db():
     # Setup databaset, if new
     if(not os.path.isfile("data.db")):
         conn = sqlite3.connect('data.db')
@@ -98,11 +90,20 @@ def setup():
             cursor.execute("DELETE FROM tokens;")
             conn.commit()
         '''
-    
-    setup_checker()
 
-if __name__ == "__main__":
-    setup()
+def setup_checker():
+    global checker_thread, stop_checker
+
+    # Setup checker variables
+    with sqlite3.connect('data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM config;")
+        result = cursor.fetchone()
+        
+        checker_thread = threading.Thread(target=checker.run, args=(result[1], result[2], result[3], result[4], result[5], lambda : stop_checker))
+        checker_thread.daemon = True
+
     checker_thread.start()
-    
+
+if __name__ == "__main__":    
     app.run()

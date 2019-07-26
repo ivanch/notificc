@@ -2,7 +2,4 @@ flask
 flask_cors
 opencv-python
 selenium
-ndg-httpsclient
-pyopenssl
-pyasn1
 uwsgi
