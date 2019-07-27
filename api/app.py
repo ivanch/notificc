@@ -42,7 +42,6 @@ def turn_checker():
 
     if(not checker_thread.is_alive()):
         setup_checker()
-        checker_thread.start()
         stop_checker = False
     else:
         stop_checker = False if stop_checker else True
@@ -56,8 +55,8 @@ def setup():
 
 def setup_db():
     # Setup databaset, if new
-    if(not os.path.isfile("data.db")):
-        conn = sqlite3.connect('data.db')
+    if(not os.path.isfile("data/data.db")):
+        conn = sqlite3.connect('data/data.db')
         cursor = conn.cursor()
 
         cursor.execute("CREATE TABLE urls (\
@@ -85,7 +84,7 @@ def setup_db():
     else:
         # Reset all access tokens
         '''
-        with sqlite3.connect('data.db') as conn:
+        with sqlite3.connect('data/data.db') as conn:
             cursor = conn.cursor()
             cursor.execute("DELETE FROM tokens;")
             conn.commit()
@@ -95,7 +94,7 @@ def setup_checker():
     global checker_thread, stop_checker
 
     # Setup checker variables
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()

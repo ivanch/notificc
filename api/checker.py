@@ -1,9 +1,9 @@
 from time import sleep, time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import sqlite3
 import smtplib
-import cv2
+from PIL import Image
+import numpy as np
 import glob
 import sys
 import os
@@ -49,7 +49,7 @@ def message(title, link):
 
 def get_websites():
     urls = []
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM urls")
         results = cursor.fetchall()
@@ -59,11 +59,14 @@ def get_websites():
     return urls
 
 # Check if 2 images are different
-def compare(index):
-    new = cv2.imread('screenshots/ss-%d.png' % (index))
-    old = cv2.imread('screenshots/old-ss-%d.png' % (index))
-
+def compare(index):    
     if(not os.path.isfile('screenshots/old-ss-%d.png' % (index))): return False
+
+    new = Image.open('screenshots/ss-%d.png' % (index))
+    old = Image.open('screenshots/old-ss-%d.png' % (index))
+
+    new = np.array(new)
+    old = np.array(old)
 
     if(len(new) != len(old)): return True
     if(len(new[0]) != len(old[0])): return True
@@ -89,12 +92,9 @@ def loop(stop_checker):
             start = time() # to "normalize" time
             if(not stop_checker()):
                 urls = get_websites()
-
-                chrome_options = Options()
-                chrome_options.add_argument("--headless")
-                chrome_options.add_argument("--no-sandbox")
-                chrome_options.add_argument("--window-size=1920x1080")
-                driver = webdriver.Chrome(chrome_options=chrome_options)
+                
+                driver = webdriver.PhantomJS()
+                driver.set_window_size(1920, 1080)
 
                 for url in urls:
                     id = url['id']

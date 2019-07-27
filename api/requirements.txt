@@ -1,5 +1,6 @@
+numpy
 flask
 flask_cors
-opencv-python
+pillow
 selenium
 uwsgi

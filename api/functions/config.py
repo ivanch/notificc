@@ -9,7 +9,7 @@ config = Blueprint('config', __name__)
 
 @config.route('/api/config', methods=['GET'])
 def config_get():
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
@@ -21,7 +21,7 @@ def config_get():
 @config.route('/api/config', methods=['PUT'])
 def config_update():
     json = request.get_json()
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("UPDATE config SET user = ?, password = ?, SMTP_server = ?, SMTP_port = ?, SMTP_ttls = ? WHERE id = 0;",
                         (json['user'], json['password'], json['SMTP_server'], json['SMTP_port'], int(json['SMTP_ttls'])))

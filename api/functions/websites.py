@@ -7,7 +7,7 @@ import glob
 websites = Blueprint('websites', __name__)
 
 def exists(url):
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT id FROM urls WHERE url = ?", (url,))
 
@@ -18,7 +18,7 @@ def exists(url):
 @websites.route('/api/websites', methods=['GET'])
 def websites_get():
     response = []
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM urls")
         results = cursor.fetchall()
@@ -34,7 +34,7 @@ def websites_register():
     threshold = json['threshold']
 
     if(not exists(url)):
-        with sqlite3.connect('data.db') as conn:
+        with sqlite3.connect('data/data.db') as conn:
             cursor = conn.cursor()
             cursor.execute("INSERT INTO urls (url , interval, threshold , enabled) \
                             VALUES           (?   , 120     , ?         , 1);", (url, threshold))
@@ -50,7 +50,7 @@ def websites_register():
 def websites_delete():
     json = request.get_json()
 
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("DELETE FROM urls WHERE id = ?", (json['id'],))
         conn.commit()

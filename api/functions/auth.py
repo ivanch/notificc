@@ -7,7 +7,7 @@ import random
 auth = Blueprint('auth', __name__)
 
 def register_token(token):
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO tokens (token) VALUES (?);", (token,))
         conn.commit()
@@ -16,7 +16,7 @@ def register_token(token):
 def token_auth():
     json = request.get_json()
 
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM tokens WHERE token = ?;", (json['token'],))
         result = cursor.fetchone()
@@ -32,7 +32,7 @@ def token_auth():
 def token_delete():
     json = request.get_json()
 
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("DELETE FROM tokens WHERE token = ?;", (json['token'],))
         conn.commit()
@@ -44,7 +44,7 @@ def token_delete():
 def password_auth():
     json = request.get_json()
 
-    with sqlite3.connect('data.db') as conn:
+    with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()

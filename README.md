@@ -9,12 +9,12 @@
 * Make checker an Object Oriented Thread with Threading Module
 * Handle errors on the checker thread
 * Documentation
-* Change to Pillow instead of OpenCV
 * Lower the Docker image size
 
 ## Usage (Docker)
-1. Pull the docker image (todo)
-2. Run with `docker run -d -p 8000:80 -p 8080:8080 joseivanchechen/notify-change`
+1. Pull the docker image `docker pull joseivanchechen/notify-change:latest`
+2. Create a docker volume with `docker volume create notify-api`
+3. Create a container and run it with `docker run -d -p 8000:80 -p 8080:8080 -v notify-api:/opt/api/data --name notify joseivanchechen/notify-change`
 
 Access the page at [http://localhost:8000](http://localhost:8000). Port 8080 is where the API will provide/get information.
 
