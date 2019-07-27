@@ -1,4 +1,12 @@
 node_modules
 src
 public
-data.db
+*.db
+.DS_Store
+.env.*
+*.md
+*.log
+*.old
+screenshots
+__pycache__
+*.sock

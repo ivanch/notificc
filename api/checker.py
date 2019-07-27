@@ -17,8 +17,7 @@ SMTP_SERVER = ""
 SMTP_PORT = -1
 SMTP_TTLS = True
 
-DELAY = 120 # 1 day by default if config doesn't load
-THRESHOLD_PC = 0.05 # difference percentage on the images
+DELAY = 120 # 2 minutes by default
 
 def message(title, link):
     if(EMAIL_USER == "example@example.com"):
@@ -55,11 +54,12 @@ def get_websites():
         results = cursor.fetchall()
         
         for result in results:
-            urls.append({'id':result[0], 'url':result[1], 'enabled': True if result[4] == 1 else False})
+            if(result[4] == 1): # if the url is enabled
+                urls.append({'id': result[0], 'url': result[1], 'threshold': result[3]})
     return urls
 
 # Check if 2 images are different
-def compare(index):    
+def compare(index, thresh):    
     if(not os.path.isfile('screenshots/old-ss-%d.png' % (index))): return False
 
     new = Image.open('screenshots/ss-%d.png' % (index))
@@ -68,19 +68,21 @@ def compare(index):
     new = np.array(new)
     old = np.array(old)
 
-    if(len(new) != len(old)): return True
-    if(len(new[0]) != len(old[0])): return True
-
     # Limit the height to 1080px
     if(len(new) > 1080):
         new = new[:1080]
         old = old[:1080]
 
+    if(len(new) != len(old)): return True
+    if(len(new[0]) != len(old[0])): return True
+
     count = 0
     for i in range(len(new)):
         for j in range(len(old[i])):
             if(all(new[i,j] != old[i,j])): count += 1
-    diff_max = (len(new)*len(new[0]))*THRESHOLD_PC
+    diff_max = (len(new)*len(new[0]))*(thresh/100)
+
+    print(thresh/100, count)
     if(count > diff_max): return True
 
     # It's not different (or not too different)
@@ -102,31 +104,38 @@ def loop(stop_checker):
 
                     driver.get(link)
                     sleep(1)
-                    driver.get_screenshot_as_file('screenshots/ss-%d.png' % (id))
+                    driver.save_screenshot('screenshots/ss-%d.png' % (id))
 
-                    r = compare(id)
+                    r = compare(id, url['threshold'])
                     if(r): # has changed
                         message(driver.title, link)
 
                     os.rename("screenshots/ss-%d.png" % (id), "screenshots/old-ss-%d.png" % (id))
 
-                driver.close()
+                driver.quit()
             t = DELAY - (time() - start)
             if(t < 0): t = 0
             sleep(t)
         except KeyboardInterrupt:
             break
 
-def run(_EMAIL_USER, _EMAIL_PASS, _SMTP_SERVER, _SMTP_PORT, _SMTP_TTLS, stop_checker):
-    global EMAIL_USER, EMAIL_PASS, SMTP_SERVER, SMTP_PORT, SMTP_TTLS
+def run(stop_checker):
+    global EMAIL_USER, EMAIL_PASS, SMTP_SERVER, SMTP_PORT, SMTP_TTLS, DELAY
+
+    with sqlite3.connect('data/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM config;")
+        result = cursor.fetchone()
 
     # Load email credentials
-    EMAIL_USER = _EMAIL_USER
-    EMAIL_PASS = _EMAIL_PASS
+    EMAIL_USER = result[1]
+    EMAIL_PASS = result[2]
 
-    SMTP_SERVER = _SMTP_SERVER
-    SMTP_PORT = _SMTP_PORT
-    SMTP_TTLS = True if _SMTP_TTLS == 1 else False
+    SMTP_SERVER = result[3]
+    SMTP_PORT = result[4]
+    SMTP_TTLS = True if result[5] == 1 else False
+
+    DELAY = result[7]
 
     # Process files
     if(not os.path.isdir("screenshots")):

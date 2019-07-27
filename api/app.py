@@ -11,6 +11,7 @@ import smtplib
 from functions.auth import *
 from functions.websites import *
 from functions.config import *
+from functions.email import *
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +19,7 @@ CORS(app)
 app.register_blueprint(auth)
 app.register_blueprint(websites)
 app.register_blueprint(config)
+app.register_blueprint(email)
 
 checker_thread = None
 stop_checker = True
@@ -63,7 +65,7 @@ def setup_db():
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\
                 url TEXT NOT NULL,\
                 interval INTEGER NOT NULL,\
-                threshold FLOAT NOT NULL,\
+                threshold INTEGER NOT NULL,\
                 enabled INTEGER NOT NULL);")
 
         cursor.execute("CREATE TABLE config (\
@@ -73,22 +75,21 @@ def setup_db():
                 SMTP_server TEXT,\
                 SMTP_port INTEGER,\
                 SMTP_ttls INTEGER,\
-                auth_pass TEXT);")
+                auth_pass TEXT,\
+                delay INTEGER);")
         
         cursor.execute("CREATE TABLE tokens (\
                 token TEXT NOT NULL PRIMARY KEY);")
         
-        cursor.execute("INSERT INTO config  (id, user, password, SMTP_server , SMTP_port, SMTP_ttls, auth_pass) \
-                        VALUES              (0 , 'example@example.com', 'password', 'SMTP.server.com', 80, 1, 'password');")
+        cursor.execute("INSERT INTO config  (id, user, password, SMTP_server , SMTP_port, SMTP_ttls, auth_pass, delay) \
+                        VALUES              (0 , 'example@example.com', 'password', 'SMTP.server.com', 80, 1, 'password', 120);")
         conn.commit()
     else:
         # Reset all access tokens
-        '''
         with sqlite3.connect('data/data.db') as conn:
             cursor = conn.cursor()
             cursor.execute("DELETE FROM tokens;")
             conn.commit()
-        '''
 
 def setup_checker():
     global checker_thread, stop_checker
@@ -99,7 +100,7 @@ def setup_checker():
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
         
-        checker_thread = threading.Thread(target=checker.run, args=(result[1], result[2], result[3], result[4], result[5], lambda : stop_checker))
+        checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker,))
         checker_thread.daemon = True
 
     checker_thread.start()

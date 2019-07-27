@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import API_URL from './config';
 
-import SettingsModal from './SettingsModal.js'
-
+import EmailModal from './EmailModal.js';
+import SettingsModal from './SettingsModal.js';
 
 export default class StatusBar extends Component {
     constructor(props) {
@@ -10,6 +10,7 @@ export default class StatusBar extends Component {
 
         this.state = {
             settings: false,
+            email: false,
             auth: false,
         };
     };
@@ -24,11 +25,12 @@ export default class StatusBar extends Component {
             body: JSON.stringify({
                 token: localStorage.getItem('@notify-change/access_token'),
             })
-        }).then().then(() => {
+        })
+        .then(() => {
             localStorage.removeItem('@notify-change/access_token');
             window.location.reload(false);
         });
-    }
+    };
 
     handleClick = (event) => {
         if([event.target.name] === 'logout'){
@@ -36,11 +38,11 @@ export default class StatusBar extends Component {
         }else{
             this.setState({[event.target.name]: true});   
         }
-    }
+    };
 
-    handleClose = () => {
-        this.setState({settings: false});
-    }
+    handleClose = (name) => {
+        this.setState({[name]: false});
+    };
 
     handleClickChecker() {
         fetch(API_URL + '/api/checker', {
@@ -50,7 +52,6 @@ export default class StatusBar extends Component {
                 'Content-Type': 'application/json',
             },
         })
-        .then()
         .then(() => {
             window.location.reload(false);
         })
@@ -99,14 +100,19 @@ export default class StatusBar extends Component {
         
                 <div className="level-right">
                     <div className="level-item">
-                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.api_status === 'online' ? false : true}>Logout</button>
+                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.api_status === 'online' ? false : true}>Settings</button>
                     </div>
 
                     <div className="level-item">
-                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.api_status === 'online' ? false : true}>Checker Settings</button>
+                        <button className="button" name="email" onClick={this.handleClick} disabled={this.props.api_status === 'online' ? false : true}>Email Settings</button>
+                    </div>
+
+                    <div className="level-item">
+                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.api_status === 'online' ? false : true}>Logout</button>
                     </div>
                 </div>
 
+                <EmailModal active={this.state.email} handleClose={this.handleClose}/>
                 <SettingsModal active={this.state.settings} handleClose={this.handleClose}/>
             </nav>
         )

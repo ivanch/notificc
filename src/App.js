@@ -63,7 +63,7 @@ export default class App extends Component {
             }
         })
         .catch(() => {
-            this.setState({api_status: 'error'});
+            this.setState({api_status: 'offline'});
             this.setState({checker_status: 'offline'});
         });
     }

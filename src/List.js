@@ -47,7 +47,7 @@ export default class List extends Component {
                         Websites:
                     </p>
                     {this.state.data.map(x => 
-                        <a className={"panel-block " + (x['enabled'] ? "is-active" : "")} key={x['id']} href={x['url']}>
+                        <a className={"panel-block " + (x['enabled'] ? "is-active" : "")} key={x['id']}>
                             <span className="panel-icon">
                                 <i className="fa fa-book" aria-hidden="true"></i>
                             </span>

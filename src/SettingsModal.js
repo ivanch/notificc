@@ -3,16 +3,16 @@ import API_URL from './config';
 
 import './SettingsModal.css';
 
+const delay_min = 60; // 1 minute
+const delay_max = 86400; // 1 day
+
 export default class SettingsModal extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            user: 'null',
-            password: '',
-            SMTP_server: 'null',
-            SMTP_port: 'null',
-            SMTP_ttls: 1,
+            auth_pass: '',
+            delay:'',
         }
     };
 
@@ -20,135 +20,122 @@ export default class SettingsModal extends Component {
         if (this.props.active !== prevProps.active && this.props.active === true) {
             this.fetchData();
         }
-    }
+    };
       
     fetchData() {
         fetch(API_URL + '/api/config')
         .then(_response => _response.json())
         .then(response => {
             if(response != null){
-                this.setState({user: response['user'], SMTP_server: response['SMTP_server'], SMTP_port: response['SMTP_port']})
+                this.setState({delay: response['delay']})
             }
-            console.log(response);
         });
-    }   
+    };
+
+    delay_valid() {
+        const int_delay = parseInt(this.state.delay);
+        if(int_delay < delay_min || int_delay > delay_max) return false;
+        return true;
+    }
 
     handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
-    }
-
-    handleCheck = (event) => {
-        this.setState({[event.target.name]: event.target.checked});
-    }
+    };
 
     handleSubmit = () => {
-        fetch(API_URL + '/api/config', {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                user: this.state.user,
-                password: this.state.password,
-                SMTP_server: this.state.SMTP_server,
-                SMTP_port: this.state.SMTP_port,
-                SMTP_ttls: this.state.SMTP_ttls,
+        if(this.state.auth_pass !== ''){
+            fetch(API_URL + '/api/auth/password', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    auth_pass: this.state.auth_pass,
+                })
             })
-        }).then().then(() => {
-            this.props.handleClose();
-        });
-    }
+            .then()
+            .then();
+        }
+        if(this.state.delay !== ''){
+            fetch(API_URL + '/api/config', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    delay: this.state.delay,
+                })
+            })
+            .then()
+            .then();
+        }
+        this.handleClose();
+    };
 
-    handleTest = () => {
-        fetch(API_URL + '/api/config/test', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                user: this.state.user,
-                password: this.state.password,
-                SMTP_server: this.state.SMTP_server,
-                SMTP_port: this.state.SMTP_port,
-                SMTP_ttls: this.state.SMTP_ttls,
-            })
-        })
-        .then(_response => _response.json())
-        .then(response => {
-            if(response['message'] !== 'Success'){
-                alert("Server has returned an error: " + response['message'] + "("+response['statusCode']+")");
-            }
-        })
-        .catch(() => {
-            alert("Some undefined error has occurred.");
-        });
-    }    
+    handleClose = () => {
+        this.props.handleClose("settings");
+    };
 
     render() {
+        let delay_warning;
+        if(!this.delay_valid()){
+            delay_warning = <p className="help is-danger">Min {delay_min}, max {delay_max}.</p>;
+        }
+
         return (
             <div className={"modal " + (this.props.active ? 'is-active' : '')}>
-                <div className="modal-background" onClick={this.props.handleClose}></div>
+                <div className="modal-background" onClick={this.handleClose}></div>
                 <div className="modal-content">
                     <div id="settings" className="box">
                         <h3 className="title">
                             Settings
                         </h3>
                         <div className="field">
-                            <label className="label">Email user:</label>
+                            <label className="label">Change Auth Password:</label>
                             <div className="control">
-                                <input className="input" type="email" name="user" placeholder="User" value={this.state.user} onChange={this.handleChange}/>
+                                <input  className="input"
+                                        type="password"
+                                        name="auth_pass"
+                                        value={this.state.auth_pass}
+                                        onChange={this.handleChange}
+                                />
                             </div>
+                            <p className="help">
+                                Set it to 0 to ignore the auth page.
+                            </p>
+                        </div>
 
-                            <label className="label">Email password:</label>
-                            <div className="control">
-                                <input className="input" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                        <label className="label">Delay between checks:</label>
+                        <div className="field columns">
+                            <div className="column is-one-quarter">
+                                <div className="control">
+                                    <input  className={"input " + (this.delay_valid() ? '' : 'is-danger')}
+                                            type="text"
+                                            name="delay"
+                                            placeholder={`${delay_min}..${delay_max}`}
+                                            value={this.state.delay}
+                                            onChange={this.handleChange}
+                                    />
+                                </div>
+                                {delay_warning}
                             </div>
-
-                            <label className="label">SMTP server:</label>
-                            <div className="field has-addons">
-                                <div className="control" style={{'width':'20em'}}>
-                                    <input className="input" type="text" name="SMTP_server" placeholder="SMTP IP" value={this.state.SMTP_server} onChange={this.handleChange}/>
-                                </div>
-                                <div className="control" style={{'width':'10em'}}>
-                                    <input className="input" type="text" name="SMTP_port" placeholder="SMTP Port" value={this.state.SMTP_port} onChange={this.handleChange}/>
-                                </div>
+                            <div className="column">
+                                <label className="label">seconds</label>
                             </div>
-
-                            <div className="level">
-                                <div className="level-item level-left">
-                                    <div>
-                                        <label className="label">SMTP TTLS:</label>
-                                        <div>
-                                            <label className="checkbox">
-                                                <input type="checkbox" name="SMTP_ttls" checked={this.state.SMTP_ttls} onChange={this.handleCheck}/> TTLS Enabled
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="level-item level-right">
-                                    <div>
-                                        <div className="submit control">
-                                            <button
-                                                className="button is-info tooltip is-tooltip-left"
-                                                data-tooltip="Test your configuration before submitting it."
-                                                onClick={this.handleTest}
-                                            >
-                                                Email test
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
+                        </div>
+                        <div className="field">
                             <div className="submit control">
                                 <button className="button is-primary" onClick={this.handleSubmit}>Submit</button>
                             </div>
+                            <p className="help" style={{'textAlign':'center'}}>
+                                You don't need to set both fields to submit.
+                            </p>
                         </div>
                     </div>
                 </div>
-                <button className="modal-close is-large" aria-label="close" onClick={this.props.handleClose}></button>
+                <button className="modal-close is-large" aria-label="close" onClick={this.handleClose}></button>
             </div>
         )
     }

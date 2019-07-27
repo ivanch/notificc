@@ -10,7 +10,7 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom'
 import * as serviceWorker from './serviceWorker';
 
 const routing = (
-    <BrowserRouter basename={`${process.env.PUBLIC_URL}`}>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Switch>
             <Route path="/" exact={true} component={Login} />
             <Route path="/index" component={App} />
@@ -18,6 +18,8 @@ const routing = (
         </Switch>
     </BrowserRouter>
 )
+
+console.log(window.location);
 
 ReactDOM.render(routing, document.getElementById('root'));
 

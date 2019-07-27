@@ -9,14 +9,15 @@ export default class Login extends Component {
         super(props);
 
         this.state = {
-            api_status: false,
-            password: '',
+            api_status: 'offline',
+            auth_pass: '',
             auth: false,
-        }
+        };
     };
 
     componentDidMount() {
         this.fetch_api();
+        this.check_auth();
         this.timer = setInterval(() => this.fetch_api(), 5000);
     };
 
@@ -24,17 +25,29 @@ export default class Login extends Component {
         fetch(API_URL + '/api/status')
         .then(_response => _response.json())
         .then(response => {
-            if(response != null){
-                this.setState({api_status: 'online'});
-            }else{
-                this.setState({api_status: 'offline'});
-            }
+            this.setState({api_status: 'online'});
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+            console.error(error);
+            this.setState({api_status: 'offline'});
+        });
     }
 
-    handleChange = (event) => {
-        this.setState({[event.target.name]: event.target.value});
+    check_auth() {
+        fetch(API_URL + '/api/auth/token', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: localStorage.getItem('@notify-change/access_token'),
+            })
+        })
+        .then(_response => _response.json())
+        .then(response => {
+            this.setState({auth: response['message'] === 'Authorized'});
+        });
     }
 
     handleLogin = () => {
@@ -45,7 +58,7 @@ export default class Login extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                password: this.state.password,
+                auth_pass: this.state.auth_pass,
             })
         })
         .then(_response => _response.json())
@@ -59,6 +72,10 @@ export default class Login extends Component {
         });
     }
 
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value});
+    }
+
     render() {
         if(this.state.auth){
             clearInterval(this.timer);
@@ -68,10 +85,8 @@ export default class Login extends Component {
         let api_tag;
         if(this.state.api_status === 'online'){
             api_tag = <span className="tag is-success tag-compact">online</span>;
-        }else if(this.state.api_status === 'offline'){
-            api_tag = <span className="tag is-danger tag-compact">offline</span>;
         }else{
-            api_tag = <span className="tag is-black tag-compact">error</span>;
+            api_tag = <span className="tag is-danger tag-compact">offline</span>;
         }
 
         return (
@@ -85,7 +100,7 @@ export default class Login extends Component {
                     
                     <label className="label">Password:</label>
                     <div className="control">
-                        <input className="input" type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
+                        <input className="input" type="password" name="auth_pass" value={this.state.auth_pass} onChange={this.handleChange}/>
                     </div>
 
                     <div className="submit control">
