@@ -6,3 +6,15 @@
 .control {
     text-align: right;
 }
+
+.panel .panel-block a {
+    text-decoration: none;
+    color: #363636;
+}
+
+.panel .panel-block i {
+    cursor: pointer;
+
+    margin-left: auto;
+    margin-right: 1em;
+}

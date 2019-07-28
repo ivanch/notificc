@@ -22,7 +22,7 @@ def token_auth():
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
 
-        if(result[6] == '0'):
+        if(result[1] == '0'):
             return jsonify(message="Authorized",
                         statusCode=200), 200
         
@@ -59,7 +59,7 @@ def password_auth():
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
 
-        if(result[6] == json['auth_pass']):
+        if(result[1] == json['auth_pass']):
             letters = string.ascii_lowercase
             token = ''.join(random.choice(letters) for i in range(10))
 

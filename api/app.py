@@ -64,25 +64,30 @@ def setup_db():
         cursor.execute("CREATE TABLE urls (\
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\
                 url TEXT NOT NULL,\
-                interval INTEGER NOT NULL,\
                 threshold INTEGER NOT NULL,\
                 enabled INTEGER NOT NULL);")
 
         cursor.execute("CREATE TABLE config (\
                 id INTEGER PRIMARY KEY CHECK (id = 0),\
+                auth_pass TEXT,\
+                delay INTEGER);")
+
+        cursor.execute("CREATE TABLE email (\
+                id INTEGER PRIMARY KEY CHECK (id = 0),\
                 user TEXT,\
                 password TEXT,\
                 SMTP_server TEXT,\
                 SMTP_port INTEGER,\
-                SMTP_ttls INTEGER,\
-                auth_pass TEXT,\
-                delay INTEGER);")
+                SMTP_ttls INTEGER);")
         
         cursor.execute("CREATE TABLE tokens (\
                 token TEXT NOT NULL PRIMARY KEY);")
         
-        cursor.execute("INSERT INTO config  (id, user, password, SMTP_server , SMTP_port, SMTP_ttls, auth_pass, delay) \
-                        VALUES              (0 , 'example@example.com', 'password', 'SMTP.server.com', 80, 1, 'password', 120);")
+        cursor.execute("INSERT INTO config  (id, auth_pass , delay) \
+                        VALUES              (0 , 'password', 120);")
+        
+        cursor.execute("INSERT INTO email   (id, user, password, SMTP_server , SMTP_port, SMTP_ttls) \
+                        VALUES              (0 , 'example@example.com', 'password', 'SMTP.server.com', 80, 1);")
         conn.commit()
     else:
         # Reset all access tokens

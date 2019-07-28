@@ -15,11 +15,8 @@ RUN apk add --virtual .build-dependencies \
             wget \
             tar
 
-# Application itself
-COPY config/nginx.conf /etc/nginx/nginx.conf
-COPY config/requirements.txt requirements.txt
-
 ## Python
+COPY config/requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt && \
     python3 -c 'from PIL import Image; import selenium; print("Python - SUCCESS!")' && \
     rm requirements.txt
@@ -33,6 +30,8 @@ RUN set -ex && \
 RUN apk del .build-dependencies && \
     rm -rf /var/cache/apk/* && \
     rm -rf /tmp
+
+COPY config/nginx.conf /etc/nginx/nginx.conf
 
 # Application itself
 COPY ./build /var/www

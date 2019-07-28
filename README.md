@@ -1,16 +1,6 @@
 # Notify-Change
 #### Send an email from yourself to yourself when a website changes.
 
-## to-do:
-* Improve design
-* Ensure integers were put on inputs
-* Handle high ping
-* Handle no internet connection
-* Make checker an Object Oriented Thread with Threading Module
-* Handle errors on the checker thread
-* Documentation
-* Lower the Docker image size
-
 ## Usage (Docker)
 1. Pull the docker image `docker pull joseivanchechen/notify-change:latest`
 2. Create a docker volume with `docker volume create notify-api`
@@ -40,11 +30,10 @@ After that, you should be able to access it from [http://localhost/notify-change
 Reverse proxing a react-router app isn't so easy, so you'll have to build the Docker image again and deploy it.
 
 ## Building Docker image
-1. `npm run build`. This will take a while.
-2. `docker build --force-rm -t joseivanchechen/notify-change:latest .`. This will take a while.
-3. If you're running the container, stop it with `docker stop notify`
-4. If you have created the container, remove it with `docker rm notify`
-5. Create and run the container, as stated in **Usage** step 3.
+1. Run `sh build.sh` (This will take a while)
+2. If you're running the container, stop it with `docker stop notify`
+3. If you have created the container, remove it with `docker rm notify`
+4. Create and run the container, as stated in **Usage** step 3.
 
 ## Resource usage
 Nginx and API uses about 50MB RAM. CPU only grows a little when the checker compares two images.
@@ -52,3 +41,13 @@ Nginx and API uses about 50MB RAM. CPU only grows a little when the checker comp
 ## Warning
 ### It's intended to be self-hosted.
 Meaning that the API may not work if you run it on a VPS. That's because there's a high probability that the email server will block the logins attempts, returning a 403 response to the login request.
+
+## to-do:
+* Improve design
+* Ensure integers were put on inputs
+* Handle high ping
+* Handle no internet connection
+* Make checker an Object Oriented Thread with Threading Module
+* Handle errors on the checker thread
+* Documentation
+* Decrease Docker image size

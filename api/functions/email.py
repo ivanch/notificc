@@ -11,7 +11,7 @@ email = Blueprint('email', __name__)
 def email_get():
     with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM config;")
+        cursor.execute("SELECT * FROM email;")
         result = cursor.fetchone()
         return jsonify( user=result[1],
                         SMTP_server=result[3],
@@ -23,7 +23,7 @@ def email_update():
     json = request.get_json()
     with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("UPDATE config SET user = ?, password = ?, SMTP_server = ?, SMTP_port = ?, SMTP_ttls = ? WHERE id = 0;",
+        cursor.execute("UPDATE email SET user = ?, password = ?, SMTP_server = ?, SMTP_port = ?, SMTP_ttls = ? WHERE id = 0;",
                         (json['user'], json['password'], json['SMTP_server'], json['SMTP_port'], int(json['SMTP_ttls'])))
         conn.commit()
     return jsonify(message="Success",

@@ -54,8 +54,8 @@ def get_websites():
         results = cursor.fetchall()
         
         for result in results:
-            if(result[4] == 1): # if the url is enabled
-                urls.append({'id': result[0], 'url': result[1], 'threshold': result[3]})
+            if(result[3] == 1): # if the url is enabled
+                urls.append({'id': result[0], 'url': result[1], 'threshold': result[2]})
     return urls
 
 # Check if 2 images are different
@@ -79,10 +79,9 @@ def compare(index, thresh):
     count = 0
     for i in range(len(new)):
         for j in range(len(old[i])):
-            if(all(new[i,j] != old[i,j])): count += 1
+            if(any(new[i,j] != old[i,j])): count += 1
     diff_max = (len(new)*len(new[0]))*(thresh/100)
 
-    print(thresh/100, count)
     if(count > diff_max): return True
 
     # It's not different (or not too different)
@@ -124,18 +123,20 @@ def run(stop_checker):
 
     with sqlite3.connect('data/data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM config;")
+        cursor.execute("SELECT delay FROM config;")
         result = cursor.fetchone()
 
-    # Load email credentials
-    EMAIL_USER = result[1]
-    EMAIL_PASS = result[2]
+        DELAY = result[0]
 
-    SMTP_SERVER = result[3]
-    SMTP_PORT = result[4]
-    SMTP_TTLS = True if result[5] == 1 else False
+        cursor.execute("SELECT * FROM email;")
+        result = cursor.fetchone()
 
-    DELAY = result[7]
+        EMAIL_USER = result[1]
+        EMAIL_PASS = result[2]
+
+        SMTP_SERVER = result[3]
+        SMTP_PORT = result[4]
+        SMTP_TTLS = True if result[5] == 1 else False
 
     # Process files
     if(not os.path.isdir("screenshots")):
