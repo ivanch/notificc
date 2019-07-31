@@ -57,8 +57,8 @@ def setup():
 
 def setup_db():
     # Setup databaset, if new
-    if(not os.path.isfile("data/data.db")):
-        conn = sqlite3.connect('data/data.db')
+    if(not os.path.isfile("shared/data.db")):
+        conn = sqlite3.connect('shared/data.db')
         cursor = conn.cursor()
 
         cursor.execute("CREATE TABLE urls (\
@@ -91,22 +91,16 @@ def setup_db():
         conn.commit()
     else:
         # Reset all access tokens
-        with sqlite3.connect('data/data.db') as conn:
+        with sqlite3.connect('shared/data.db') as conn:
             cursor = conn.cursor()
             cursor.execute("DELETE FROM tokens;")
             conn.commit()
 
 def setup_checker():
     global checker_thread, stop_checker
-
-    # Setup checker variables
-    with sqlite3.connect('data/data.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM config;")
-        result = cursor.fetchone()
         
-        checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker,))
-        checker_thread.daemon = True
+    checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker,))
+    checker_thread.daemon = True
 
     checker_thread.start()
 

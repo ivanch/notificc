@@ -9,7 +9,7 @@ email = Blueprint('email', __name__)
 
 @email.route('/api/email', methods=['GET'])
 def email_get():
-    with sqlite3.connect('data/data.db') as conn:
+    with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM email;")
         result = cursor.fetchone()
@@ -21,7 +21,7 @@ def email_get():
 @email.route('/api/email', methods=['PUT'])
 def email_update():
     json = request.get_json()
-    with sqlite3.connect('data/data.db') as conn:
+    with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("UPDATE email SET user = ?, password = ?, SMTP_server = ?, SMTP_port = ?, SMTP_ttls = ? WHERE id = 0;",
                         (json['user'], json['password'], json['SMTP_server'], json['SMTP_port'], int(json['SMTP_ttls'])))

@@ -2,9 +2,8 @@
 #### Send an email from yourself to yourself when a website changes.
 
 ## Usage (Docker)
-1. Pull the docker image `docker pull joseivanchechen/notify-change:latest`
-2. Create a docker volume with `docker volume create notify-api`
-3. Create a container and run it with `docker run -d -p 8000:80 -p 8080:8080 -v notify-api:/opt/api/data --name notify joseivanchechen/notify-change`
+1. Configure the `docker-compose.yaml` file as you need it.
+2. Simply run `docker-compose -d up`
 
 Access the page at [http://localhost:8000](http://localhost:8000). Port 8080 is where the API will provide/get information.
 
@@ -27,13 +26,11 @@ server {
 
 After that, you should be able to access it from [http://localhost/notify-change](http://localhost/notify-change). Note that you won't be able to access it using the 8000 port from your browser anymore.
 
-Reverse proxing a react-router app isn't so easy, so you'll have to build the Docker image again and deploy it.
+Reverse proxying a *react-router* app isn't so easy, so you'll have to build the Docker image again and deploy it.
 
 ## Building Docker image
-1. Run `sh build.sh` (This will take a while)
-2. If you're running the container, stop it with `docker stop notify`
-3. If you have created the container, remove it with `docker rm notify`
-4. Create and run the container, as stated in **Usage** step 3.
+1. Run `./build.sh` (This will take a while)
+2. Create and run the composer, as stated in **Usage** step 2.
 
 ## Resource usage
 Nginx and API uses about 50MB RAM. CPU only grows a little when the checker compares two images.

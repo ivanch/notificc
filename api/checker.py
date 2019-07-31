@@ -48,7 +48,7 @@ def message(title, link):
 
 def get_websites():
     urls = []
-    with sqlite3.connect('data/data.db') as conn:
+    with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM urls")
         results = cursor.fetchall()
@@ -121,7 +121,8 @@ def loop(stop_checker):
 def run(stop_checker):
     global EMAIL_USER, EMAIL_PASS, SMTP_SERVER, SMTP_PORT, SMTP_TTLS, DELAY
 
-    with sqlite3.connect('data/data.db') as conn:
+    # Load the data
+    with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT delay FROM config;")
         result = cursor.fetchone()

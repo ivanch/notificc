@@ -1,13 +1,13 @@
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+web/node_modules
+web/.pnp
+web/.pnp.js
 
 # testing
-/coverage
+web/coverage
 
 # production
-/build
+web/build
 
 # misc
 .DS_Store
@@ -16,14 +16,15 @@
 .env.test.local
 .env.production.local
 *.old
+.vscode
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # API related
-*.log
-*.db
-screenshots
-__pycache__
-*.sock
+api/**/*.db
+api/**/__pycache__
+api/**/*.log
+api/**/*.sock
+api/screenshots

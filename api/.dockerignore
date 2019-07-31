@@ -1,0 +1,4 @@
+*.log
+screenshots
+shared
+*/**/__pycache__

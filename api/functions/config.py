@@ -10,7 +10,7 @@ config = Blueprint('config', __name__)
 # Returns the delay
 @config.route('/api/config', methods=['GET'])
 def config_get():
-    with sqlite3.connect('data/data.db') as conn:
+    with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
@@ -21,7 +21,7 @@ def config_get():
 def config_update():
     json = request.get_json()
 
-    with sqlite3.connect('data/data.db') as conn:
+    with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("UPDATE config SET delay = ? WHERE id = 0;",
                         (json['delay'],))
