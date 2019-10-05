@@ -1,15 +1,19 @@
 version: '3'
 services:
-    web:
-        image: joseivanchechen/notify-web
-        ports:
-            - "8000:80"
-    api:
-        image: joseivanchechen/notify-api
-        ports:
-              - "8080:8080"
-        volumes:
-              - api:/opt/api/shared
+  web:
+    image: joseivanchechen/notify-web
+    ports:
+        - "8800:80"
+  api:
+      image: joseivanchechen/notify-api
+      deploy:
+        resources:
+          limits:
+            cpus: '0.1'
+      ports:
+          - "2740:8080"
+      volumes:
+          - api:/opt/api/shared
 
 volumes:
-    api:
+  api:

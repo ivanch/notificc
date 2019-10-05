@@ -1,0 +1,38 @@
+name: Node CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@master
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install and build
+      working-directory: ./web
+      run: |
+        npm install
+        npm run build --if-present
+      env:
+        CI: true
+    - name: Build Docker Image
+      working-directory: ./web
+      run: |
+        docker build -t ivanch/notify-web:latest .
+    
+    #- name: Publish Docker Image
+    #  uses: elgohr/Publish-Docker-Github-Action@2.2
+    #  with:
+    #    name: ivanch/notify-web:latest
+    #    username: ${{ secrets.DOCKER_USERNAME }}
+    #    password: ${{ secrets.DOCKER_PASSWORD }}
+    #    workdir: ./web

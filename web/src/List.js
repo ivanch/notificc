@@ -68,6 +68,7 @@ export default class List extends Component {
                             <span className="panel-icon">
                                 <i className="fa fa-book" aria-hidden="true"></i>
                             </span>
+                            {/* eslint-disable-next-line */}
                             <a  key={x['id']}
                                 id={x['id']}
                                 onClick={this.handleClick}

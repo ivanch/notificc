@@ -26,14 +26,19 @@ server {
 
 After that, you should be able to access it from [http://localhost/notify-change](http://localhost/notify-change). Note that you won't be able to access it using the 8000 port from your browser anymore.
 
-Reverse proxying a *react-router* app isn't so easy, so you'll have to build the Docker image again and deploy it.
+Reverse proxying a *react-router* app isn't so easy, you'll have to build the Docker image again and deploy it.
 
 ## Building Docker image
 1. Run `./build.sh` (This will take a while)
 2. Create and run the composer, as stated in **Usage** step 2.
 
 ## Resource usage
-Nginx and API uses about 50MB RAM. CPU only grows a little when the checker compares two images.
+| Service | State | RAM Usage |
+|---------|-------|-----------|
+| Web server | Idle/Active | About 2 MB |
+| API server | Idle | About 20 MB |
+| API server | Active | About 50 MB |
+
 
 ## Warning
 ### It's intended to be self-hosted.
@@ -48,3 +53,4 @@ Meaning that the API may not work if you run it on a VPS. That's because there's
 * Handle errors on the checker thread
 * Documentation
 * Decrease Docker image size
+* Change to push notifications
