@@ -11,7 +11,7 @@ services:
           limits:
             cpus: '0.1'
       ports:
-          - "2740:8080"
+          - "8810:8080"
       volumes:
           - api:/opt/api/shared
 

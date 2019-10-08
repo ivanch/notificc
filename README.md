@@ -5,7 +5,7 @@
 1. Configure the `docker-compose.yaml` file as you need it.
 2. Simply run `docker-compose up -d`
 
-Access the page at [http://localhost:8000](http://localhost:8000). Port 8080 is where the API will listen.
+Access the page at [http://localhost:8800](http://localhost:8800). Port 8810 is where the API will listen.
 
 ## Usage
 Default password is *password*, you can change or disable that later.
@@ -18,7 +18,7 @@ Once at the index page, you can start/stop the checker by clicking at its status
 ```
 server {
     location /notify-change/ {
-        proxy_pass http://localhost:8000/;
+        proxy_pass http://localhost:8800/;
     }
 }
 ```
