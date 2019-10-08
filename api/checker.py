@@ -9,6 +9,9 @@ import sys
 import os
 import configparser
 import urllib.request, json
+import datetime
+
+from functions.config import get_delay
 
 EMAIL_USER = ""
 EMAIL_PASS = ""
@@ -46,6 +49,16 @@ def message(title, link):
     server.sendmail(FROM, TO, message)
     server.close()
 
+def logWebsite(name, url, title):
+    now = datetime.datetime.now()
+
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO logs (name, url , title , read , time) \
+                        VALUES           (?   , ?   , ?     , 0    , ?);", (name, url, title, now))
+        conn.commit()
+
+
 def get_websites():
     urls = []
     with sqlite3.connect('shared/data.db') as conn:
@@ -55,7 +68,7 @@ def get_websites():
         
         for result in results:
             if(result[3] == 1): # if the url is enabled
-                urls.append({'id': result[0], 'url': result[1], 'threshold': result[2]})
+                urls.append({'id': result[0], 'name': result[1], 'url': result[2], 'threshold': result[3]})
     return urls
 
 # Check if 2 images are different
@@ -87,10 +100,12 @@ def compare(index, thresh):
     # It's not different (or not too different)
     return False
 
-def loop(stop_checker):
+def loop(stop_checker, changed_websites):
     while True:
         try:
             start = time() # to "normalize" time
+            DELAY = get_delay()
+
             if(not stop_checker()):
                 urls = get_websites()
                 
@@ -99,6 +114,7 @@ def loop(stop_checker):
 
                 for url in urls:
                     id = url['id']
+                    name = url['name']
                     link = url['url']
 
                     driver.get(link)
@@ -108,6 +124,7 @@ def loop(stop_checker):
                     r = compare(id, url['threshold'])
                     if(r): # has changed
                         message(driver.title, link)
+                        logWebsite(name, link, driver.title)
 
                     os.rename("screenshots/ss-%d.png" % (id), "screenshots/old-ss-%d.png" % (id))
 
@@ -118,7 +135,7 @@ def loop(stop_checker):
         except KeyboardInterrupt:
             break
 
-def run(stop_checker):
+def run(stop_checker, changed_websites):
     global EMAIL_USER, EMAIL_PASS, SMTP_SERVER, SMTP_PORT, SMTP_TTLS, DELAY
 
     # Load the data
@@ -146,4 +163,4 @@ def run(stop_checker):
         os.remove(file)
 
     # Start the main loop on a new thread
-    loop(stop_checker)
+    loop(stop_checker, changed_websites)

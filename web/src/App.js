@@ -6,9 +6,10 @@ import "bloomer-extensions";
 import API_URL from './config';
 
 import './App.css'
-import List from './List.js'
-import Registery from './Registery.js'
 import StatusBar from './StatusBar.js'
+import Registery from './Registery.js'
+import Logs from './Logs.js'
+import List from './List.js'
 
 export default class App extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ export default class App extends Component {
     };
 
     componentDidMount() {
-        this.fetch_api();
+        this.fetch_api();     
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -50,7 +51,7 @@ export default class App extends Component {
         });
     }
 
-    async fetch_api() {
+    fetch_api = () => {
         fetch(API_URL + '/api/status')
         .then(_response => _response.json())
         .then(response => {
@@ -76,13 +77,14 @@ export default class App extends Component {
 
         return (
             <div className="App">
-                <StatusBar api_status={this.state.api_status} checker_status={this.state.checker_status}/>
-                <div className="columns is-multiline">
+                <StatusBar api_status={this.state.api_status} checker_status={this.state.checker_status} fetch_api={this.fetch_api}/>
+                <div className="columns is-multiline" style={{"marginTop": "0.5rem"}}>
                     <div className="column is-half">
                         <Registery api_status={this.state.api_status}/>
-                    </div>
-                    <div className="column is-half">
                         <List api_status={this.state.api_status}/>
+                    </div>
+                    <div className="column">
+                        <Logs api_status={this.state.api_status}/>
                     </div>
                 </div>
             </div>

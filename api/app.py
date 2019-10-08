@@ -23,11 +23,11 @@ app.register_blueprint(email)
 
 checker_thread = None
 stop_checker = True
-
+changed_websites = []
 
 @app.route('/api/status', methods=['GET'])
 def main():
-    global stop_checker
+    global stop_checker, changed_websites
     checker_status = 'error' # with error by default
     
     if(checker_thread is None): checker_status = 'error'
@@ -36,6 +36,10 @@ def main():
     else: checker_status = 'online'
 
     response = {'checker_status': checker_status}
+    if len(changed_websites) > 0:
+        response['changed_websites'] = changed_websites
+        changed_websites = []
+    
     return jsonify(response), 200
 
 @app.route('/api/checker', methods=['POST'])
@@ -63,22 +67,31 @@ def setup_db():
 
         cursor.execute("CREATE TABLE urls (\
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\
-                url TEXT NOT NULL,\
-                threshold INTEGER NOT NULL,\
+                name TEXT NOT NULL, \
+                url TEXT NOT NULL, \
+                threshold INTEGER NOT NULL, \
                 enabled INTEGER NOT NULL);")
 
         cursor.execute("CREATE TABLE config (\
                 id INTEGER PRIMARY KEY CHECK (id = 0),\
-                auth_pass TEXT,\
+                auth_pass TEXT, \
                 delay INTEGER);")
 
-        cursor.execute("CREATE TABLE email (\
-                id INTEGER PRIMARY KEY CHECK (id = 0),\
-                user TEXT,\
-                password TEXT,\
-                SMTP_server TEXT,\
-                SMTP_port INTEGER,\
+        cursor.execute("CREATE TABLE email ( \
+                id INTEGER PRIMARY KEY CHECK (id = 0), \
+                user TEXT, \
+                password TEXT, \
+                SMTP_server TEXT, \
+                SMTP_port INTEGER, \
                 SMTP_ttls INTEGER);")
+
+        cursor.execute("CREATE TABLE logs ( \
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \
+                name TEXT NOT NULL, \
+                url TEXT NOT NULL, \
+                title TEXT NOT NULL, \
+                read INTEGER NOT NULL, \
+                time timestamp);")
         
         cursor.execute("CREATE TABLE tokens (\
                 token TEXT NOT NULL PRIMARY KEY);")
@@ -97,9 +110,9 @@ def setup_db():
             conn.commit()
 
 def setup_checker():
-    global checker_thread, stop_checker
+    global checker_thread, stop_checker, changed_websites
         
-    checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker,))
+    checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker, changed_websites))
     checker_thread.daemon = True
 
     checker_thread.start()

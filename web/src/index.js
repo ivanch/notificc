@@ -19,8 +19,6 @@ const routing = (
     </BrowserRouter>
 )
 
-console.log(window.location);
-
 ReactDOM.render(routing, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

@@ -8,6 +8,14 @@ import glob
 config = Blueprint('config', __name__)
 
 # Returns the delay
+def get_delay():
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM config;")
+        result = cursor.fetchone()
+        return result[2]
+
+# Returns the config
 @config.route('/api/config', methods=['GET'])
 def config_get():
     with sqlite3.connect('shared/data.db') as conn:

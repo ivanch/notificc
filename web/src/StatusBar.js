@@ -4,6 +4,8 @@ import API_URL from './config';
 import EmailModal from './EmailModal.js';
 import SettingsModal from './SettingsModal.js';
 
+import './StatusBar.css'
+
 export default class StatusBar extends Component {
     constructor(props) {
         super(props);
@@ -44,16 +46,15 @@ export default class StatusBar extends Component {
         this.setState({[name]: false});
     };
 
-    handleClickChecker() {
+    handleClickChecker = () => {
         fetch(API_URL + '/api/checker', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-        })
-        .then(() => {
-            window.location.reload(false);
+        }).then(() => {
+            this.props.fetch_api();
         })
         .catch(error => {
             alert("Error: " + error);
@@ -76,13 +77,13 @@ export default class StatusBar extends Component {
         }else if(this.props.checker_status === 'offline'){
             checker_tag = <span className="tag is-danger" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>offline</span>;
         }else if(this.props.checker_status === 'stopped'){
-            checker_tag = <span className="tag is-light" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>stopped</span>;
+            checker_tag = <span className="tag is-warning" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>stopped</span>;
         }else if(this.props.checker_status === 'online'){
             checker_tag = <span className="tag is-success" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>online</span>;
         }
 
         return (
-            <nav className="level status">
+            <div className="level status">
                 <div className="level-left">
                     <div className="level-item">
                         <div className="tags has-addons">
@@ -114,7 +115,7 @@ export default class StatusBar extends Component {
 
                 <EmailModal active={this.state.email} handleClose={this.handleClose}/>
                 <SettingsModal active={this.state.settings} handleClose={this.handleClose}/>
-            </nav>
+            </div>
         )
     }
 

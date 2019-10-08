@@ -29,7 +29,6 @@ export default class EmailModal extends Component {
             if(response != null){
                 this.setState({user: response['user'], SMTP_server: response['SMTP_server'], SMTP_port: response['SMTP_port']})
             }
-            console.log(response);
         });
     }   
 

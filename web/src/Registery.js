@@ -8,9 +8,11 @@ export default class Registery extends Component {
         super(props);
 
         this.state = {
+            name: '',
             url: '',
             thresh: '5',
-            wrong_url: false,
+            invalid_url: false,
+            invalid_name: false,
         };
     }
 
@@ -19,9 +21,14 @@ export default class Registery extends Component {
 
         if(event.target.name === 'url'){
             this.setState({
-                wrong_url: !(event.target.value.startsWith("http://") ||
+                invalid_url: !(event.target.value.startsWith("http://") ||
                             event.target.value.startsWith("https://") ||
                             event.target.value.includes(" "))
+            });
+        }else if(event.target.name === 'name'){
+            this.setState({
+                invalid_name:   (event.target.value.length === 0 || 
+                                event.target.value.length > 24)
             });
         }
     }
@@ -34,6 +41,7 @@ export default class Registery extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                name: this.state.name,
                 url: this.state.url,
                 threshold: parseInt(this.state.thresh),
             })
@@ -54,24 +62,39 @@ export default class Registery extends Component {
     }
 
     is_valid() {
-        if(this.state.wrong_url === true) return false;
-        if(this.state.url === '') return false;
-        if(this.props.api_status !== 'online') return false;
+        if( this.state.invalid_url || 
+            this.state.invalid_name || 
+            this.state.url === '' || 
+            this.props.api_status !== 'online') return false;
         return true;
     }
 
     render() {
+        let name_warning;
+        if(this.state.invalid_name){
+            name_warning = <p className="help is-danger">Name lenght must be between 0 and 24.</p>;
+        }
+
         return (
             <div id="registry" className="box">
-                <h3 className="title">
-                    Register a website
-                </h3>
+                <div className="centered">
+                    <span className="title">
+                        Register a website
+                    </span>
+                </div>
+
                 <div className="field">
+                    <label className="label">Name:</label>
+                    <div className="control has-icons-right">
+                        <input className={"input " + (this.state.invalid_name ? 'is-danger' : '')} type="text" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange}/>
+                    </div>
+                    {name_warning}
+
                     <label className="label">URL:</label>
                     <div className="control has-icons-right">
-                        <input className={"input " + (this.state.wrong_url ? 'is-danger' : '')} type="text" name="url" placeholder="URL" value={this.state.value} onChange={this.handleChange}/>
+                        <input className={"input " + (this.state.invalid_url ? 'is-danger' : '')} type="text" name="url" placeholder="URL" value={this.state.value} onChange={this.handleChange}/>
                     </div>
-                    {this.state.wrong_url ? <p className="help is-danger">Invalid URL</p> : null}
+                    {this.state.invalid_url ? <p className="help is-danger">Invalid URL</p> : null}
 
                     <label className="label">Difference threshold:</label>
                     <div className="columns">

@@ -1,11 +1,11 @@
 # Notify-Change
 #### Send an email from yourself to yourself when a website changes.
 
-## Usage (Docker)
+## Deploy (Docker)
 1. Configure the `docker-compose.yaml` file as you need it.
-2. Simply run `docker-compose -d up`
+2. Simply run `docker-compose up -d`
 
-Access the page at [http://localhost:8000](http://localhost:8000). Port 8080 is where the API will provide/get information.
+Access the page at [http://localhost:8000](http://localhost:8000). Port 8080 is where the API will listen.
 
 ## Usage
 Default password is *password*, you can change or disable that later.
@@ -32,6 +32,10 @@ Reverse proxying a *react-router* app isn't so easy, you'll have to build the Do
 1. Run `./build.sh` (This will take a while)
 2. Create and run the composer, as stated in **Usage** step 2.
 
+## Develop
+1. Go to `web` folder and run `npm install` and `npm start`
+2. You will also need to start the API server (Python WSGI), go to `api` and run `python app.py`
+
 ## Resource usage
 | Service | State | RAM Usage |
 |---------|-------|-----------|
@@ -45,12 +49,8 @@ Reverse proxying a *react-router* app isn't so easy, you'll have to build the Do
 Meaning that the API may not work if you run it on a VPS. That's because there's a high probability that the email server will block the logins attempts, returning a 403 response to the login request.
 
 ## to-do:
-* Improve design
 * Ensure integers were put on inputs
 * Handle high ping
 * Handle no internet connection
-* Make checker an Object Oriented Thread with Threading Module
 * Handle errors on the checker thread
-* Documentation
-* Decrease Docker image size
 * Change to push notifications

@@ -85,13 +85,15 @@ export default class SettingsModal extends Component {
         }
 
         return (
-            <div className={"modal " + (this.props.active ? 'is-active' : '')}>
+            <div className={"modal animated " + (this.props.active ? 'is-active fadeIn' : '')}>
                 <div className="modal-background" onClick={this.handleClose}></div>
                 <div className="modal-content">
                     <div id="settings" className="box">
-                        <h3 className="title">
-                            Settings
-                        </h3>
+                        <div className="header centered">
+                            <span className="title">
+                                Settings
+                            </span>
+                        </div>
                         <div className="field">
                             <label className="label">Change Auth Password:</label>
                             <div className="control">
@@ -130,7 +132,7 @@ export default class SettingsModal extends Component {
                                 <button className="button is-primary" onClick={this.handleSubmit}>Submit</button>
                             </div>
                             <p className="help" style={{'textAlign':'center'}}>
-                                You don't need to set both fields to submit.
+                                You don't need to set all fields to submit.
                             </p>
                         </div>
                     </div>

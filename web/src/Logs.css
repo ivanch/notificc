@@ -1,0 +1,22 @@
+.header {
+    position: relative;
+}
+
+.header-control {
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}
+
+.header-control i {
+    margin-left: 1rem;
+}
+
+#logs .list-line {
+    transition: all 750ms ease;
+}
+
+#logs .unread {
+    background-color: #97ffaa;
+    border-color: #00ff00;
+}

@@ -8,17 +8,21 @@ export default class List extends Component {
         super(props);
 
         this.state = {
-            data: null,
+            data: [],
         }
     };
 
     componentDidMount() {
+        this.fetchWebsites();
+    };
+
+    fetchWebsites = () => {
         fetch(API_URL + '/api/websites')
         .then(_response => _response.json())
         .then(response => {
             this.setState({ data: response });
         });
-    };
+    }
 
     handleClick = (event) => {
         fetch(API_URL + '/api/websites', {
@@ -34,7 +38,10 @@ export default class List extends Component {
         .catch(() => {
             alert("Error while trying to turn on/off website: " + event.target.id);
         });
-        window.location.reload(false);
+        //window.location.reload(false);
+        setTimeout(() => {
+            this.fetchWebsites();
+        }, 25);
     };
 
     handleDelete = (event) => {
@@ -58,29 +65,46 @@ export default class List extends Component {
         if(this.props.api_status !== 'online') return null;
 
         return (
-            <div className="List">
-                <nav className="panel">
-                    <p className="panel-heading">
-                        Websites:
-                    </p>
+            <div id="registered" className="box">
+                <div className="header centered">
+                    <span className="title">
+                        Registered websites
+                    </span>
+                </div>
+                {/* icone book | nome <a> | ligado/desligado check */}
+
+                <div id="list">
                     {this.state.data.map(x => 
-                        <div className={"panel-block " + (x['enabled'] ? "is-active" : "")}>
-                            <span className="panel-icon">
-                                <i className="fa fa-book" aria-hidden="true"></i>
+                        <div className="list-line" key={x['id']}>
+                            <span className="icon">
+                                <i className="fa fa-bookmark"></i>
                             </span>
-                            {/* eslint-disable-next-line */}
-                            <a  key={x['id']}
-                                id={x['id']}
-                                onClick={this.handleClick}
-                                href='#'
-                                title="Enable/disable website check"
-                            >
-                                {x['url']}
+                            
+                            <a href={x['url']}>
+                                {x['name']}
                             </a>
-                            <i className="fa fa-minus" title="Delete" id={x['id']} onClick={this.handleDelete}></i>
+
+                            <div className="list-control">
+                                <div className="list-control-item switch">
+                                    <input
+                                        type="checkbox"
+                                        className="switch-checkbox"
+                                        id={x['id']}
+                                        onChange={this.handleClick}
+                                        checked={x['enabled']}
+                                    />
+                                    <label
+                                        className="switch-label"
+                                        htmlFor={x['id']}
+                                        title={x['enabled'] ? "Disable website" : "Enable website"}>    
+                                    </label>
+                                </div>
+
+                                <i className="list-control-item fa fa-times pointer" title="Delete" id={x['id']} onClick={this.handleDelete}></i>
+                            </div>
                         </div>
                     )}
-                </nav>
+                </div>
             </div>
         );
     }

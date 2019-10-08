@@ -1,6 +1,7 @@
 body {
     color: white;
     background-color: #202020;
+    padding: 1rem;
 }
 
 .status {
@@ -10,4 +11,42 @@ body {
 
 #settings {
     color: white !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.header {
+    margin-bottom: 1.5rem;
+}
+
+.centered {
+    text-align: center;
+    font-weight: bold;
+}
+
+.list-line {
+    display: block;
+    border: 1px rgb(200, 200, 200) solid;
+    border-radius: 5px;
+    padding: 0.75rem 0.5rem;
+    background-color: rgb(230, 230, 230);
+    margin-bottom: 1rem;
+}
+
+.list-line .icon {
+    float: left;
+    max-width: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.list-control {
+    float: right;
+    padding-top: 0;
+    margin-right: 0.5rem;
+}
+
+.list-control-item {
+    margin-left: 0.5rem;
 }
