@@ -37,11 +37,11 @@ export default class List extends Component {
         })
         .catch(() => {
             alert("Error while trying to turn on/off website: " + event.target.id);
+        }).then(() => {
+            setTimeout(() => {
+                this.fetchWebsites();
+            }, 25);
         });
-        //window.location.reload(false);
-        setTimeout(() => {
-            this.fetchWebsites();
-        }, 25);
     };
 
     handleDelete = (event) => {
