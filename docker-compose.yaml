@@ -1,19 +1,22 @@
-version: '3'
+version: '2.3'
 services:
+  api:
+    image: ivanch/notify-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    cpus: 0.5
+    mem_limit: 200M
+    ports:
+      - 8810:8080/tcp
+    volumes:
+      - api:/opt/api/shared:rw
   web:
     image: ivanch/notify-web
+    build:
+      context: ./web
+      dockerfile: Dockerfile
     ports:
-        - "8800:80"
-  api:
-      image: ivanch/notify-api
-      deploy:
-        resources:
-          limits:
-            cpus: '0.1'
-      ports:
-          - "8810:8080"
-      volumes:
-          - api:/opt/api/shared
-
+      - 8800:80/tcp
 volumes:
-  api:
+  api: {}

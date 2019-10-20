@@ -1,14 +1,18 @@
 # Notify-Change
-#### Send an email from yourself to yourself when a website changes.
+#### Logs websites changes
+[![Build Status](https://travis-ci.com/ivanch/notify-change.svg?token=EiwZJLp9isLBJ89qdmD6&branch=master)](https://travis-ci.com/ivanch/notify-change)
 
 ## Deploy (Docker)
 1. Configure the `docker-compose.yaml` file as you need it.
-2. Simply run `docker-compose up -d`
+2. Simply run `docker-compose up -d`.
+
+## Deploy (Build Docker Image)
+1. Run `docker-compose up -d --build` (This will take a while)
 
 Access the page at [http://localhost:8800](http://localhost:8800). Port 8810 is where the API will listen.
 
 ## Usage
-Default password is *password*, you can change or disable that later.
+Default password is *password*, you can change or disable that later in Settings.
 
 Once at the index page, you can start/stop the checker by clicking at its status.
 
@@ -26,15 +30,16 @@ server {
 
 After that, you should be able to access it from [http://localhost/notify-change](http://localhost/notify-change). Note that you won't be able to access it using the 8000 port from your browser anymore.
 
-Reverse proxying a *react-router* app isn't so easy, you'll have to build the Docker image again and deploy it.
+>Reverse proxying a *react-router* app isn't so easy, you'll have to [build the Docker Image](#deploy-build-docker-image) again with your configuration.
 
-## Building Docker image
-1. Run `./build.sh` (This will take a while)
-2. Create and run the composer, as stated in **Usage** step 2.
+## Screenshot
 
-## Develop
-1. Go to `web` folder and run `npm install` and `npm start`
-2. You will also need to start the API server (Python WSGI), go to `api` and run `python app.py`
+![Index page](assets/index.png)
+
+## Development
+1. Go to `web` folder and run `npm install` to install dependencies and `npm start` to start the development server.
+2. Go to `api` folder and run `pip install docker/requirements.txt` to install all the requirements.
+3. Run `python app.py` to start the API server.
 
 ## Resource usage
 | Service | State | RAM Usage |
@@ -43,13 +48,14 @@ Reverse proxying a *react-router* app isn't so easy, you'll have to build the Do
 | API server | Idle | About 20 MB |
 | API server | Active | About 50 MB |
 
-
-## Warning
-### It's intended to be self-hosted.
-Meaning that the API may not work if you run it on a VPS. That's because there's a high probability that the email server will block the logins attempts, returning a 403 response to the login request.
+Note that at `docker-compose.yaml` the API is limited to use 50% of CPUs count and limite to 200MB RAM usage. It should work fine with lower configurations too.
 
 ## to-do:
-* Ensure integers were put on inputs
+* Add API key
+* Add option to select a part of the website page
+* Improve Settings modal
+* Write tests for Web service
+* Write tests for API
 * Handle high ping
 * Handle no internet connection
 * Handle errors on the checker thread
