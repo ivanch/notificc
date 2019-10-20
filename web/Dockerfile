@@ -1,16 +1,20 @@
+FROM node:alpine as builder
+
+WORKDIR /web
+COPY package* ./
+RUN npm install
+COPY . ./
+RUN npm run build
+
 FROM nginx:stable-alpine
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY ./build /var/www
+COPY --from=builder /web/build /var/www
 
 EXPOSE 80
 
 RUN addgroup www && \
-    adduser -D -H -G www www && \
-    mkdir /opt/api && \
-    mkdir /opt/api/shared && \
-    chmod -R 770 /opt/api && \
-    chown -R www:www /opt/api
+    adduser -D -H -G www www
 
 VOLUME /opt/api/shared
 
