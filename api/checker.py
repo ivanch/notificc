@@ -67,7 +67,7 @@ def get_websites():
         results = cursor.fetchall()
         
         for result in results:
-            if(result[3] == 1): # if the url is enabled
+            if(result[4] == 1): # if the url is enabled
                 urls.append({'id': result[0], 'name': result[1], 'url': result[2], 'threshold': result[3]})
     return urls
 
