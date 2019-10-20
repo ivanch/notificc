@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import API_URL from './config';
 
 import './Login.css';
+
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export default class Login extends Component {
     constructor(props) {
@@ -90,21 +91,24 @@ export default class Login extends Component {
         }
 
         return (
-            <div id="auth">
-                <div className="field center">
-                    <h1 id="head">Auth</h1>
-                    <div className="tags has-addons tags-center">
-                        <span className="tag is-dark tag-compact">api status</span>
-                        {api_tag}
+            <div id="login">
+                <div id="login-box">
+                    <div className="auth-header">
+                        <h1>Auth</h1>
+                        <div className="tags has-addons tags-center">
+                            <span className="tag is-dark tag-compact">api status</span>
+                            {api_tag}
+                        </div>
                     </div>
-                    
-                    <label className="label">Password:</label>
-                    <div className="control">
-                        <input className="input" type="password" name="auth_pass" value={this.state.auth_pass} onChange={this.handleChange}/>
-                    </div>
+                    <div className="field">                        
+                        <label className="label">Password:</label>
+                        <div className="control">
+                            <input className="input" type="password" name="auth_pass" value={this.state.auth_pass} onChange={this.handleChange}/>
+                        </div>
 
-                    <div className="submit control">
-                        <button className="button is-primary" onClick={this.handleLogin} disabled={this.state.api_status !== 'online'}>Login</button>
+                        <div className="submit control">
+                            <button className="button is-primary" onClick={this.handleLogin} disabled={this.state.api_status !== 'online'}>Login</button>
+                        </div>
                     </div>
                 </div>
             </div>

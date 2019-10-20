@@ -1,7 +1,8 @@
-body {
+.App {
+    padding: 1rem;
     color: white;
     background-color: #202020;
-    padding: 1rem;
+    min-height: 100vh;
 }
 
 .status {

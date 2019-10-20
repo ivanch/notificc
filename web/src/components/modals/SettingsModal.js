@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import API_URL from './config';
-
 import './SettingsModal.css';
+
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const delay_min = 60; // 1 minute
 const delay_max = 86400; // 1 day
@@ -131,9 +131,6 @@ export default class SettingsModal extends Component {
                             <div className="submit control">
                                 <button className="button is-primary" onClick={this.handleSubmit}>Submit</button>
                             </div>
-                            <p className="help" style={{'textAlign':'center'}}>
-                                You don't need to set all fields to submit.
-                            </p>
                         </div>
                     </div>
                 </div>

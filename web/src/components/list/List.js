@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import API_URL from './config';
+import './List.css';
 
-import './List.css'
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export default class List extends Component {
     constructor(props) {
@@ -71,7 +71,6 @@ export default class List extends Component {
                         Registered websites
                     </span>
                 </div>
-                {/* icone book | nome <a> | ligado/desligado check */}
 
                 <div id="list">
                     {this.state.data.map(x => 

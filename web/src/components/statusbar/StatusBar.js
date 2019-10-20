@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import API_URL from './config';
 
-import EmailModal from './EmailModal.js';
-import SettingsModal from './SettingsModal.js';
+import SettingsModal from '../modals/SettingsModal.js';
 
-import './StatusBar.css'
+import './StatusBar.css';
+
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export default class StatusBar extends Component {
     constructor(props) {
@@ -12,7 +12,6 @@ export default class StatusBar extends Component {
 
         this.state = {
             settings: false,
-            email: false,
             auth: false,
         };
     };
@@ -105,15 +104,10 @@ export default class StatusBar extends Component {
                     </div>
 
                     <div className="level-item">
-                        <button className="button" name="email" onClick={this.handleClick} disabled={this.props.api_status === 'online' ? false : true}>Email Settings</button>
-                    </div>
-
-                    <div className="level-item">
                         <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.api_status === 'online' ? false : true}>Logout</button>
                     </div>
                 </div>
 
-                <EmailModal active={this.state.email} handleClose={this.handleClose}/>
                 <SettingsModal active={this.state.settings} handleClose={this.handleClose}/>
             </div>
         )

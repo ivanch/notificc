@@ -3,13 +3,13 @@ import { Redirect } from 'react-router-dom'
 import "react-bulma-components/full";
 import "bloomer-extensions";
 
-import API_URL from './config';
-
 import './App.css'
-import StatusBar from './StatusBar.js'
-import Registery from './Registery.js'
-import Logs from './Logs.js'
-import List from './List.js'
+import StatusBar from './components/statusbar/StatusBar.js'
+import Registery from './components/registry/Registery.js'
+import Logs from './components/logs/Logs.js'
+import List from './components/list/List.js'
+
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export default class App extends Component {
     constructor(props) {

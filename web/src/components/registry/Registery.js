@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import API_URL from './config';
-
 import './Registery.css';
+
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export default class Registery extends Component {
     constructor(props) {

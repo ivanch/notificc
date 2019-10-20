@@ -1,10 +1,16 @@
-#auth {
+#login {
+    padding: 1rem;
+    color: white;
+    background-color: #151515;
+    height: 100%;
+}
+
+#login-box {
     background-color: white;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 2em;
     color: black;
 
-    display: flex;
     align-items: center;
     justify-content: center;
     
@@ -13,23 +19,26 @@
 }
 
 @media only screen and (max-width: 700px) {
-    #auth {
+    #login-box {
         max-width: 85%;
     }
 }
 
-#head {
+.tags {
+    justify-content: center !important;
+}
+
+.auth-header {
+    display: block;
     text-align: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.auth-header h1 {
     font-size: 2em;
 }
 
 .tag-compact {
     max-height: 1.5em;
-    margin-bottom: -1em !important;
-}
-
-.tags-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
