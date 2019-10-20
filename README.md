@@ -7,9 +7,9 @@
 2. Simply run `docker-compose up -d`.
 
 ## Deploy (Build Docker Image)
-1. Run `docker-compose up -d --build` (This will take a while)
+* Run `docker-compose up -d --build` to build and deploy it afterwards.
+* Run `docker-compose build` just to build.
 
-Access the page at [http://localhost:8800](http://localhost:8800). Port 8810 is where the API will listen.
 
 ## Usage
 Default password is *password*, you can change or disable that later in Settings.
@@ -54,6 +54,7 @@ Note that at `docker-compose.yaml` the API is limited to use 50% of CPUs count a
 * Add API key
 * Add option to select a part of the website page
 * Improve Settings modal
+* Improve travis build script
 * Write tests for Web service
 * Write tests for API
 * Handle high ping

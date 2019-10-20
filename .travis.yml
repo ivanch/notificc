@@ -1,18 +1,10 @@
 matrix:
   include:
-    - language: node_js
-      before_script:
-        - cd web
-      script:
-        - npm install
-        - npm run build
-
     - language: generic
-      dependents: *
-      - services:
+      services:
         - docker
       script:
-        - docker-compose --build
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker-compose build
         - docker push ivanch/notify-web:latest
         - docker push ivanch/notify-api:latest
