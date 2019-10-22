@@ -11,7 +11,7 @@ export default class SettingsModal extends Component {
         super(props);
 
         this.state = {
-            auth_pass: '',
+            login_pass: '',
             delay:'',
         }
     };
@@ -43,7 +43,7 @@ export default class SettingsModal extends Component {
     };
 
     handleSubmit = () => {
-        if(this.state.auth_pass !== ''){
+        if(this.state.login_pass !== ''){
             fetch(API_URL + '/api/auth/password', {
                 method: 'PUT',
                 headers: {
@@ -51,7 +51,7 @@ export default class SettingsModal extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    auth_pass: this.state.auth_pass,
+                    auth_pass: this.state.login_pass,
                 })
             })
             .then()
@@ -95,17 +95,17 @@ export default class SettingsModal extends Component {
                             </span>
                         </div>
                         <div className="field">
-                            <label className="label">Change Auth Password:</label>
+                            <label className="label">Change Login Password:</label>
                             <div className="control">
                                 <input  className="input"
                                         type="password"
-                                        name="auth_pass"
-                                        value={this.state.auth_pass}
+                                        name="login_pass"
+                                        value={this.state.login_pass}
                                         onChange={this.handleChange}
                                 />
                             </div>
                             <p className="help">
-                                Set it to 0 to ignore the auth page.
+                                Set it to 0 to ignore the authentication page.
                             </p>
                         </div>
 

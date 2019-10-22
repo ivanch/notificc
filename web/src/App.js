@@ -19,37 +19,13 @@ export default class App extends Component {
             api_status: 'offline',
             checker_status: 'offline',
             settings: false,
-            auth: true,
         }
-        this.timer = setInterval(() => this.fetch_api(), 5000);
+        //this.timer = setInterval(() => this.fetch_api(), 5000);
     };
 
     componentDidMount() {
-        this.fetch_api();     
+        this.fetch_api();  
     };
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevState.api_status === 'offline' && this.state.api_status === 'online'){
-            this.fetch_auth();
-        }
-    }
-
-    fetch_auth() {
-        fetch(API_URL + '/api/auth/token', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
-            })
-        })
-        .then(_response => _response.json())
-        .then(response => {
-            this.setState({auth: response['message'] === 'Authorized'});
-        });
-    }
 
     fetch_api = () => {
         fetch(API_URL + '/api/status')
@@ -70,11 +46,6 @@ export default class App extends Component {
     }
 
     render() {
-        if(!this.state.auth){
-            clearInterval(this.timer);
-            return <Redirect to="/login" />
-        }
-
         return (
             <div className="App">
                 <StatusBar api_status={this.state.api_status} checker_status={this.state.checker_status} fetch_api={this.fetch_api}/>

@@ -47,7 +47,9 @@ export default class Login extends Component {
         })
         .then(_response => _response.json())
         .then(response => {
-            this.setState({auth: response['message'] === 'Authorized'});
+            var authorized = response['message'] === 'Authorized';
+            this.setState({auth: authorized});
+            this.props.handleAuth(authorized);
         });
     }
 
@@ -67,6 +69,7 @@ export default class Login extends Component {
             if(data['message'] === 'Authorized'){
                 localStorage.setItem('@notify-change/access_token', data['token']);
                 this.setState({auth: true});
+                this.props.handleAuth(true);
             }else{
                 alert("Wrong password!");
             }
