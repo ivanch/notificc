@@ -5,6 +5,8 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+      cache_from:
+        - ivanch/notificc-api:latest
     cpus: 0.5
     mem_limit: 200M
     ports:
@@ -16,6 +18,8 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile
+      cache_from:
+        - ivanch/notificc-api:latest
     ports:
       - 8800:80/tcp
 volumes:

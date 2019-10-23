@@ -6,7 +6,7 @@ RUN npm install
 COPY . ./
 RUN npm run build
 
-FROM nginx:stable-alpine
+FROM nginx:stable-alpine as stage
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /web/build /var/www
