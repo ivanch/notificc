@@ -1,6 +1,6 @@
 {
-  "short_name": "Notify Change",
-  "name": "Notify yourself",
+  "short_name": "NotificC",
+  "name": "Notific Changes",
   "icons": [
     {
       "src": "favicon.ico",

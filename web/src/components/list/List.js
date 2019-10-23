@@ -32,7 +32,7 @@ export default class List extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
+                token: localStorage.getItem('@notificc/access_token'),
                 id: event.target.id,
             })
         })
@@ -53,7 +53,7 @@ export default class List extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
+                token: localStorage.getItem('@notificc/access_token'),
                 id: event.target.id,
             })
         })

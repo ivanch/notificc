@@ -1,6 +1,11 @@
-# Notify-Change
-#### Logs websites changes
-[![Build Status](https://travis-ci.com/ivanch/notify-change.svg?token=EiwZJLp9isLBJ89qdmD6&branch=master)](https://travis-ci.com/ivanch/notify-change)
+<h1 align="center">
+  <p align="center">NotificC - Log when website changes</p>
+</h1>
+<p align="center">
+  <a href="https://travis-ci.com/ivanch/notificc"><img src="https://travis-ci.com/ivanch/notify-change.svg?token=EiwZJLp9isLBJ89qdmD6&branch=master"/></a>
+  <a href="https://hub.docker.com/r/ivanch/notificc-api"><img src="https://images.microbadger.com/badges/image/ivanch/notificc-api.svg"/></a>
+  <a href="https://hub.docker.com/r/ivanch/notificc-web"><img src="https://images.microbadger.com/badges/image/ivanch/notificc-web.svg"/></a>
+</p>
 
 ## Deploy (Docker)
 1. Configure the `docker-compose.yaml` file as you need it.
@@ -22,14 +27,14 @@ Once at the index page, you can start/stop the checker by clicking at its status
 1. Sample **nginx** configuration:
 ```
 server {
-    location /notify-change/ {
+    location /notificc/ {
         proxy_pass http://localhost:8800/;
     }
 }
 ```
-2. At `package.json`, `"homepage"` should be defined as `./notify-change`
+2. At `package.json`, `"homepage"` should be defined as `./notificc`
 
-After that, you should be able to access it from [http://localhost/notify-change](http://localhost/notify-change). Note that you won't be able to access it using the 8800 port from your browser anymore.
+After that, you should be able to access it from [http://localhost/notificc](http://localhost/notificc). Note that you won't be able to access it using the 8800 port from your browser anymore.
 
 >Reverse proxying a *react-router* app isn't so easy, you'll have to [build the Docker Image](#deploy-build-docker-image) again with your configuration.
 
@@ -53,12 +58,12 @@ Note that at `docker-compose.yaml` the API is limited to use 50% of CPUs count a
 
 ## to-do:
 * General improvements on front-end
-* Add option to select a part of the website page
 * Improve travis build script
 * Write tests for Web service
 * Write tests for API
 * Handle high ping
 * Handle no internet connection
 * Handle errors on the checker thread
-* Change alerts to simple notifications
-* Change to push notifications
+* (v2) Change alerts to simple notifications
+* (v2) Change to push notifications
+* (v2) Add option to select a part of the website page

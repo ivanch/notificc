@@ -1,10 +1,28 @@
-matrix:
+language: generic
+services:
+  - docker
+
+stages:
+  - pull
+  - build
+  - name: deploy
+    if: branch = master
+
+jobs:
   include:
-    - language: generic
-      services:
-        - docker
+    - stage: pull     # speeds up by using cache
+      name: "Pull from Docker Hub"
+      script:
+        - docker pull notificc-web:latest
+        - docker pull notificc-api:latest
+    - stage: build
+      name: "Build Images"
+      script:
+        - docker-compose build api
+        - docker-compose build web
+    - stage: deploy
+      name: "Deploy to Docker Hub"
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker-compose build
-        - docker push ivanch/notify-web:latest
-        - docker push ivanch/notify-api:latest
+        - docker push ivanch/notificc-web:latest
+        - docker push ivanch/notificc-api:latest

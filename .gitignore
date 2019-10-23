@@ -29,3 +29,4 @@ api/**/*.log
 api/**/*.sock
 api/screenshots
 api/shared/**
+api/.pytest*

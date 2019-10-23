@@ -1,7 +1,7 @@
 version: '2.3'
 services:
   api:
-    image: ivanch/notify-api
+    image: ivanch/notificc-api
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
     volumes:
       - api:/opt/api/shared:rw
   web:
-    image: ivanch/notify-web
+    image: ivanch/notificc-web
     build:
       context: ./web
       dockerfile: Dockerfile

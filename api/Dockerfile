@@ -33,7 +33,8 @@ COPY docker/exec.sh /opt
 # API itself
 COPY . /opt/api
 WORKDIR /opt/api
-RUN mkdir /opt/api/shared && \
+RUN python -c "import app" && \
+    mkdir /opt/api/shared && \
     addgroup www && \
     adduser -D -H -G www www && \
     chmod -R 770 /opt/api && \

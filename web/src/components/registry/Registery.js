@@ -41,7 +41,7 @@ export default class Registery extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
+                token: localStorage.getItem('@notificc/access_token'),
                 name: this.state.name,
                 url: this.state.url,
                 threshold: parseInt(this.state.thresh),

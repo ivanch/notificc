@@ -45,7 +45,7 @@ export default class Logs extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
+                token: localStorage.getItem('@notificc/access_token'),
                 id:     event.target.id === "all" ? "all" :
                             this.state.data[event.target.id]['id'],
                 read:   event.target.id === "all" ? "1" : 
@@ -67,7 +67,7 @@ export default class Logs extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
+                token: localStorage.getItem('@notificc/access_token'),
                 id: event.target.id,
             })
         })

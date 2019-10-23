@@ -25,11 +25,11 @@ export default class StatusBar extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
+                token: localStorage.getItem('@notificc/access_token'),
             })
         })
         .then(() => {
-            localStorage.removeItem('@notify-change/access_token');
+            localStorage.removeItem('@notificc/access_token');
             window.location.reload(false);
         });
     };

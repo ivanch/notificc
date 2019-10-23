@@ -42,7 +42,7 @@ export default class Login extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notify-change/access_token'),
+                token: localStorage.getItem('@notificc/access_token'),
             })
         })
         .then(_response => _response.json())
@@ -67,7 +67,7 @@ export default class Login extends Component {
         .then(_response => _response.json())
         .then(data => {
             if(data['message'] === 'Authorized'){
-                localStorage.setItem('@notify-change/access_token', data['token']);
+                localStorage.setItem('@notificc/access_token', data['token']);
                 this.setState({auth: true});
                 this.props.handleAuth(true);
             }else{
