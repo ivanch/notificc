@@ -116,7 +116,7 @@ export default class SettingsModal extends Component {
                             <div className="column is-one-quarter">
                                 <div className="control">
                                     <input  className={"input " + (this.delay_valid() ? '' : 'is-danger')}
-                                            type="text"
+                                            type="number"
                                             name="delay"
                                             placeholder={`${delay_min}..${delay_max}`}
                                             value={this.state.delay}

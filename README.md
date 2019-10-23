@@ -52,13 +52,13 @@ After that, you should be able to access it from [http://localhost/notify-change
 Note that at `docker-compose.yaml` the API is limited to use 50% of CPUs count and limite to 200MB RAM usage. It should work fine with lower configurations too.
 
 ## to-do:
-* Improvements on front-end
+* General improvements on front-end
 * Add option to select a part of the website page
-* Improve Settings modal
 * Improve travis build script
 * Write tests for Web service
 * Write tests for API
 * Handle high ping
 * Handle no internet connection
 * Handle errors on the checker thread
+* Change alerts to simple notifications
 * Change to push notifications

@@ -3,10 +3,6 @@
     background-color: #fff;
 }
 
-.status .tag {
-    transition: all 750ms ease;
-}
-
 .level-right .button {
     border: 1px #363636 solid !important;
 }

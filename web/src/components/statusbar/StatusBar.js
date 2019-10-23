@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import SettingsModal from '../modals/SettingsModal.js';
+import Tag from '../tag/Tag.js';
 
 import './StatusBar.css';
 
@@ -60,41 +61,38 @@ export default class StatusBar extends Component {
         });
     };
 
-    render(){
-        let api_tag;
+    getAPIStatusColor(){
         if(this.props.api_status === 'online'){
-            api_tag = <span className="tag is-success">online</span>;
+            return "is-success";
         }else if(this.props.api_status === 'offline'){
-            api_tag = <span className="tag is-danger">offline</span>;
+            return "is-danger";
         }else{
-            api_tag = <span className="tag is-black">error</span>;
+            return "is-black";
         }
+    }
 
-        let checker_tag;
+    getCheckerStatusColor(){
         if(this.props.checker_status === 'error'){
-            checker_tag = <span className="tag is-black">error</span>;
+            return "is-black";
         }else if(this.props.checker_status === 'offline'){
-            checker_tag = <span className="tag is-danger" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>offline</span>;
+            return "is-danger";
         }else if(this.props.checker_status === 'stopped'){
-            checker_tag = <span className="tag is-warning" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>stopped</span>;
+            return "is-warning";
         }else if(this.props.checker_status === 'online'){
-            checker_tag = <span className="tag is-success" onClick={this.handleClickChecker} style={{'cursor':'pointer'}}>online</span>;
+            return "is-success";
         }
+        return "is-white";
+    }
 
+    render(){
         return (
             <div className="level status">
                 <div className="level-left">
                     <div className="level-item">
-                        <div className="tags has-addons">
-                            <span className="tag is-dark">api</span>
-                            {api_tag}
-                        </div>
+                        <Tag name="api" content={this.props.api_status} color={this.getAPIStatusColor()} />
                     </div>
                     <div className="level-item">
-                        <div className="tags has-addons">
-                            <span className="tag is-dark">checker</span>
-                            {checker_tag}
-                        </div>
+                        <Tag name="checker" content={this.props.checker_status} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
                     </div>
                 </div>
         
