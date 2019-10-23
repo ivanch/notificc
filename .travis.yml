@@ -13,8 +13,8 @@ jobs:
     - stage: pull     # speeds up by using cache
       name: "Pull from Docker Hub"
       script:
-        - docker pull notificc-web:latest
-        - docker pull notificc-api:latest
+        - docker pull ivanch/notificc-web:latest
+        - docker pull ivanch/notificc-api:latest
     - stage: build
       name: "Build Images"
       script:

@@ -2,7 +2,7 @@
   <p align="center">NotificC - Log when website changes</p>
 </h1>
 <p align="center">
-  <a href="https://travis-ci.com/ivanch/notificc"><img src="https://travis-ci.com/ivanch/notify-change.svg?token=EiwZJLp9isLBJ89qdmD6&branch=master"/></a>
+  <a href="https://travis-ci.com/ivanch/notificc"><img src="https://travis-ci.com/ivanch/notificc.svg?token=EiwZJLp9isLBJ89qdmD6&branch=master"/></a>
   <a href="https://hub.docker.com/r/ivanch/notificc-api"><img src="https://images.microbadger.com/badges/image/ivanch/notificc-api.svg"/></a>
   <a href="https://hub.docker.com/r/ivanch/notificc-web"><img src="https://images.microbadger.com/badges/image/ivanch/notificc-web.svg"/></a>
 </p>
