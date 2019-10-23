@@ -12,29 +12,39 @@ def register_token(token):
         cursor.execute("INSERT INTO tokens (token) VALUES (?);", (token,))
         conn.commit()
 
-# Checks if a token is authorized
-@auth.route('/api/auth/token', methods=['POST'])
-def token_auth():
-    json = request.get_json()
-
+def is_token_authorized(token):
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
 
         if(result[1] == '0'):
-            return jsonify(message="Authorized",
-                        statusCode=200), 200
+            return True
         
-        cursor.execute("SELECT * FROM tokens WHERE token = ?;", (json['token'],))
+        cursor.execute("SELECT * FROM tokens WHERE token = ?;", (token,))
         result = cursor.fetchone()
 
-        if(result == None):
-            return jsonify(message="Unauthorized",
+        if result == None:
+            return False
+        return True
+    
+    # returns false in case of some error
+    return False
+
+
+# Checks if a token is authorized
+@auth.route('/api/auth/token', methods=['POST'])
+def token_auth():
+    json = request.get_json()
+
+    result = is_token_authorized(json['token'])
+
+    if result:
+        return jsonify(message="Authorized",
                     statusCode=200), 200
-        else:
-            return jsonify(message="Authorized",
-                        statusCode=200), 200
+    else:
+        return jsonify(message="Unauthorized",
+                statusCode=200), 200
 
 # Deletes a token from db
 @auth.route('/api/auth/token', methods=['DELETE'])
@@ -75,6 +85,10 @@ def password_auth():
 @auth.route('/api/auth/password', methods=['PUT'])
 def password_update():
     json = request.get_json()
+
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized",
+                        statusCode=401), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()

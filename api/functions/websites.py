@@ -4,6 +4,8 @@ import sqlite3
 import os
 import glob
 
+from .auth import is_token_authorized
+
 websites = Blueprint('websites', __name__)
 
 def exists(url):
@@ -30,6 +32,11 @@ def websites_get():
 @websites.route('/api/websites', methods=['POST'])
 def websites_register():
     json = request.get_json()
+
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized",
+                        statusCode=401), 401
+    
     name = json['name']
     url = json['url']
     threshold = json['threshold']
@@ -50,6 +57,11 @@ def websites_register():
 @websites.route('/api/websites', methods=['PUT'])
 def websites_update():
     json = request.get_json()
+    
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized",
+                        statusCode=401), 401
+    
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
 
@@ -76,6 +88,10 @@ def websites_update():
 @websites.route('/api/websites', methods=['DELETE'])
 def websites_delete():
     json = request.get_json()
+
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized",
+                        statusCode=401), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -104,6 +120,11 @@ def websitesLogs_get():
 @websites.route('/api/websites/logs', methods=['PUT'])
 def websitesLogs_update():
     json = request.get_json()
+
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized",
+                        statusCode=401), 401
+    
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
 
@@ -120,6 +141,10 @@ def websitesLogs_update():
 @websites.route('/api/websites/logs', methods=['DELETE'])
 def websitesLogs_delete():
     json = request.get_json()
+
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized",
+                        statusCode=401), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()

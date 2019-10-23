@@ -51,6 +51,7 @@ export default class SettingsModal extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    token: localStorage.getItem('@notify-change/access_token'),
                     auth_pass: this.state.login_pass,
                 })
             })
@@ -65,6 +66,7 @@ export default class SettingsModal extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    token: localStorage.getItem('@notify-change/access_token'),
                     delay: this.state.delay,
                 })
             })

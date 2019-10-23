@@ -7,6 +7,7 @@
 2. Simply run `docker-compose up -d`.
 
 ## Deploy (Build Docker Image)
+1. Clone this repo and either:
 * Run `docker-compose up -d --build` to build and deploy it afterwards.
 * Run `docker-compose build` just to build.
 
@@ -28,7 +29,7 @@ server {
 ```
 2. At `package.json`, `"homepage"` should be defined as `./notify-change`
 
-After that, you should be able to access it from [http://localhost/notify-change](http://localhost/notify-change). Note that you won't be able to access it using the 8000 port from your browser anymore.
+After that, you should be able to access it from [http://localhost/notify-change](http://localhost/notify-change). Note that you won't be able to access it using the 8800 port from your browser anymore.
 
 >Reverse proxying a *react-router* app isn't so easy, you'll have to [build the Docker Image](#deploy-build-docker-image) again with your configuration.
 
@@ -37,7 +38,7 @@ After that, you should be able to access it from [http://localhost/notify-change
 ![Index page](assets/index.png)
 
 ## Development
-1. Go to `web` folder and run `npm install` to install dependencies and `npm start` to start the development server.
+1. Go to `web` folder, run `npm install` to install dependencies and `npm start` to start the development server.
 2. Go to `api` folder and run `pip install docker/requirements.txt` to install all the requirements.
 3. Run `python app.py` to start the API server.
 
@@ -51,7 +52,7 @@ After that, you should be able to access it from [http://localhost/notify-change
 Note that at `docker-compose.yaml` the API is limited to use 50% of CPUs count and limite to 200MB RAM usage. It should work fine with lower configurations too.
 
 ## to-do:
-* Add API key
+* Improvements on front-end
 * Add option to select a part of the website page
 * Improve Settings modal
 * Improve travis build script

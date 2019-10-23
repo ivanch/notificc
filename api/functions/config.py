@@ -5,6 +5,8 @@ import smtplib
 import os
 import glob
 
+from .auth import is_token_authorized
+
 config = Blueprint('config', __name__)
 
 # Returns the delay
@@ -28,6 +30,10 @@ def config_get():
 @config.route('/api/config', methods=['PUT'])
 def config_update():
     json = request.get_json()
+
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized",
+                        statusCode=401), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()

@@ -11,7 +11,6 @@ import smtplib
 from functions.auth import *
 from functions.websites import *
 from functions.config import *
-from functions.email import *
 
 app = Flask(__name__)
 CORS(app)
@@ -19,7 +18,6 @@ CORS(app)
 app.register_blueprint(auth)
 app.register_blueprint(websites)
 app.register_blueprint(config)
-app.register_blueprint(email)
 
 checker_thread = None
 stop_checker = True
