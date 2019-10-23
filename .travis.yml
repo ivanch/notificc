@@ -2,45 +2,31 @@ language: generic
 services:
   - docker
 
-stages:
-  - pull
-  - build
-  - name: deploy
-    if: branch = master
+before_script:
+  - docker pull ivanch/notificc-web:builder
+  - docker pull ivanch/notificc-web:latest
+  - docker pull ivanch/notificc-api:latest
 
-jobs:
-  include:
-    - stage: pull     # speeds up by using cache
-      name: "Pull from Docker Hub"
-      script:
-        - docker pull ivanch/notificc-web:builder
-        - docker pull ivanch/notificc-web:latest
-        - docker pull ivanch/notificc-api:latest
-    - stage: build
-      name: "Build API"
-      script:
-        - cd api && 
-          docker build 
-            --cache-from ivanch/notificc-api:latest 
-            --tag ivanch/notificc-api:latest . && 
-          cd ..
-    - name: "Build Web"
-      script:
-        - cd web && 
-          docker build 
-            --target builder 
-            --cache-from ivanch/notificc-web:builder
-            --tag ivanch/notificc-web:builder .
-        - docker build 
-            --target stage 
-            --cache-from ivanch/notificc-web:builder 
-            --cache-from ivanch/notificc-web:latest 
-            --tag ivanch/notificc-web:latest . && 
-          cd ..
-    - stage: deploy
-      name: "Deploy to Docker Hub"
-      script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker push ivanch/notificc-web:builder
-        - docker push ivanch/notificc-web:latest
-        - docker push ivanch/notificc-api:latest
+script:
+  - cd api && 
+    docker build 
+      --cache-from ivanch/notificc-api:latest 
+      --tag ivanch/notificc-api:latest . && 
+    cd ..
+  - cd web && 
+    docker build 
+      --target builder 
+      --cache-from ivanch/notificc-web:builder
+      --tag ivanch/notificc-web:builder .
+  - docker build 
+      --target stage 
+      --cache-from ivanch/notificc-web:builder 
+      --cache-from ivanch/notificc-web:latest 
+      --tag ivanch/notificc-web:latest . && 
+    cd ..
+
+deploy:
+  provider: script
+  script: bash deploy_dockerhub.sh
+  on:
+    branch: master

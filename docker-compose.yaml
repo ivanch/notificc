@@ -19,7 +19,8 @@ services:
       context: ./web
       dockerfile: Dockerfile
       cache_from:
-        - ivanch/notificc-api:latest
+        - ivanch/notificc-web:builder
+        - ivanch/notificc-web:latest
     ports:
       - 8800:80/tcp
 volumes:
