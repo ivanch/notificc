@@ -36,7 +36,7 @@ server {
 
 After that, you should be able to access it from [http://localhost/notificc](http://localhost/notificc). Note that you won't be able to access it using the 8800 port from your browser anymore.
 
->Reverse proxying a *react-router* app isn't so easy, you'll have to [build the Docker Image](#deploy-build-docker-image) again with your configuration.
+>Reverse proxying a *react-router* app isn't so easy, you'll have to [build the Web Image](#deploy-build-docker-image) again with your configuration.
 
 ## Screenshot
 

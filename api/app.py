@@ -75,14 +75,6 @@ def setup_db():
                 auth_pass TEXT, \
                 delay INTEGER);")
 
-        cursor.execute("CREATE TABLE email ( \
-                id INTEGER PRIMARY KEY CHECK (id = 0), \
-                user TEXT, \
-                password TEXT, \
-                SMTP_server TEXT, \
-                SMTP_port INTEGER, \
-                SMTP_ttls INTEGER);")
-
         cursor.execute("CREATE TABLE logs ( \
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \
                 name TEXT NOT NULL, \
@@ -97,8 +89,6 @@ def setup_db():
         cursor.execute("INSERT INTO config  (id, auth_pass , delay) \
                         VALUES              (0 , 'password', 120);")
         
-        cursor.execute("INSERT INTO email   (id, user, password, SMTP_server , SMTP_port, SMTP_ttls) \
-                        VALUES              (0 , 'example@example.com', 'password', 'SMTP.server.com', 80, 1);")
         conn.commit()
     else:
         # Reset all access tokens

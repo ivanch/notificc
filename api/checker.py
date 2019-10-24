@@ -1,53 +1,15 @@
 from time import sleep, time
 from selenium import webdriver
-import sqlite3
-import smtplib
 from PIL import Image
-import numpy as np
+from PIL import ImageChops
+import sqlite3
 import glob
-import sys
 import os
-import configparser
-import urllib.request, json
 import datetime
 
 from functions.config import get_delay
 
-EMAIL_USER = ""
-EMAIL_PASS = ""
-
-SMTP_SERVER = ""
-SMTP_PORT = -1
-SMTP_TTLS = True
-
 DELAY = 120 # 2 minutes by default
-
-def message(title, link):
-    if(EMAIL_USER == "example@example.com"):
-        return
-
-    FROM = EMAIL_USER
-    TO = [EMAIL_USER] # must be a list
-
-    # Prepare actual message
-    message = """From: %s\r\nTo: %s\r\nSubject: %s\r\n\
-
-    URL seems to have changed:
-    %s
-
-    Automatic Message.
-    """ % (FROM, ", ".join(TO), "Change in '%s'" % (title), link)
-
-    # Send the mail
-
-    message = message.encode("ascii", errors="ignore")
-
-    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    if(SMTP_TTLS): server.starttls()
-    server.ehlo()
-    server.login(EMAIL_USER, EMAIL_PASS)
-    server.sendmail(FROM, TO, message)
-    server.close()
 
 def logWebsite(name, url, title):
     now = datetime.datetime.now()
@@ -77,25 +39,16 @@ def compare(index, thresh):
 
     new = Image.open('screenshots/ss-%d.png' % (index))
     old = Image.open('screenshots/old-ss-%d.png' % (index))
+    
+    diff = ImageChops.difference(old, new)
+    if diff.getbbox():
+        print(diff.getbbox())
+        bbox = diff.getbbox()
 
-    new = np.array(new)
-    old = np.array(old)
+        total_size = new.size[0] * new.size[1]
+        total_diff = ( (bbox[2]*bbox[3])/total_size ) * 100
 
-    # Limit the height to 1080px
-    if(len(new) > 1080):
-        new = new[:1080]
-        old = old[:1080]
-
-    if(len(new) != len(old)): return True
-    if(len(new[0]) != len(old[0])): return True
-
-    count = 0
-    for i in range(len(new)):
-        for j in range(len(old[i])):
-            if(any(new[i,j] != old[i,j])): count += 1
-    diff_max = (len(new)*len(new[0]))*(thresh/100)
-
-    if(count > diff_max): return True
+    if(total_diff > thresh): return True
 
     # It's not different (or not too different)
     return False
@@ -123,7 +76,6 @@ def loop(stop_checker, changed_websites):
 
                     r = compare(id, url['threshold'])
                     if(r): # has changed
-                        message(driver.title, link)
                         logWebsite(name, link, driver.title)
 
                     os.rename("screenshots/ss-%d.png" % (id), "screenshots/old-ss-%d.png" % (id))
@@ -136,7 +88,7 @@ def loop(stop_checker, changed_websites):
             break
 
 def run(stop_checker, changed_websites):
-    global EMAIL_USER, EMAIL_PASS, SMTP_SERVER, SMTP_PORT, SMTP_TTLS, DELAY
+    global DELAY
 
     # Load the data
     with sqlite3.connect('shared/data.db') as conn:
@@ -145,16 +97,6 @@ def run(stop_checker, changed_websites):
         result = cursor.fetchone()
 
         DELAY = result[0]
-
-        cursor.execute("SELECT * FROM email;")
-        result = cursor.fetchone()
-
-        EMAIL_USER = result[1]
-        EMAIL_PASS = result[2]
-
-        SMTP_SERVER = result[3]
-        SMTP_PORT = result[4]
-        SMTP_TTLS = True if result[5] == 1 else False
 
     # Process files
     if(not os.path.isdir("screenshots")):
