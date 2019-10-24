@@ -11,7 +11,7 @@ export default class SettingsModal extends Component {
         super(props);
 
         this.state = {
-            login_pass: '',
+            loginPass: '',
             delay:'',
         }
     };
@@ -32,7 +32,7 @@ export default class SettingsModal extends Component {
         });
     };
 
-    delay_valid() {
+    isDelayValid() {
         const int_delay = parseInt(this.state.delay);
         if(int_delay < delay_min || int_delay > delay_max) return false;
         return true;
@@ -43,7 +43,7 @@ export default class SettingsModal extends Component {
     };
 
     handleSubmit = () => {
-        if(this.state.login_pass !== ''){
+        if(this.state.loginPass !== ''){
             fetch(API_URL + '/api/auth/password', {
                 method: 'PUT',
                 headers: {
@@ -52,7 +52,7 @@ export default class SettingsModal extends Component {
                 },
                 body: JSON.stringify({
                     token: localStorage.getItem('@notificc/access_token'),
-                    auth_pass: this.state.login_pass,
+                    auth_pass: this.state.loginPass,
                 })
             })
             .then()
@@ -82,7 +82,7 @@ export default class SettingsModal extends Component {
 
     render() {
         let delay_warning;
-        if(!this.delay_valid()){
+        if(!this.isDelayValid()){
             delay_warning = <p className="help is-danger">Min {delay_min}, max {delay_max}.</p>;
         }
 
@@ -101,8 +101,8 @@ export default class SettingsModal extends Component {
                             <div className="control">
                                 <input  className="input"
                                         type="password"
-                                        name="login_pass"
-                                        value={this.state.login_pass}
+                                        name="loginPass"
+                                        value={this.state.loginPass}
                                         onChange={this.handleChange}
                                 />
                             </div>
@@ -115,7 +115,7 @@ export default class SettingsModal extends Component {
                         <div className="field columns">
                             <div className="column is-one-quarter">
                                 <div className="control">
-                                    <input  className={"input " + (this.delay_valid() ? '' : 'is-danger')}
+                                    <input  className={"input " + (this.isDelayValid() ? '' : 'is-danger')}
                                             type="number"
                                             name="delay"
                                             placeholder={`${delay_min}..${delay_max}`}

@@ -11,6 +11,7 @@ export default class Logs extends Component {
         this.state = {
             data: [],
             delay: 60*1000,
+            background: 'white',
         }
     };
 
@@ -30,11 +31,15 @@ export default class Logs extends Component {
     };
 
     fetchLogs = () => {
+        this.setState({background: '#23d160'});
         fetch(API_URL + '/api/websites/logs')
         .then(_response => _response.json())
         .then(response => {
             this.setState({ data: response });
         });
+        setTimeout(() => {
+            this.setState({background: 'white'});
+        }, 100);
     }
 
     handleRead = (event) => {
@@ -84,10 +89,10 @@ export default class Logs extends Component {
     }
 
     render() {
-        if(this.props.api_status !== 'online') return null;
+        if(this.props.apiStatus !== 'online') return null;
 
         return (
-            <div id="logs" className="box">
+            <div id="logs" className="box" style={{backgroundColor: this.state.background}}>
 
                 <div className="header centered">
                     <span className="title">

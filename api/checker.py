@@ -35,7 +35,8 @@ def get_websites():
 
 # Check if 2 images are different
 def compare(index, thresh):    
-    if(not os.path.isfile('screenshots/old-ss-%d.png' % (index))): return False
+    if(not os.path.isfile('screenshots/old-ss-%d.png' % (index))):
+        return False
 
     new = Image.open('screenshots/ss-%d.png' % (index))
     old = Image.open('screenshots/old-ss-%d.png' % (index))
@@ -48,10 +49,7 @@ def compare(index, thresh):
         total_size = new.size[0] * new.size[1]
         total_diff = ( (bbox[2]*bbox[3])/total_size ) * 100
 
-    if(total_diff > thresh): return True
-
-    # It's not different (or not too different)
-    return False
+    return total_diff > thresh
 
 def loop(stop_checker, changed_websites):
     while True:
@@ -66,23 +64,24 @@ def loop(stop_checker, changed_websites):
                 driver.set_window_size(1920, 1080)
 
                 for url in urls:
-                    id = url['id']
+                    uid = url['id']
                     name = url['name']
                     link = url['url']
 
                     driver.get(link)
                     sleep(1)
-                    driver.save_screenshot('screenshots/ss-%d.png' % (id))
+                    driver.save_screenshot('screenshots/ss-%d.png' % (uid))
 
-                    r = compare(id, url['threshold'])
+                    r = compare(uid, url['threshold'])
                     if(r): # has changed
                         logWebsite(name, link, driver.title)
 
-                    os.rename("screenshots/ss-%d.png" % (id), "screenshots/old-ss-%d.png" % (id))
+                    os.rename("screenshots/ss-%d.png" % (uid), "screenshots/old-ss-%d.png" % (uid))
 
                 driver.quit()
             t = DELAY - (time() - start)
-            if(t < 0): t = 0
+            if t < 0:
+                t = 0
             sleep(t)
         except KeyboardInterrupt:
             break
@@ -101,8 +100,8 @@ def run(stop_checker, changed_websites):
     # Process files
     if(not os.path.isdir("screenshots")):
         os.mkdir("screenshots")
-    for file in glob.iglob("screenshots/ss-*.png"):
-        os.remove(file)
+    for l_file in glob.iglob("screenshots/ss-*.png"):
+        os.remove(l_file)
 
     # Start the main loop on a new thread
     loop(stop_checker, changed_websites)

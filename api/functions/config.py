@@ -1,9 +1,6 @@
 from flask import Blueprint
 from flask import request, jsonify
 import sqlite3
-import smtplib
-import os
-import glob
 
 from .auth import is_token_authorized
 

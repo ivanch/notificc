@@ -41,7 +41,7 @@ def websites_register():
     url = json['url']
     threshold = json['threshold']
 
-    if(not exists(url)):
+    if not exists(url):
         with sqlite3.connect('shared/data.db') as conn:
             cursor = conn.cursor()
             cursor.execute("INSERT INTO urls (name, url , threshold , enabled) \
@@ -50,9 +50,9 @@ def websites_register():
 
         return jsonify(message="Success",
                     statusCode=200), 200
-    else:
-        return jsonify(message="Exists",
-                    statusCode=400), 400
+    
+    return jsonify(message="Exists",
+                statusCode=400), 400
 
 @websites.route('/api/websites', methods=['PUT'])
 def websites_update():

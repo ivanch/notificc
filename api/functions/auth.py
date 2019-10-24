@@ -24,13 +24,9 @@ def is_token_authorized(token):
         cursor.execute("SELECT * FROM tokens WHERE token = ?;", (token,))
         result = cursor.fetchone()
 
-        if result == None:
+        if result is None:
             return False
         return True
-    
-    # returns false in case of some error
-    return False
-
 
 # Checks if a token is authorized
 @auth.route('/api/auth/token', methods=['POST'])
@@ -77,9 +73,9 @@ def password_auth():
             return jsonify(message="Authorized",
                             token=token,
                             statusCode=200), 200
-        else:
-            return jsonify(message="Unauthorized",
-                            statusCode=200), 200
+                            
+        return jsonify(message="Unauthorized",
+                        statusCode=200), 200
 
 # Updates the Auth Password
 @auth.route('/api/auth/password', methods=['PUT'])

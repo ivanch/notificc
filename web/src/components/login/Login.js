@@ -11,15 +11,15 @@ export default class Login extends Component {
         super(props);
 
         this.state = {
-            api_status: 'offline',
-            auth_pass: '',
+            apiStatus: 'offline',
+            authPass: '',
             auth: false,
         };
     };
 
     componentDidMount() {
         this.fetch_api();
-        this.check_auth();
+        this.checkAuth();
         this.timer = setInterval(() => this.fetch_api(), 5000);
     };
 
@@ -27,15 +27,15 @@ export default class Login extends Component {
         fetch(API_URL + '/api/status')
         .then(_response => _response.json())
         .then(response => {
-            this.setState({api_status: 'online'});
+            this.setState({apiStatus: 'online'});
         })
         .catch(error => {
             console.error(error);
-            this.setState({api_status: 'offline'});
+            this.setState({apiStatus: 'offline'});
         });
     }
 
-    check_auth() {
+    checkAuth() {
         fetch(API_URL + '/api/auth/token', {
             method: 'POST',
             headers: {
@@ -62,7 +62,7 @@ export default class Login extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                auth_pass: this.state.auth_pass,
+                auth_pass: this.state.authPass,
             })
         })
         .then(_response => _response.json())
@@ -78,9 +78,9 @@ export default class Login extends Component {
     }
 
     getAPIStatusColor(){
-        if(this.state.api_status === 'online'){
+        if(this.state.apiStatus === 'online'){
             return "is-success";
-        }else if(this.state.api_status === 'offline'){
+        }else if(this.state.apiStatus === 'offline'){
             return "is-danger";
         }else{
             return "is-black";
@@ -102,16 +102,16 @@ export default class Login extends Component {
                 <div id="login-box">
                     <div className="auth-header">
                         <h1>Auth</h1>
-                        <Tag name="api" content={this.state.api_status} color={this.getAPIStatusColor()} />
+                        <Tag name="api" content={this.state.apiStatus} color={this.getAPIStatusColor()} />
                     </div>
                     <div className="field">                        
                         <label className="label">Password:</label>
                         <div className="control">
-                            <input className="input" type="password" name="auth_pass" value={this.state.auth_pass} onChange={this.handleChange}/>
+                            <input className="input" type="password" name="authPass" value={this.state.authPass} onChange={this.handleChange}/>
                         </div>
 
                         <div className="submit control">
-                            <button className="button is-primary" onClick={this.handleLogin} disabled={this.state.api_status !== 'online'}>Login</button>
+                            <button className="button is-primary" onClick={this.handleLogin} disabled={this.state.apiStatus !== 'online'}>Login</button>
                         </div>
                     </div>
                 </div>

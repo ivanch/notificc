@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 from flask import Flask
-from flask import request, jsonify
+from flask import jsonify
 from flask_cors import CORS
 import checker
 import threading
 import sqlite3
-import smtplib
 
 from functions.auth import *
 from functions.websites import *
@@ -28,10 +27,13 @@ def main():
     global stop_checker, changed_websites
     checker_status = 'error' # with error by default
     
-    if(checker_thread is None): checker_status = 'error'
-    elif(not checker_thread.is_alive()): checker_status = 'offline'
-    elif(stop_checker): checker_status = 'stopped'
-    else: checker_status = 'online'
+    if not checker_thread is None: # if it exists
+        if not checker_thread.is_alive():
+            checker_status = 'offline' # thread died
+        elif stop_checker:
+            checker_status = 'stopped' # thread stopped
+        else:
+            checker_status = 'online' # all online
 
     response = {'checker_status': checker_status}
     if len(changed_websites) > 0:

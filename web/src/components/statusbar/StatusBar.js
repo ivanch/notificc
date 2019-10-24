@@ -13,7 +13,6 @@ export default class StatusBar extends Component {
 
         this.state = {
             settings: false,
-            auth: false,
         };
     };
 
@@ -54,7 +53,7 @@ export default class StatusBar extends Component {
                 'Content-Type': 'application/json',
             },
         }).then(() => {
-            this.props.fetch_api();
+            this.props.fetchAPI();
         })
         .catch(error => {
             alert("Error: " + error);
@@ -62,9 +61,9 @@ export default class StatusBar extends Component {
     };
 
     getAPIStatusColor(){
-        if(this.props.api_status === 'online'){
+        if(this.props.apiStatus === 'online'){
             return "is-success";
-        }else if(this.props.api_status === 'offline'){
+        }else if(this.props.apiStatus === 'offline'){
             return "is-danger";
         }else{
             return "is-black";
@@ -72,13 +71,13 @@ export default class StatusBar extends Component {
     }
 
     getCheckerStatusColor(){
-        if(this.props.checker_status === 'error'){
+        if(this.props.checkerStatus === 'error'){
             return "is-black";
-        }else if(this.props.checker_status === 'offline'){
+        }else if(this.props.checkerStatus === 'offline'){
             return "is-danger";
-        }else if(this.props.checker_status === 'stopped'){
+        }else if(this.props.checkerStatus === 'stopped'){
             return "is-warning";
-        }else if(this.props.checker_status === 'online'){
+        }else if(this.props.checkerStatus === 'online'){
             return "is-success";
         }
         return "is-white";
@@ -89,20 +88,20 @@ export default class StatusBar extends Component {
             <div className="level status">
                 <div className="level-left">
                     <div className="level-item">
-                        <Tag name="api" content={this.props.api_status} color={this.getAPIStatusColor()} />
+                        <Tag name="api" content={this.props.apiStatus} color={this.getAPIStatusColor()} />
                     </div>
                     <div className="level-item">
-                        <Tag name="checker" content={this.props.checker_status} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
+                        <Tag name="checker" content={this.props.checkerStatus} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
                     </div>
                 </div>
         
                 <div className="level-right">
                     <div className="level-item">
-                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.api_status === 'online' ? false : true}>Settings</button>
+                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.apiStatus === 'online' ? false : true}>Settings</button>
                     </div>
 
                     <div className="level-item">
-                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.api_status === 'online' ? false : true}>Logout</button>
+                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.apiStatus === 'online' ? false : true}>Logout</button>
                     </div>
                 </div>
 

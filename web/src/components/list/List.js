@@ -64,7 +64,7 @@ export default class List extends Component {
     };
 
     render() {
-        if(this.props.api_status !== 'online') return null;
+        if(this.props.apiStatus !== 'online') return null;
 
         return (
             <div id="registered" className="box">

@@ -15,46 +15,44 @@ export default class App extends Component {
         super(props);
 
         this.state = {
-            api_status: 'offline',
-            checker_status: 'offline',
-            settings: false,
+            apiStatus: 'offline',
+            checkerStatus: 'offline',
         }
-        //this.timer = setInterval(() => this.fetch_api(), 5000);
     };
 
     componentDidMount() {
-        this.fetch_api();  
+        this.fetchAPI();  
     };
 
-    fetch_api = () => {
+    fetchAPI = () => {
         fetch(API_URL + '/api/status')
         .then(_response => _response.json())
         .then(response => {
             if(response != null){
-                this.setState({api_status: 'online'});
-                this.setState({checker_status: response['checker_status']});
+                this.setState({apiStatus: 'online'});
+                this.setState({checkerStatus: response['checker_status']});
             }else{
-                this.setState({api_status: 'offline'});
-                this.setState({checker_status: 'offline'});
+                this.setState({apiStatus: 'offline'});
+                this.setState({checkerStatus: 'offline'});
             }
         })
         .catch(() => {
-            this.setState({api_status: 'offline'});
-            this.setState({checker_status: 'offline'});
+            this.setState({apiStatus: 'offline'});
+            this.setState({checkerStatus: 'offline'});
         });
     }
 
     render() {
         return (
             <div className="App">
-                <StatusBar api_status={this.state.api_status} checker_status={this.state.checker_status} fetch_api={this.fetch_api}/>
+                <StatusBar apiStatus={this.state.apiStatus} checkerStatus={this.state.checkerStatus} fetchAPI={this.fetchAPI}/>
                 <div className="columns is-multiline" style={{"marginTop": "0.5rem"}}>
                     <div className="column is-half">
-                        <Registery api_status={this.state.api_status}/>
-                        <List api_status={this.state.api_status}/>
+                        <Registery apiStatus={this.state.apiStatus}/>
+                        <List apiStatus={this.state.apiStatus}/>
                     </div>
                     <div className="column">
-                        <Logs api_status={this.state.api_status}/>
+                        <Logs apiStatus={this.state.apiStatus}/>
                     </div>
                 </div>
             </div>

@@ -11,8 +11,8 @@ export default class Registery extends Component {
             name: '',
             url: '',
             thresh: '5',
-            invalid_url: false,
-            invalid_name: false,
+            invalidURL: false,
+            invalidName: false,
         };
     }
 
@@ -21,13 +21,13 @@ export default class Registery extends Component {
 
         if(event.target.name === 'url'){
             this.setState({
-                invalid_url: !(event.target.value.startsWith("http://") ||
+                invalidURL: !(event.target.value.startsWith("http://") ||
                             event.target.value.startsWith("https://") ||
                             event.target.value.includes(" "))
             });
         }else if(event.target.name === 'name'){
             this.setState({
-                invalid_name:   (event.target.value.length === 0 || 
+                invalidName:   (event.target.value.length === 0 || 
                                 event.target.value.length > 24)
             });
         }
@@ -62,18 +62,18 @@ export default class Registery extends Component {
         });
     }
 
-    is_valid() {
-        if( this.state.invalid_url || 
-            this.state.invalid_name || 
+    isValid() {
+        if( this.state.invalidURL || 
+            this.state.invalidName || 
             this.state.url === '' || 
-            this.props.api_status !== 'online') return false;
+            this.props.apiStatus !== 'online') return false;
         return true;
     }
 
     render() {
-        let name_warning;
-        if(this.state.invalid_name){
-            name_warning = <p className="help is-danger">Name lenght must be between 0 and 24.</p>;
+        let nameWarning;
+        if(this.state.invalidName){
+            nameWarning = <p className="help is-danger">Name lenght must be between 0 and 24.</p>;
         }
 
         return (
@@ -87,15 +87,15 @@ export default class Registery extends Component {
                 <div className="field">
                     <label className="label">Name:</label>
                     <div className="control has-icons-right">
-                        <input className={"input " + (this.state.invalid_name ? 'is-danger' : '')} type="text" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange}/>
+                        <input className={"input " + (this.state.invalidName ? 'is-danger' : '')} type="text" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange}/>
                     </div>
-                    {name_warning}
+                    {nameWarning}
 
                     <label className="label">URL:</label>
                     <div className="control has-icons-right">
-                        <input className={"input " + (this.state.invalid_url ? 'is-danger' : '')} type="text" name="url" placeholder="URL" value={this.state.value} onChange={this.handleChange}/>
+                        <input className={"input " + (this.state.invalidURL ? 'is-danger' : '')} type="text" name="url" placeholder="URL" value={this.state.value} onChange={this.handleChange}/>
                     </div>
-                    {this.state.invalid_url ? <p className="help is-danger">Invalid URL</p> : null}
+                    {this.state.invalidURL ? <p className="help is-danger">Invalid URL</p> : null}
 
                     <label className="label">Difference threshold:</label>
                     <div className="columns">
@@ -110,7 +110,7 @@ export default class Registery extends Component {
                     </div>
                     
                     <div className="submit control">
-                        <button className="button is-primary" onClick={this.handleSubmit} disabled={!(this.is_valid())}>Submit</button>
+                        <button className="button is-primary" onClick={this.handleSubmit} disabled={!(this.isValid())}>Submit</button>
                     </div>
                 </div>
             </div>

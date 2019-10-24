@@ -12,6 +12,10 @@
     margin-left: 1rem;
 }
 
+#logs {
+    transition: all 250ms ease;
+}
+
 #logs .list-line {
     transition: all 750ms ease;
 }

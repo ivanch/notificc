@@ -6,6 +6,12 @@
   <a href="https://hub.docker.com/r/ivanch/notificc-api"><img src="https://images.microbadger.com/badges/image/ivanch/notificc-api.svg"/></a>
   <a href="https://hub.docker.com/r/ivanch/notificc-web"><img src="https://images.microbadger.com/badges/image/ivanch/notificc-web.svg"/></a>
 </p>
+<p align="center">
+  <a href="https://app.codacy.com/manual/joseivanchechen/notificc/dashboard"><img alt="Codacy grade" src="https://img.shields.io/codacy/grade/4ab5b78493614268a7d6aa73ea41bcb6"></a>
+<a href="https://www.codefactor.io/repository/github/ivanch/notificc"><img src="https://www.codefactor.io/repository/github/ivanch/notificc/badge" alt="CodeFactor" /></a>
+<a href="https://lgtm.com/projects/g/ivanch/notificc/"><img alt="LGTM Alerts" src="https://img.shields.io/lgtm/alerts/github/ivanch/notificc"></a>
+
+</p>
 
 ## Deploy (Docker)
 1. Configure the `docker-compose.yaml` file as you need it.
