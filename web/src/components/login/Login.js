@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import Tag from '../tag/Tag.js';
 import './Login.css';
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
@@ -76,6 +77,16 @@ export default class Login extends Component {
         });
     }
 
+    getAPIStatusColor(){
+        if(this.state.api_status === 'online'){
+            return "is-success";
+        }else if(this.state.api_status === 'offline'){
+            return "is-danger";
+        }else{
+            return "is-black";
+        }
+    }
+
     handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
     }
@@ -86,22 +97,12 @@ export default class Login extends Component {
             return <Redirect to="/index" />
         }
 
-        let api_tag;
-        if(this.state.api_status === 'online'){
-            api_tag = <span className="tag is-success tag-compact">online</span>;
-        }else{
-            api_tag = <span className="tag is-danger tag-compact">offline</span>;
-        }
-
         return (
             <div id="login">
                 <div id="login-box">
                     <div className="auth-header">
                         <h1>Auth</h1>
-                        <div className="tags has-addons tags-center">
-                            <span className="tag is-dark tag-compact">api status</span>
-                            {api_tag}
-                        </div>
+                        <Tag name="api" content={this.state.api_status} color={this.getAPIStatusColor()} />
                     </div>
                     <div className="field">                        
                         <label className="label">Password:</label>
