@@ -10,7 +10,6 @@ export default class Logs extends Component {
 
         this.state = {
             data: [],
-            delay: 60*1000,
             background: 'white',
         };
     }
@@ -51,9 +50,9 @@ export default class Logs extends Component {
             },
             body: JSON.stringify({
                 token: localStorage.getItem('@notificc/access_token'),
-                id:     event.target.id === 'all' ? 'all' :
+                id:     event.target.id === 'readAll' ? 'all' :
                             this.state.data[event.target.id]['id'],
-                read:   event.target.id === 'all' ? '1' : 
+                read:   event.target.id === 'readAll' ? '1' : 
                             this.state.data[event.target.id]['read'] === 0 ? 1 : 0,
             })
         })
@@ -73,7 +72,7 @@ export default class Logs extends Component {
             },
             body: JSON.stringify({
                 token: localStorage.getItem('@notificc/access_token'),
-                id: event.target.id,
+                id: event.target.id === 'deleteAll' ? 'all' : event.target.id,
             })
         })
         .catch(() => {
@@ -101,8 +100,8 @@ export default class Logs extends Component {
 
                     <span className='header-control'>
                         <i className='fas fa-sync pointer' title='Refresh logs' onClick={this.fetchLogs}></i>
-                        <i className='fa fa-tasks pointer' title='Mark all as read' id='all' onClick={this.handleRead}></i>
-                        <i className='fa fa-trash pointer' title='Delete all' id='all' onClick={this.handleDelete}></i>
+                        <i className='fa fa-tasks pointer' title='Mark all as read' id='readAll' onClick={this.handleRead}></i>
+                        <i className='fa fa-trash pointer' title='Delete all' id='deleteAll' onClick={this.handleDelete}></i>
                     </span>
                 </div>
 
