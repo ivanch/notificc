@@ -10,11 +10,11 @@ export default class List extends Component {
         this.state = {
             data: [],
         }
-    };
+    }
 
     componentDidMount() {
         this.fetchWebsites();
-    };
+    }
 
     fetchWebsites = () => {
         fetch(API_URL + '/api/websites')
@@ -43,7 +43,7 @@ export default class List extends Component {
                 this.fetchWebsites();
             }, 25);
         });
-    };
+    }
 
     handleDelete = (event) => {
         fetch(API_URL + '/api/websites', {
@@ -61,7 +61,7 @@ export default class List extends Component {
             alert("Error while trying to delete website: " + event.target.id);
         });
         window.location.reload(false);
-    };
+    }
 
     render() {
         if(this.props.apiStatus !== 'online') return null;

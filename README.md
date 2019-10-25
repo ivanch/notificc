@@ -22,12 +22,10 @@
 * Run `docker-compose up -d --build` to build and deploy it afterwards.
 * Run `docker-compose build` just to build.
 
-
 ## Usage
 Default password is *password*, you can change or disable that later in Settings.
 
 Once at the index page, you can start/stop the checker by clicking at its status.
-
 
 ## Reverse Proxy Example
 1. Sample **nginx** configuration:

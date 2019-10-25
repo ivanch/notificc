@@ -15,13 +15,13 @@ export default class Login extends Component {
             authPass: '',
             auth: false,
         };
-    };
+    }
 
     componentDidMount() {
         this.fetch_api();
         this.checkAuth();
         this.timer = setInterval(() => this.fetch_api(), 5000);
-    };
+    }
 
     async fetch_api() {
         fetch(API_URL + '/api/status')

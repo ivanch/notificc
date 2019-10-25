@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Registery.css';
 
+import Warning from '../warning/Warning.js';
+
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export default class Registery extends Component {
@@ -63,19 +65,13 @@ export default class Registery extends Component {
     }
 
     isValid() {
-        if( this.state.invalidURL || 
-            this.state.invalidName || 
-            this.state.url === '' || 
-            this.props.apiStatus !== 'online') return false;
-        return true;
+        return !(this.state.invalidURL || 
+                this.state.invalidName || 
+                this.state.url === '' || 
+                this.props.apiStatus !== 'online');
     }
 
     render() {
-        let nameWarning;
-        if(this.state.invalidName){
-            nameWarning = <p className="help is-danger">Name lenght must be between 0 and 24.</p>;
-        }
-
         return (
             <div id="registry" className="box">
                 <div className="centered">
@@ -87,21 +83,40 @@ export default class Registery extends Component {
                 <div className="field">
                     <label className="label">Name:</label>
                     <div className="control has-icons-right">
-                        <input className={"input " + (this.state.invalidName ? 'is-danger' : '')} type="text" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange}/>
+                        <input className={"input " + (this.state.invalidName ? 'is-danger' : '')}
+                            type="text"
+                            name="name"
+                            placeholder="Name"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                        />
                     </div>
-                    {nameWarning}
+                    <Warning enabled={this.state.invalidName} text="Name lenght must be between 0 and 24." />
 
                     <label className="label">URL:</label>
                     <div className="control has-icons-right">
-                        <input className={"input " + (this.state.invalidURL ? 'is-danger' : '')} type="text" name="url" placeholder="URL" value={this.state.value} onChange={this.handleChange}/>
+                        <input className={"input " + (this.state.invalidURL ? 'is-danger' : '')}
+                            type="text"
+                            name="url"
+                            placeholder="URL"
+                            value={this.state.value}
+                            onChange={this.handleChange}    
+                        />
                     </div>
-                    {this.state.invalidURL ? <p className="help is-danger">Invalid URL</p> : null}
+                    <Warning enabled={this.state.invalidURL} text="Invalid URL." />
 
                     <label className="label">Difference threshold:</label>
                     <div className="columns">
                         <div className="column is-11">
                             <div className="control">
-                                <input className="slider is-fullwidth" name="thresh" step="1" min="0" max="100" value={this.state.thresh} type="range" onChange={this.handleChange}/>
+                                <input className="slider is-fullwidth"
+                                    name="thresh"
+                                    step="1"
+                                    min="0" max="100"
+                                    value={this.state.thresh}
+                                    type="range"
+                                    onChange={this.handleChange}
+                                />
                             </div>
                         </div>
                         <div className="column">
@@ -110,7 +125,9 @@ export default class Registery extends Component {
                     </div>
                     
                     <div className="submit control">
-                        <button className="button is-primary" onClick={this.handleSubmit} disabled={!(this.isValid())}>Submit</button>
+                        <button className="button is-primary"
+                            onClick={this.handleSubmit}
+                            disabled={!(this.isValid())}>Submit</button>
                     </div>
                 </div>
             </div>

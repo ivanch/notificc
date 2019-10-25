@@ -18,11 +18,11 @@ export default class App extends Component {
             apiStatus: 'offline',
             checkerStatus: 'offline',
         }
-    };
+    }
 
     componentDidMount() {
         this.fetchAPI();  
-    };
+    }
 
     fetchAPI = () => {
         fetch(API_URL + '/api/status')

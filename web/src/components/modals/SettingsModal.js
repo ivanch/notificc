@@ -14,13 +14,13 @@ export default class SettingsModal extends Component {
             loginPass: '',
             delay:'',
         }
-    };
+    }
 
     componentDidUpdate(prevProps) {
         if (this.props.active !== prevProps.active && this.props.active === true) {
             this.fetchData();
         }
-    };
+    }
       
     fetchData() {
         fetch(API_URL + '/api/config')
@@ -30,7 +30,7 @@ export default class SettingsModal extends Component {
                 this.setState({delay: response['delay']})
             }
         });
-    };
+    }
 
     isDelayValid() {
         const int_delay = parseInt(this.state.delay);
@@ -40,7 +40,7 @@ export default class SettingsModal extends Component {
 
     handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
-    };
+    }
 
     handleSubmit = () => {
         if(this.state.loginPass !== ''){
@@ -74,11 +74,11 @@ export default class SettingsModal extends Component {
             .then();
         }
         this.handleClose();
-    };
+    }
 
     handleClose = () => {
         this.props.handleClose("settings");
-    };
+    }
 
     render() {
         let delay_warning;

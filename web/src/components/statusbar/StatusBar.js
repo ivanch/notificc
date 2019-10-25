@@ -14,7 +14,7 @@ export default class StatusBar extends Component {
         this.state = {
             settings: false,
         };
-    };
+    }
 
     handleLogout() {
         fetch(API_URL + '/api/auth/token', {
@@ -31,15 +31,15 @@ export default class StatusBar extends Component {
             localStorage.removeItem('@notificc/access_token');
             window.location.reload(false);
         });
-    };
+    }
 
     handleClick = (event) => {
         this.setState({[event.target.name]: true});
-    };
+    }
 
     handleClose = (name) => {
         this.setState({[name]: false});
-    };
+    }
 
     handleClickChecker = () => {
         fetch(API_URL + '/api/checker', {
@@ -54,7 +54,7 @@ export default class StatusBar extends Component {
         .catch(error => {
             alert("Error: " + error);
         });
-    };
+    }
 
     getAPIStatusColor(){
         if(this.props.apiStatus === 'online'){

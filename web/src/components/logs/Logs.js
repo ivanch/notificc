@@ -13,12 +13,12 @@ export default class Logs extends Component {
             delay: 60*1000,
             background: 'white',
         }
-    };
+    }
 
     componentDidMount() {
         this.fetchLogs();
         this.setupTimer();
-    };
+    }
       
     setupTimer() {
         fetch(API_URL + '/api/config')
@@ -28,7 +28,7 @@ export default class Logs extends Component {
                 this.timer = setInterval(() => this.fetchLogs(), (response['delay']*1000)/2);
             }
         });
-    };
+    }
 
     fetchLogs = () => {
         this.setState({background: '#23d160'});
@@ -81,7 +81,7 @@ export default class Logs extends Component {
         }).then(() => {
             this.fetchLogs();
         });
-    };
+    }
 
     getDateFormatted = (timestamp) => {
         var date = new Date(timestamp)
