@@ -9,7 +9,7 @@ export default class List extends Component {
 
         this.state = {
             data: [],
-        }
+        };
     }
 
     componentDidMount() {
@@ -37,7 +37,7 @@ export default class List extends Component {
             })
         })
         .catch(() => {
-            alert("Error while trying to turn on/off website: " + event.target.id);
+            alert('Error while trying to turn on/off website: ' + event.target.id);
         }).then(() => {
             setTimeout(() => {
                 this.fetchWebsites();
@@ -58,7 +58,7 @@ export default class List extends Component {
             })
         })
         .catch(() => {
-            alert("Error while trying to delete website: " + event.target.id);
+            alert('Error while trying to delete website: ' + event.target.id);
         });
         window.location.reload(false);
     }
@@ -67,44 +67,44 @@ export default class List extends Component {
         if(this.props.apiStatus !== 'online') return null;
 
         return (
-            <div id="registered" className="box">
-                <div className="header centered">
-                    <span className="title">
+            <div id='registered' className='box'>
+                <div className='header centered'>
+                    <span className='title'>
                         Registered websites
                     </span>
                 </div>
 
-                <div id="list">
-                    {this.state.data.map(x => 
-                        <div className="list-line" key={x['id']}>
-                            <span className="icon">
-                                <i className="fa fa-bookmark"></i>
+                <div id='list'>
+                    {this.state.data.map(x => (
+                        <div className='list-line' key={x['id']}>
+                            <span className='icon'>
+                                <i className='fa fa-bookmark'></i>
                             </span>
                             
                             <a href={x['url']}>
                                 {x['name']}
                             </a>
 
-                            <div className="list-control">
-                                <div className="list-control-item switch">
+                            <div className='list-control'>
+                                <div className='list-control-item switch'>
                                     <input
-                                        type="checkbox"
-                                        className="switch-checkbox"
+                                        type='checkbox'
+                                        className='switch-checkbox'
                                         id={x['id']}
                                         onChange={this.handleClick}
                                         checked={x['enabled']}
                                     />
                                     <label
-                                        className="switch-label"
+                                        className='switch-label'
                                         htmlFor={x['id']}
-                                        title={x['enabled'] ? "Disable website" : "Enable website"}>    
+                                        title={x['enabled'] ? 'Disable website' : 'Enable website'}>    
                                     </label>
                                 </div>
 
-                                <i className="list-control-item fa fa-times pointer" title="Delete" id={x['id']} onClick={this.handleDelete}></i>
+                                <i className='list-control-item fa fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
                             </div>
                         </div>
-                    )}
+                    ))}
                 </div>
             </div>
         );

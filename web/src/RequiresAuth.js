@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
-import Login from "./components/login/Login.js";
+import React, { Component, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
+import Login from './components/login/Login.js';
 
 class RequireAuth extends Component {
     state = {
@@ -9,14 +9,14 @@ class RequireAuth extends Component {
 
     componentDidMount = () => {
         if (!this.state.isAuthenticated) {
-            this.props.history.push("/");
+            this.props.history.push('/');
         }
     };
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.props.location.pathname !== prevProps.location.pathname &&
             !this.state.isAuthenticated){
-            this.props.history.push("/");
+            this.props.history.push('/');
         }
     };
 

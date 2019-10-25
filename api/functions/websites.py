@@ -154,6 +154,6 @@ def websitesLogs_delete():
         else:
             cursor.execute("DELETE FROM logs WHERE id = ?", (json['id'],))
         conn.commit()
-    
+
     return jsonify(message="Success",
                 statusCode=200), 200

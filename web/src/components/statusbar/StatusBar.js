@@ -52,53 +52,53 @@ export default class StatusBar extends Component {
             this.props.fetchAPI();
         })
         .catch(error => {
-            alert("Error: " + error);
+            alert('Error: ' + error);
         });
     }
 
     getAPIStatusColor(){
         if(this.props.apiStatus === 'online'){
-            return "is-success";
+            return 'is-success';
         }else if(this.props.apiStatus === 'offline'){
-            return "is-danger";
+            return 'is-danger';
         }else{
-            return "is-black";
+            return 'is-black';
         }
     }
 
     getCheckerStatusColor(){
         if(this.props.checkerStatus === 'error'){
-            return "is-black";
+            return 'is-black';
         }else if(this.props.checkerStatus === 'offline'){
-            return "is-danger";
+            return 'is-danger';
         }else if(this.props.checkerStatus === 'stopped'){
-            return "is-warning";
+            return 'is-warning';
         }else if(this.props.checkerStatus === 'online'){
-            return "is-success";
+            return 'is-success';
         }
-        return "is-white";
+        return 'is-white';
     }
 
     render(){
         return (
-            <div id="status">
-                <div className="level">
-                    <div className="level-left">
-                        <div className="level-item">
-                            <Tag name="api" content={this.props.apiStatus} color={this.getAPIStatusColor()} />
+            <div id='status'>
+                <div className='level'>
+                    <div className='level-left'>
+                        <div className='level-item'>
+                            <Tag name='api' content={this.props.apiStatus} color={this.getAPIStatusColor()} />
                         </div>
-                        <div className="level-item">
-                            <Tag name="checker" content={this.props.checkerStatus} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
+                        <div className='level-item'>
+                            <Tag name='checker' content={this.props.checkerStatus} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
                         </div>
                     </div>
             
-                    <div className="level-right">
-                        <div className="level-item">
-                            <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.apiStatus === 'online' ? false : true}>Settings</button>
+                    <div className='level-right'>
+                        <div className='level-item'>
+                            <button className='button' name='settings' onClick={this.handleClick} disabled={this.props.apiStatus === 'online' ? false : true}>Settings</button>
                         </div>
 
-                        <div className="level-item">
-                            <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.apiStatus === 'online' ? false : true}>Logout</button>
+                        <div className='level-item'>
+                            <button className='button is-danger' name='logout' onClick={this.handleLogout} disabled={this.props.apiStatus === 'online' ? false : true}>Logout</button>
                         </div>
                     </div>
 

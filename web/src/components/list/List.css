@@ -22,7 +22,7 @@
     transition: background-color 0.3s ease-in;
 }
 .switch-label:before {
-    content: "";
+    content: '';
     display: block;
     width: 14px;
     margin: 0px;

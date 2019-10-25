@@ -34,7 +34,7 @@ def get_websites():
     return urls
 
 # Check if 2 images are different
-def compare(index, thresh):    
+def compare(index, thresh):
     if(not os.path.isfile('screenshots/old-ss-%d.png' % (index))):
         return False
 
@@ -59,7 +59,7 @@ def loop(stop_checker, changed_websites):
 
             if(not stop_checker()):
                 urls = get_websites()
-                
+
                 driver = webdriver.PhantomJS()
                 driver.set_window_size(1920, 1080)
 

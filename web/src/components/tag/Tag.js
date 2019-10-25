@@ -6,15 +6,15 @@ export default class Tag extends Component {
     getTagContent() {
         if(this.props.click){
             return <span
-                        className={"tag " + this.props.color}
-                        style={{"cursor":"pointer"}}
+                        className={'tag ' + this.props.color}
+                        style={{'cursor':'pointer'}}
                         onClick={this.props.click}
                     >
                         {this.props.content}
                     </span>;
         }else{
             return <span
-                        className={"tag " + this.props.color}
+                        className={'tag ' + this.props.color}
                     >
                         {this.props.content}
                     </span>;
@@ -23,8 +23,8 @@ export default class Tag extends Component {
 
     render(){
         return (
-            <div className="tags has-addons">
-                <span className="tag is-dark">{this.props.name}</span>
+            <div className='tags has-addons'>
+                <span className='tag is-dark'>{this.props.name}</span>
                 {this.getTagContent()}
             </div>
         )

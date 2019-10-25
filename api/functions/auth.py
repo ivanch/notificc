@@ -73,7 +73,7 @@ def password_auth():
             return jsonify(message="Authorized",
                             token=token,
                             statusCode=200), 200
-                            
+
         return jsonify(message="Unauthorized",
                         statusCode=200), 200
 

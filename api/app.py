@@ -101,11 +101,11 @@ def setup_db():
 
 def setup_checker():
     global checker_thread, stop_checker, changed_websites
-        
+
     checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker, changed_websites))
     checker_thread.daemon = True
 
     checker_thread.start()
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     app.run()

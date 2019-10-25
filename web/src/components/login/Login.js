@@ -18,12 +18,12 @@ export default class Login extends Component {
     }
 
     componentDidMount() {
-        this.fetch_api();
+        this.fetchAPI();
         this.checkAuth();
-        this.timer = setInterval(() => this.fetch_api(), 5000);
+        this.timer = setInterval(() => this.fetchAPI(), 5000);
     }
 
-    async fetch_api() {
+    async fetchAPI() {
         fetch(API_URL + '/api/status')
         .then(_response => _response.json())
         .then(response => {
@@ -72,18 +72,18 @@ export default class Login extends Component {
                 this.setState({auth: true});
                 this.props.handleAuth(true);
             }else{
-                alert("Wrong password!");
+                alert('Wrong password!');
             }
         });
     }
 
     getAPIStatusColor(){
         if(this.state.apiStatus === 'online'){
-            return "is-success";
+            return 'is-success';
         }else if(this.state.apiStatus === 'offline'){
-            return "is-danger";
+            return 'is-danger';
         }else{
-            return "is-black";
+            return 'is-black';
         }
     }
 
@@ -94,24 +94,24 @@ export default class Login extends Component {
     render() {
         if(this.state.auth){
             clearInterval(this.timer);
-            return <Redirect to="/index" />
+            return <Redirect to='/index' />
         }
 
         return (
-            <div id="login">
-                <div id="login-box">
-                    <div className="auth-header">
+            <div id='login'>
+                <div id='login-box'>
+                    <div className='auth-header'>
                         <h1>Auth</h1>
-                        <Tag name="api" content={this.state.apiStatus} color={this.getAPIStatusColor()} />
+                        <Tag name='api' content={this.state.apiStatus} color={this.getAPIStatusColor()} />
                     </div>
-                    <div className="field">                        
-                        <label className="label">Password:</label>
-                        <div className="control">
-                            <input className="input" type="password" name="authPass" value={this.state.authPass} onChange={this.handleChange}/>
+                    <div className='field'>                        
+                        <label className='label'>Password:</label>
+                        <div className='control'>
+                            <input className='input' type='password' name='authPass' value={this.state.authPass} onChange={this.handleChange}/>
                         </div>
 
-                        <div className="submit control">
-                            <button className="button is-primary" onClick={this.handleLogin} disabled={this.state.apiStatus !== 'online'}>Login</button>
+                        <div className='submit control'>
+                            <button className='button is-primary' onClick={this.handleLogin} disabled={this.state.apiStatus !== 'online'}>Login</button>
                         </div>
                     </div>
                 </div>

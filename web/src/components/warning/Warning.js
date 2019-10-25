@@ -4,7 +4,7 @@ export default class Warning extends Component {
     render(){
         if(!this.props.enabled) return null;
         return (
-            <p className="help is-danger">{this.props.text}</p>
+            <p className='help is-danger'>{this.props.text}</p>
         )
     }
 

@@ -12,7 +12,7 @@ export default class Logs extends Component {
             data: [],
             delay: 60*1000,
             background: 'white',
-        }
+        };
     }
 
     componentDidMount() {
@@ -51,14 +51,14 @@ export default class Logs extends Component {
             },
             body: JSON.stringify({
                 token: localStorage.getItem('@notificc/access_token'),
-                id:     event.target.id === "all" ? "all" :
+                id:     event.target.id === 'all' ? 'all' :
                             this.state.data[event.target.id]['id'],
-                read:   event.target.id === "all" ? "1" : 
+                read:   event.target.id === 'all' ? '1' : 
                             this.state.data[event.target.id]['read'] === 0 ? 1 : 0,
             })
         })
         .catch(() => {
-            alert("Error while trying to change read log: " + event.target.id);
+            alert('Error while trying to change read log: ' + event.target.id);
         }).then(() => {
             this.fetchLogs();
         });
@@ -77,40 +77,40 @@ export default class Logs extends Component {
             })
         })
         .catch(() => {
-            alert("Error while trying to delete log: " + event.target.id);
+            alert('Error while trying to delete log: ' + event.target.id);
         }).then(() => {
             this.fetchLogs();
         });
     }
 
     getDateFormatted = (timestamp) => {
-        var date = new Date(timestamp)
-        return date.getDate() + "/" + date.getMonth() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+        var date = new Date(timestamp);
+        return date.getDate() + '/' + date.getMonth() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     }
 
     render() {
         if(this.props.apiStatus !== 'online') return null;
 
         return (
-            <div id="logs" className="box" style={{backgroundColor: this.state.background}}>
+            <div id='logs' className='box' style={{backgroundColor: this.state.background}}>
 
-                <div className="header centered">
-                    <span className="title">
+                <div className='header centered'>
+                    <span className='title'>
                         Logs
                     </span>
 
-                    <span className="header-control">
-                        <i className="fas fa-sync pointer" title="Refresh logs" onClick={this.fetchLogs}></i>
-                        <i className="fa fa-tasks pointer" title="Mark all as read" id='all' onClick={this.handleRead}></i>
-                        <i className="fa fa-trash pointer" title="Delete all" id='all' onClick={this.handleDelete}></i>
+                    <span className='header-control'>
+                        <i className='fas fa-sync pointer' title='Refresh logs' onClick={this.fetchLogs}></i>
+                        <i className='fa fa-tasks pointer' title='Mark all as read' id='all' onClick={this.handleRead}></i>
+                        <i className='fa fa-trash pointer' title='Delete all' id='all' onClick={this.handleDelete}></i>
                     </span>
                 </div>
 
-                <div id="list">
+                <div id='list'>
                     {this.state.data.map((x, index) => 
-                        <div className={"list-line " + (x['read'] ? "" : "unread")} key={x['id']}>
-                            <span className="icon">
-                                <i className="fa fa-book"></i>
+                        <div className={'list-line ' + (x['read'] ? '' : 'unread')} key={x['id']}>
+                            <span className='icon'>
+                                <i className='fa fa-book'></i>
                             </span>
                             
                             <a href={x['url']}>
@@ -121,16 +121,16 @@ export default class Logs extends Component {
                             : {x['title']}
                             </span>
 
-                            <div className="list-control">
-                                <span className="list-control-item logs-time">
+                            <div className='list-control'>
+                                <span className='list-control-item logs-time'>
                                     {this.getDateFormatted(x['time'])}
                                 </span>
 
                                 {x['read'] ? 
-                                    <i className="list-control-item far fa-check-circle pointer" title="Mark as unread" id={index} onClick={this.handleRead}></i> :
-                                    <i className="list-control-item fas fa-check-circle pointer" title="Mark as read" id={index} onClick={this.handleRead}></i>
+                                    <i className='list-control-item far fa-check-circle pointer' title='Mark as unread' id={index} onClick={this.handleRead}></i> :
+                                    <i className='list-control-item fas fa-check-circle pointer' title='Mark as read' id={index} onClick={this.handleRead}></i>
                                 }
-                                <i className="list-control-item fas fa-times pointer" title="Delete" id={x['id']} onClick={this.handleDelete}></i>
+                                <i className='list-control-item fas fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
                             </div>
                         </div>
                     )}
