@@ -5,15 +5,6 @@
     min-height: 100vh;
 }
 
-.status {
-    padding: 1em;
-    margin-bottom: 0em !important;
-}
-
-#settings {
-    color: white !important;
-}
-
 .pointer {
     cursor: pointer;
 }

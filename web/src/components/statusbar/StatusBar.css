@@ -1,8 +1,9 @@
-.status {
+#status {
+    padding: 1em;
     border-radius: 5px;
     background-color: #fff;
 }
 
-.level-right .button {
-    border: 1px #363636 solid !important;
+#status .level-right .button {
+    border: 1px #363636 solid;
 }

@@ -34,11 +34,7 @@ export default class StatusBar extends Component {
     };
 
     handleClick = (event) => {
-        if([event.target.name] === 'logout'){
-            window.location.reload(false);
-        }else{
-            this.setState({[event.target.name]: true});   
-        }
+        this.setState({[event.target.name]: true});
     };
 
     handleClose = (name) => {
@@ -85,27 +81,29 @@ export default class StatusBar extends Component {
 
     render(){
         return (
-            <div className="level status">
-                <div className="level-left">
-                    <div className="level-item">
-                        <Tag name="api" content={this.props.apiStatus} color={this.getAPIStatusColor()} />
+            <div id="status">
+                <div className="level">
+                    <div className="level-left">
+                        <div className="level-item">
+                            <Tag name="api" content={this.props.apiStatus} color={this.getAPIStatusColor()} />
+                        </div>
+                        <div className="level-item">
+                            <Tag name="checker" content={this.props.checkerStatus} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
+                        </div>
                     </div>
-                    <div className="level-item">
-                        <Tag name="checker" content={this.props.checkerStatus} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
-                    </div>
-                </div>
-        
-                <div className="level-right">
-                    <div className="level-item">
-                        <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.apiStatus === 'online' ? false : true}>Settings</button>
+            
+                    <div className="level-right">
+                        <div className="level-item">
+                            <button className="button" name="settings" onClick={this.handleClick} disabled={this.props.apiStatus === 'online' ? false : true}>Settings</button>
+                        </div>
+
+                        <div className="level-item">
+                            <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.apiStatus === 'online' ? false : true}>Logout</button>
+                        </div>
                     </div>
 
-                    <div className="level-item">
-                        <button className="button is-danger" name="logout" onClick={this.handleLogout} disabled={this.props.apiStatus === 'online' ? false : true}>Logout</button>
-                    </div>
+                    <SettingsModal active={this.state.settings} handleClose={this.handleClose}/>
                 </div>
-
-                <SettingsModal active={this.state.settings} handleClose={this.handleClose}/>
             </div>
         )
     }
