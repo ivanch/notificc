@@ -49,7 +49,9 @@ def compare(index, thresh):
         total_size = new.size[0] * new.size[1]
         total_diff = ( (bbox[2]*bbox[3])/total_size ) * 100
 
-    return total_diff > thresh
+        return total_diff > thresh
+    
+    return False
 
 def loop(stop_checker, changed_websites):
     while True:
