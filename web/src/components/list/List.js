@@ -59,8 +59,11 @@ export default class List extends Component {
         })
         .catch(() => {
             alert('Error while trying to delete website: ' + event.target.id);
+        }).then(() => {
+            setTimeout(() => {
+                this.fetchWebsites();
+            }, 25);
         });
-        window.location.reload(false);
     }
 
     render() {

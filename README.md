@@ -51,13 +51,6 @@ After that, you should be able to access it from [http://localhost/notificc](htt
 2. Go to `api` folder and run `pip install docker/requirements.txt` to install all the requirements.
 3. Run `python app.py` to start the API server.
 
-## Resource usage
-| Service | State | RAM Usage |
-|---------|-------|-----------|
-| Web server | Idle/Active | About 2 MB |
-| API server | Idle | About 20 MB |
-| API server | Active | About 50 MB |
-
 Note that at `docker-compose.yaml` the API is limited to use 50% of CPUs count and limite to 200MB RAM usage. It should work fine with lower configurations too.
 
 ## to-do:

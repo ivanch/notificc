@@ -29,15 +29,16 @@
     }
 }
 
-.tags {
-    justify-content: center;
-}
-
 .auth-header {
     display: block;
     text-align: center;
     align-items: center;
     margin-bottom: 1rem;
+}
+
+.auth-header .tags {
+    display: block;
+    align-items: center;
 }
 
 .auth-header h1 {

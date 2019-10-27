@@ -58,6 +58,7 @@ function registerValidSW(swUrl, config) {
           }
         };
       };
+      return registration;
     })
     .catch(error => {
       console.error('Error during service worker registration:', error);
@@ -82,7 +83,7 @@ function checkValidServiceWorker(swUrl, config) {
         });
       } else {
         // Service worker found. Proceed as normal.
-        registerValidSW(swUrl, config);
+        return registerValidSW(swUrl, config);
       }
     })
     .catch(() => {
@@ -101,7 +102,7 @@ export function unregister() {
 }
 
 export function register(config) {
-    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
       // The URL constructor is available in all browsers that support SW.
       const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
       if (publicUrl.origin !== window.location.origin) {
@@ -116,7 +117,7 @@ export function register(config) {
   
         if (isLocalhost) {
           // This is running on localhost. Let's check if a service worker still exists or not.
-          checkValidServiceWorker(swUrl, config);
+          const sw = checkValidServiceWorker(swUrl, config);
   
           // Add some additional logging to localhost, pointing developers to the
           // service worker/PWA documentation.
@@ -126,9 +127,12 @@ export function register(config) {
                 'worker. To learn more, visit https://bit.ly/CRA-PWA'
             );
           });
+
+          return sw;
+
         } else {
           // Is not localhost. Just register service worker
-          registerValidSW(swUrl, config);
+          return registerValidSW(swUrl, config);
         }
       });
     }

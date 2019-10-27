@@ -9,6 +9,7 @@ export default class Logs extends Component {
         super(props);
 
         this.state = {
+            sw: null,
             data: [],
             background: 'white',
         };
@@ -17,6 +18,14 @@ export default class Logs extends Component {
     componentDidMount() {
         this.fetchLogs();
         this.setupTimer();
+
+        window.Notification.requestPermission().then(perm => {
+            if(perm === 'granted'){
+                navigator.serviceWorker.getRegistration(`${process.env.PUBLIC_URL}/service-worker.js`).then(sw => {
+                    this.setState({sw: sw})
+                });
+            }
+        });
     }
       
     setupTimer() {
@@ -29,12 +38,29 @@ export default class Logs extends Component {
         });
     }
 
+    notificate = (title, body) => {
+        const options = {
+            "body": body,
+            "icon": "/favicon.ico"
+        };
+        this.state.sw.showNotification(title, options);
+    }
+
     fetchLogs = () => {
         this.setState({background: '#23d160'});
         fetch(API_URL + '/api/websites/logs')
         .then(_response => _response.json())
         .then(response => {
             this.setState({ data: response });
+
+            if(this.state.sw !== null){
+                response.forEach((el, index) => {
+                    if(el['read'] === 0){
+                        this.notificate(el['title'], el['name']);
+                        this.handleRead({target: { id: index }});
+                    }
+                });
+            }
         });
         setTimeout(() => {
             this.setState({background: 'white'});
@@ -42,6 +68,8 @@ export default class Logs extends Component {
     }
 
     handleRead = (event) => {
+        this.setState({background: '#23d160'});
+        console.log(event.target.id)
         fetch(API_URL + '/api/websites/logs', {
             method: 'PUT',
             headers: {
@@ -49,7 +77,7 @@ export default class Logs extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notificc/access_token'),
+                token:  localStorage.getItem('@notificc/access_token'),
                 id:     event.target.id === 'readAll' ? 'all' :
                             this.state.data[event.target.id]['id'],
                 read:   event.target.id === 'readAll' ? '1' : 
@@ -64,6 +92,7 @@ export default class Logs extends Component {
     }
 
     handleDelete = (event) => {
+        this.setState({background: '#d12323'});
         fetch(API_URL + '/api/websites/logs', {
             method: 'DELETE',
             headers: {
