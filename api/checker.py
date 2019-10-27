@@ -1,5 +1,6 @@
 from time import sleep, time
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from PIL import Image
 from PIL import ImageChops
 import sqlite3
@@ -43,7 +44,6 @@ def compare(index, thresh):
     
     diff = ImageChops.difference(old, new)
     if diff.getbbox():
-        print(diff.getbbox())
         bbox = diff.getbbox()
 
         total_size = new.size[0] * new.size[1]
@@ -62,7 +62,14 @@ def loop(stop_checker, changed_websites):
             if(not stop_checker()):
                 urls = get_websites()
 
-                driver = webdriver.PhantomJS()
+                options = Options()
+                options.add_argument('--headless')
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-dev-shm-usage')
+                options.add_argument('--disable-features=VizDisplayCompositor')
+ 
+                driver = webdriver.Chrome(chrome_options=options)
+
                 driver.set_window_size(1920, 1080)
 
                 for url in urls:
