@@ -20,7 +20,7 @@ export default class Login extends Component {
     componentDidMount() {
         this.fetchAPI();
         this.checkAuth();
-        this.timer = setInterval(() => this.fetchAPI(), 5000);
+        this.timer = setInterval(() => this.fetchAPI(), 2500);
     }
 
     async fetchAPI() {
@@ -92,11 +92,6 @@ export default class Login extends Component {
     }
 
     render() {
-        if(this.state.auth){
-            clearInterval(this.timer);
-            return <Redirect to='/index' />
-        }
-
         return (
             <div id='login'>
                 <div id='login-box'>

@@ -8,6 +8,7 @@ import RequiresAuth from './RequiresAuth.js';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 import * as serviceWorker from './serviceWorker';
+import Login from './components/login/Login';
 
 const routing = (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -15,6 +16,7 @@ const routing = (
             <Switch>
                 <Route path='/' exact={true} component={App} />
                 <Route path='/index' component={App} />
+                <Route path='/login' component={Login} />
             </Switch>
         </RequiresAuth>
     </BrowserRouter>

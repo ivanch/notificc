@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import './List.css';
+import './Registry.css';
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
-export default class List extends Component {
+export default class Registry extends Component {
     constructor(props) {
         super(props);
 
@@ -59,16 +59,11 @@ export default class List extends Component {
         })
         .catch(() => {
             alert('Error while trying to delete website: ' + event.target.id);
-        }).then(() => {
-            setTimeout(() => {
-                this.fetchWebsites();
-            }, 25);
         });
+        window.location.reload(false);
     }
 
     render() {
-        if(this.props.apiStatus !== 'online') return null;
-
         return (
             <div id='registered' className='box'>
                 <div className='header centered'>
@@ -77,9 +72,9 @@ export default class List extends Component {
                     </span>
                 </div>
 
-                <div id='list'>
+                <div id='content'>
                     {this.state.data.map(x => (
-                        <div className='list-line' key={x['id']}>
+                        <div className='content-line' key={x['id']}>
                             <span className='icon'>
                                 <i className='fa fa-bookmark'></i>
                             </span>
@@ -88,8 +83,8 @@ export default class List extends Component {
                                 {x['name']}
                             </a>
 
-                            <div className='list-control'>
-                                <div className='list-control-item switch'>
+                            <div className='content-control'>
+                                <div className='registry-control-item switch'>
                                     <input
                                         type='checkbox'
                                         className='switch-checkbox'
@@ -104,7 +99,7 @@ export default class List extends Component {
                                     </label>
                                 </div>
 
-                                <i className='list-control-item fa fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
+                                <i className='content-control-item fa fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
                             </div>
                         </div>
                     ))}
