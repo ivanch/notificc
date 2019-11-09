@@ -27,6 +27,6 @@ script:
 
 deploy:
   provider: script
-  script: bash deploy_dockerhub.sh
+  script: bash ./assets/deploy_dockerhub.sh
   on:
     branch: master

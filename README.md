@@ -8,7 +8,6 @@
 </p>
 <p align="center">
   <a href="https://app.codacy.com/manual/joseivanchechen/notificc/dashboard"><img alt="Codacy grade" src="https://img.shields.io/codacy/grade/4ab5b78493614268a7d6aa73ea41bcb6"></a>
-<a href="https://www.codefactor.io/repository/github/ivanch/notificc"><img src="https://www.codefactor.io/repository/github/ivanch/notificc/badge" alt="CodeFactor" /></a>
 <a href="https://lgtm.com/projects/g/ivanch/notificc/"><img alt="LGTM Alerts" src="https://img.shields.io/lgtm/alerts/github/ivanch/notificc"></a>
 
 </p>
@@ -51,16 +50,13 @@ After that, you should be able to access it from [http://localhost/notificc](htt
 2. Go to `api` folder and run `pip install docker/requirements.txt` to install all the requirements.
 3. Run `python app.py` to start the API server.
 
-Note that at `docker-compose.yaml` the API is limited to use 50% of CPUs count and limite to 200MB RAM usage. It should work fine with lower configurations too.
+Note that at `docker-compose.yaml` the API is limited to use 10% of CPUs count and limited to 100MB RAM usage. It should work fine with lower configurations too.
 
 ## to-do:
-* General improvements on front-end
-* Improve travis build script
 * Write tests for Web service
 * Write tests for API
 * Handle high ping
 * Handle no internet connection
 * Handle errors on the checker thread
 * (v2) Change alerts to simple notifications
-* (v2) Change to push notifications
 * (v2) Add option to select a part of the website page
