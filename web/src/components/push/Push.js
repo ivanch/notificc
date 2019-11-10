@@ -5,7 +5,7 @@ const API_URL = process.env.REACT_APP_API_ENDPOINT;
 function urlBase64ToUint8Array(base64String) {
     var padding = '='.repeat((4 - base64String.length % 4) % 4);
     var base64 = (base64String + padding)
-        .replace(/\-/g, '+')
+        .replace(/-/g, '+')
         .replace(/_/g, '/');
 
     var rawData = window.atob(base64);
@@ -17,11 +17,7 @@ function urlBase64ToUint8Array(base64String) {
     return outputArray;
 }
 
-export default class Logs extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+export default class Push extends Component {
     componentDidMount() {
         window.Notification.requestPermission().then(perm => {
             if(perm === 'granted'){
@@ -63,7 +59,7 @@ export default class Logs extends Component {
                 });
             });
         }).catch(err => {
-            if(err instanceof DOMException && twice == false){ // Already registered, unregister and try again, last time
+            if(err instanceof DOMException && twice === false){ // Already registered, unregister and try again, last time
                 sw.pushManager.getSubscription().then(pms => {
                     pms.unsubscribe();
                 }).then(() => {
