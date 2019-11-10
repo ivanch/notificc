@@ -9,6 +9,7 @@ import os
 import datetime
 
 from functions.config import get_delay
+from functions.push import send_notification
 
 DELAY = 120 # 2 minutes by default
 
@@ -53,7 +54,7 @@ def compare(index, thresh):
     
     return False
 
-def loop(stop_checker, changed_websites):
+def loop(stop_checker):
     while True:
         try:
             start = time() # to "normalize" time
@@ -84,6 +85,7 @@ def loop(stop_checker, changed_websites):
                     r = compare(uid, url['threshold'])
                     if(r): # has changed
                         logWebsite(name, link, driver.title)
+                        send_notification(name, uid)
 
                     os.rename("screenshots/ss-%d.png" % (uid), "screenshots/old-ss-%d.png" % (uid))
 
@@ -95,7 +97,7 @@ def loop(stop_checker, changed_websites):
         except KeyboardInterrupt:
             break
 
-def run(stop_checker, changed_websites):
+def run(stop_checker):
     global DELAY
 
     # Load the data
@@ -113,4 +115,4 @@ def run(stop_checker, changed_websites):
         os.remove(l_file)
 
     # Start the main loop on a new thread
-    loop(stop_checker, changed_websites)
+    loop(stop_checker)

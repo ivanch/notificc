@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import Tag from '../tag/Tag.js';
 import './Login.css';
@@ -23,7 +22,7 @@ export default class Login extends Component {
         this.timer = setInterval(() => this.fetchAPI(), 2500);
     }
 
-    async fetchAPI() {
+    fetchAPI() {
         fetch(API_URL + '/api/status')
         .then(_response => _response.json())
         .then(response => {

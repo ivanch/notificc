@@ -3,3 +3,5 @@ flask_cors
 pillow
 selenium
 uwsgi
+py-vapid==1.7.0
+pywebpush==1.10.0

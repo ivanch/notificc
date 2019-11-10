@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './Logs.css';
+import Push from '../push/Push.js';
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
@@ -13,7 +14,6 @@ export default class Logs extends Component {
         super(props);
 
         this.state = {
-            sw: null,
             data: [],
             background: 'white',
         };
@@ -22,14 +22,6 @@ export default class Logs extends Component {
     componentDidMount() {
         this.fetchLogs();
         this.setupTimer();
-
-        window.Notification.requestPermission().then(perm => {
-            if(perm === 'granted'){
-                navigator.serviceWorker.getRegistration(`${process.env.PUBLIC_URL}/service-worker.js`).then(sw => {
-                    this.setState({sw: sw})
-                });
-            }
-        });
     }
       
     setupTimer() {
@@ -42,29 +34,12 @@ export default class Logs extends Component {
         });
     }
 
-    notificate = (title, body) => {
-        const options = {
-            "body": body,
-            "icon": "/favicon.ico"
-        };
-        this.state.sw.showNotification(title, options);
-    }
-
     fetchLogs = () => {
         this.setState({background: '#23d160'});
         fetch(API_URL + '/api/websites/logs')
         .then(_response => _response.json())
         .then(response => {
             this.setState({ data: response });
-
-            if(this.state.sw !== null){
-                response.forEach((el, index) => {
-                    if(el['read'] === 0){
-                        this.notificate(el['title'], el['name']);
-                        this.handleRead({target: { id: index }});
-                    }
-                });
-            }
         });
         setTimeout(() => {
             this.setState({background: 'white'});
@@ -167,6 +142,8 @@ export default class Logs extends Component {
                         </div>
                     )}
                 </div>
+
+                <Push />
             </div>
         );
     }
