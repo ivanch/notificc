@@ -13,7 +13,9 @@ RUN apk add --virtual .build-dependencies \
             libjpeg-turbo-dev \
             pcre-dev \
             ca-certificates \
-            openssl
+            openssl \
+            openssl-dev \
+            libffi-dev
 
 COPY docker/requirements.txt requirements.txt
 RUN pip install -r requirements.txt && \
@@ -28,8 +30,7 @@ COPY docker/exec.sh /opt
 # API files
 COPY . /opt/api
 WORKDIR /opt/api
-RUN python -c "import app" && \
-    mkdir /opt/api/shared && \
+RUN mkdir /opt/api/shared && \
     addgroup www && \
     adduser -D -H -G www www && \
     chmod -R 770 /opt/api && \

@@ -51,21 +51,23 @@ def turn_checker():
         stop_checker = False
     else:
         stop_checker = False if stop_checker else True
+    
     return jsonify(message="Success",
                 statusCode=200), 200
 
 def setup_checker():
-    global checker_thread, stop_checker
+    global stop_checker, checker_thread
 
-    checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker,))
+    checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker, ))
     checker_thread.daemon = True
 
     checker_thread.start()
 
-if __name__ == "__main__":
-
+@app.before_first_request
+def setup():
     setup_db()
     setup_push()
     setup_checker()
 
+if __name__ == '__main__':
     app.run()

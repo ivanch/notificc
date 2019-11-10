@@ -11,8 +11,6 @@ import datetime
 from functions.config import get_delay
 from functions.push import send_notification
 
-DELAY = 120 # 2 minutes by default
-
 def logWebsite(name, url, title):
     now = datetime.datetime.now()
 
@@ -72,8 +70,9 @@ def loop(stop_checker):
                 driver = webdriver.Chrome(chrome_options=options)
 
                 driver.set_window_size(1920, 1080)
-
                 for url in urls:
+
+                    print("#3", url)
                     uid = url['id']
                     name = url['name']
                     link = url['url']
@@ -86,28 +85,19 @@ def loop(stop_checker):
                     if(r): # has changed
                         logWebsite(name, link, driver.title)
                         send_notification(name, uid)
-
+                    
                     os.rename("screenshots/ss-%d.png" % (uid), "screenshots/old-ss-%d.png" % (uid))
 
                 driver.quit()
             t = DELAY - (time() - start)
             if t < 0:
                 t = 0
+            t = int(t)
             sleep(t)
         except KeyboardInterrupt:
             break
 
 def run(stop_checker):
-    global DELAY
-
-    # Load the data
-    with sqlite3.connect('shared/data.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT delay FROM config;")
-        result = cursor.fetchone()
-
-        DELAY = result[0]
-
     # Process files
     if(not os.path.isdir("screenshots")):
         os.mkdir("screenshots")
