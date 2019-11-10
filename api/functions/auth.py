@@ -40,16 +40,16 @@ def token_auth():
                     statusCode=200), 200
     else:
         return jsonify(message="Unauthorized",
-                statusCode=200), 200
+                statusCode=401), 401
 
 # Deletes a token from db
 @auth.route('/api/auth/token', methods=['DELETE'])
 def token_delete():
-    json = request.get_json()
+    token = request.args.get('token')
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM tokens WHERE token = ?;", (json['token'],))
+        cursor.execute("DELETE FROM tokens WHERE token = ?;", (token,))
         conn.commit()
 
     return jsonify(message="Success",
@@ -75,7 +75,7 @@ def password_auth():
                             statusCode=200), 200
 
         return jsonify(message="Unauthorized",
-                        statusCode=200), 200
+                        statusCode=401), 401
 
 # Updates the Auth Password
 @auth.route('/api/auth/password', methods=['PUT'])

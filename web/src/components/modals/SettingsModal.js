@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './SettingsModal.css';
 
+import Warning from '../warning/Warning.js';
+
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const DELAY_MIN = 60; // 1 minute
@@ -12,6 +14,7 @@ export default class SettingsModal extends Component {
 
         this.state = {
             loginPass: '',
+            disablePass: false,
             delay:'',
         };
     }
@@ -23,12 +26,29 @@ export default class SettingsModal extends Component {
     }
       
     fetchData() {
+        // Fetch delay
         fetch(API_URL + '/api/config')
         .then(_response => _response.json())
         .then(response => {
             if(response != null){
                 this.setState({delay: response['delay']})
             }
+        });
+
+        // Fetch password disabled
+        fetch(API_URL + '/api/auth/password', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                auth_pass: '0',
+            })
+        })
+        .then(_response => _response.json())
+        .then(data => {
+            this.setState({disablePass: data['message'] === 'Authorized'});
         });
     }
 
@@ -38,12 +58,20 @@ export default class SettingsModal extends Component {
         return true;
     }
 
+    isPasswordValid() {
+        return this.state.loginPass.length >= 4 || this.state.loginPass.length === 0;
+    }
+
     handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
     }
 
+    handleClick = (event) => {
+        this.setState({disablePass: !this.state.disablePass});
+    }
+
     handleSubmit = () => {
-        if(this.state.loginPass !== ''){
+        if(this.state.loginPass !== '' || this.state.disablePass){
             fetch(API_URL + '/api/auth/password', {
                 method: 'PUT',
                 headers: {
@@ -52,11 +80,9 @@ export default class SettingsModal extends Component {
                 },
                 body: JSON.stringify({
                     token: localStorage.getItem('@notificc/access_token'),
-                    auth_pass: this.state.loginPass,
+                    auth_pass: this.state.disablePass ? '0' : this.state.loginPass,
                 })
-            })
-            .then()
-            .then();
+            });
         }
         if(this.state.delay !== ''){
             fetch(API_URL + '/api/config', {
@@ -69,9 +95,7 @@ export default class SettingsModal extends Component {
                     token: localStorage.getItem('@notificc/access_token'),
                     delay: this.state.delay,
                 })
-            })
-            .then()
-            .then();
+            });
         }
         this.handleClose();
     }
@@ -81,13 +105,8 @@ export default class SettingsModal extends Component {
     }
 
     render() {
-        let delay_warning;
-        if(!this.isDelayValid()){
-            delay_warning = <p className='help is-danger'>Min {DELAY_MIN}, max {DELAY_MAX}.</p>;
-        }
-
         return (
-            <div className={'modal animated ' + (this.props.active ? 'is-active fadeIn' : '')}>
+            <div id='settings-modal' className={'modal animated ' + (this.props.active ? 'is-active fadeIn' : '')}>
                 <div className='modal-background' onClick={this.handleClose}></div>
                 <div className='modal-content'>
                     <div id='settings' className='box'>
@@ -97,18 +116,29 @@ export default class SettingsModal extends Component {
                             </span>
                         </div>
                         <div className='field'>
-                            <label className='label'>Change Login Password:</label>
-                            <div className='control'>
-                                <input  className='input'
-                                        type='password'
-                                        name='loginPass'
-                                        value={this.state.loginPass}
-                                        onChange={this.handleChange}
-                                />
+                            <label className='label'>Auth Password:</label>
+                            <div className="columns">
+                                <div className='column is-four-fifths control'>
+                                    <input  className='input'
+                                            type='password'
+                                            name='loginPass'
+                                            disabled={this.state.disablePass}
+                                            value={this.state.loginPass}
+                                            onChange={this.handleChange}
+                                    />
+                                    <Warning text='Make sure your password is at least 4 characters long.' enabled={!this.isPasswordValid()} />
+                                </div>
+                                <div className='column control'>
+                                    <label className='checkbox'>
+                                        <input  type='checkbox'
+                                                name='disablePass'
+                                                checked={this.state.disablePass}
+                                                onChange={this.handleClick}        
+                                        />
+                                        Disable
+                                    </label>
+                                </div>
                             </div>
-                            <p className='help'>
-                                Set it to 0 to ignore the authentication page.
-                            </p>
                         </div>
 
                         <label className='label'>Delay between checks:</label>
@@ -123,7 +153,7 @@ export default class SettingsModal extends Component {
                                             onChange={this.handleChange}
                                     />
                                 </div>
-                                {delay_warning}
+                                <Warning text={`Min ${DELAY_MIN}, max ${DELAY_MAX}.`} enabled={!this.isDelayValid()} />
                             </div>
                             <div className='column'>
                                 <label className='label'>seconds</label>
@@ -131,7 +161,12 @@ export default class SettingsModal extends Component {
                         </div>
                         <div className='field'>
                             <div className='submit control'>
-                                <button className='button is-primary' onClick={this.handleSubmit}>Submit</button>
+                                <button className='button is-primary'
+                                        onClick={this.handleSubmit}
+                                        disabled={!this.isDelayValid() || !this.isPasswordValid()}
+                                >
+                                    Submit
+                                </button>
                             </div>
                         </div>
                     </div>
