@@ -25,23 +25,23 @@ RUN pip install -r requirements.txt && \
 
 # API server
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/exec.sh /opt
 
 # API files
-COPY . /opt/api
-WORKDIR /opt/api
-RUN mkdir /opt/api/shared && \
+WORKDIR /api
+COPY . ./
+RUN mkdir shared && \
+    python -m pytest tests/* -vv && \
     addgroup www && \
     adduser -D -H -G www www && \
-    chmod -R 770 /opt/api && \
-    chown -R www:www /opt/api
+    chmod -R 770 ./ && \
+    chown -R www:www ./
 
 # Cleaning
 RUN apk del .build-dependencies && \
     rm -rf /var/cache/apk/*
 
-VOLUME /opt/api/shared
+VOLUME /api/shared
 
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "/opt/exec.sh"]
+ENTRYPOINT ["sh", "/api/docker/exec.sh"]
