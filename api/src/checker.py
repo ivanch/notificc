@@ -72,7 +72,6 @@ def loop(stop_checker):
                 driver.set_window_size(1920, 1080)
                 for url in urls:
 
-                    print("#3", url)
                     uid = url['id']
                     name = url['name']
                     link = url['url']
