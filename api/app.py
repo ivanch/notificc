@@ -4,8 +4,6 @@ from flask import Flask
 from flask import jsonify
 from flask_cors import CORS
 import threading
-import sqlite3
-
 
 from src import checker
 from src.database import setup_db
@@ -63,16 +61,9 @@ def setup_checker():
 
     checker_thread.start()
 
-# Generates keys
-def setup_push():
-    if not os.path.exists("./keys/private_key.pem"):
-        os.system("cd keys && vapid --gen")
-        os.system("cd keys && vapid --applicationServerKey | sed -e 's/Application Server Key = //g' > key")
-
 @app.before_first_request
 def setup():
     setup_db()
-    setup_push()
     setup_checker()
 
 if __name__ == '__main__':

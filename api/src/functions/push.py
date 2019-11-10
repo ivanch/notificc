@@ -1,13 +1,11 @@
 from flask import Blueprint
 from flask import request, jsonify
 import os
-import sqlite3
 import json
 import time
 from pywebpush import webpush, WebPushException
 
 from src.functions.auth import is_token_authorized
-from src.functions.websites import websitesLogs_update
 
 push = Blueprint('push', __name__)
 
@@ -34,19 +32,21 @@ def send_notification(name, uid):
     }
     subscription = get_subscription()
     
-    webpush(
-        subscription_info = {
-            'endpoint': subscription['endpoint'],
-            'keys': subscription['keys']
-        },
-        data = json.dumps(message_data),
-        vapid_private_key = './keys/private_key.pem',
-        vapid_claims = {"aud": get_base_url(subscription['endpoint']),
-              "exp": int(time.time()) + 86400,
-              "sub": "mailto:email@email.com"
-        }
-    )
-    
+    try:
+        webpush(
+            subscription_info = {
+                'endpoint': subscription['endpoint'],
+                'keys': subscription['keys']
+            },
+            data = json.dumps(message_data),
+            vapid_private_key = './keys/private_key.pem',
+            vapid_claims = {"aud": get_base_url(subscription['endpoint']),
+                "exp": int(time.time()) + 86400,
+                "sub": "mailto:email@email.com"
+            }
+        )
+    except WebPushException as exception:
+        print(exception.message)
 
 # Returns the application server key
 @push.route('/api/push', methods=['GET'])

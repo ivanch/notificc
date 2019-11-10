@@ -34,7 +34,8 @@ RUN mkdir shared && \
     addgroup www && \
     adduser -D -H -G www www && \
     chmod -R 770 ./ && \
-    chown -R www:www ./
+    chown -R www:www ./ && \
+    sh docker/keys.sh
 
 # Cleaning
 RUN apk del .build-dependencies && \
