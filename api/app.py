@@ -3,16 +3,16 @@
 from flask import Flask
 from flask import jsonify
 from flask_cors import CORS
-import checker
 import threading
 import sqlite3
 
-from database import *
 
-from functions.auth import *
-from functions.websites import *
-from functions.config import *
-from functions.push import *
+from src import checker
+from src.database import setup_db
+from src.functions.auth import *
+from src.functions.websites import *
+from src.functions.config import *
+from src.functions.push import *
 
 app = Flask(__name__)
 CORS(app)
@@ -62,6 +62,12 @@ def setup_checker():
     checker_thread.daemon = True
 
     checker_thread.start()
+
+# Generates keys
+def setup_push():
+    if not os.path.exists("./keys/private_key.pem"):
+        os.system("cd keys && vapid --gen")
+        os.system("cd keys && vapid --applicationServerKey | sed -e 's/Application Server Key = //g' > key")
 
 @app.before_first_request
 def setup():

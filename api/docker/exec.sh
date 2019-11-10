@@ -1,4 +1,4 @@
 #!/bin/sh
 
 nginx
-uwsgi --ini wsgi.ini
+uwsgi --ini /api/wsgi.ini
