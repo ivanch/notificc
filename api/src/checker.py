@@ -11,6 +11,11 @@ import datetime
 from .functions.config import get_delay
 from .functions.push import send_notification
 
+# Inserts a log entry on the database
+# Parameters:
+#   name => website name
+#   url => website url
+#   title => website title in the browser
 def logWebsite(name, url, title):
     now = datetime.datetime.now()
 
@@ -20,7 +25,7 @@ def logWebsite(name, url, title):
                         VALUES           (?   , ?   , ?     , 0    , ?);", (name, url, title, now))
         conn.commit()
 
-
+# Returns the websites
 def get_websites():
     urls = []
     with sqlite3.connect('shared/data.db') as conn:
@@ -52,6 +57,9 @@ def compare(index, thresh):
     
     return False
 
+# Main loop of the checker
+# Parameters:
+#   stop_checker => function that returns True if the checker thread is stopped, False otherwise
 def loop(stop_checker):
     while True:
         try:
@@ -96,6 +104,9 @@ def loop(stop_checker):
         except KeyboardInterrupt:
             break
 
+# Starts the checker
+# Parameters:
+#   stop_checker => function that returns True if the checker thread is stopped, False otherwise
 def run(stop_checker):
     # Process files
     if(not os.path.isdir("screenshots")):
