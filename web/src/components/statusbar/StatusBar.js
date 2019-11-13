@@ -17,15 +17,12 @@ export default class StatusBar extends Component {
     }
 
     handleLogout() {
-        fetch(API_URL + '/api/auth/token', {
+        fetch(API_URL + '/api/auth/token?token=' + localStorage.getItem('@notificc/access_token'), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: localStorage.getItem('@notificc/access_token'),
-            })
+            }
         })
         .then(() => {
             localStorage.removeItem('@notificc/access_token');
