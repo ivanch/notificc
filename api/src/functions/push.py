@@ -9,7 +9,7 @@ from src.functions.auth import is_token_authorized
 
 push = Blueprint('push', __name__)
 
-# Returns the delay
+# Returns the Service Worker Subscription dict object
 def get_subscription():
     with open('./keys/push.json', 'r') as file:
         line = file.readline()
@@ -17,13 +17,17 @@ def get_subscription():
         return json.loads(line)
 
 # Returns the base URL for a valid HTTP(S) URL
+# Input: https://youtube.com/watch?v=someid
+# Returns: https://youtube.com
 def get_base_url(url):
     url = url.split('/')
     return '/'.join(url[:3])
 
+# Sends a push notification to the registered Service Worker
 def send_notification(name, uid):
+    # the existence of this file means that the user has accepted the notifications
     if not os.path.exists("./keys/push.json"):
-        return  # the existence of the file means that the user has accepted the notifications
+        return
     
     message_data = {
       'title': 'NotificC',
@@ -42,13 +46,18 @@ def send_notification(name, uid):
             vapid_private_key = './keys/private_key.pem',
             vapid_claims = {"aud": get_base_url(subscription['endpoint']),
                 "exp": int(time.time()) + 86400,
-                "sub": "mailto:email@email.com"
+                "sub": "mailto:email@email.com" # dummy email
             }
         )
     except WebPushException as exception:
         print(exception.message)
 
+# GET /api/push
 # Returns the application server key
+# Response:
+#   message => 'Success'
+#   key => registered application server key
+#   statusCode => 200
 @push.route('/api/push', methods=['GET'])
 def get_app_server_key():
     with open('./keys/key', 'r') as keyfile:
@@ -57,7 +66,14 @@ def get_app_server_key():
                         key=key,
                         statusCode=200), 200
 
-# Updates the push subscription information
+# POST /api/push
+# Updates/sets the push subscription information
+# Body:
+#   token => user token
+#   subscription => Service Worker Subscription json just like its provided
+# Response:
+#   message => 'Success'
+#   statusCode => 200
 @push.route('/api/push', methods=['POST'])
 def config_update2():
     body = request.get_json()

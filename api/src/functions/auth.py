@@ -6,12 +6,14 @@ import random
 
 auth = Blueprint('auth', __name__)
 
+# Registers a token on database
 def register_token(token):
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO tokens (token) VALUES (?);", (token,))
         conn.commit()
 
+# Returns True if the token is authorized
 def is_token_authorized(token):
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -28,7 +30,10 @@ def is_token_authorized(token):
             return False
         return True
 
+# POST /api/auth/token
 # Checks if a token is authorized
+# Body:
+#   token => token to be checked
 @auth.route('/api/auth/token', methods=['POST'])
 def token_auth():
     json = request.get_json()
@@ -42,7 +47,9 @@ def token_auth():
         return jsonify(message="Unauthorized",
                 statusCode=401), 401
 
-# Deletes a token from db
+# DELETE /api/auth/token?token=<token_string>
+# Deletes a token from database
+# Uses URL parameters
 @auth.route('/api/auth/token', methods=['DELETE'])
 def token_delete():
     token = request.args.get('token')
@@ -55,7 +62,10 @@ def token_delete():
     return jsonify(message="Success",
                 statusCode=200), 200
 
-# Checks if password is correct
+# POST /api/auth/password
+# Checks if the auth password is right
+# Body:
+#   auth_pass => password string
 @auth.route('/api/auth/password', methods=['POST'])
 def password_auth():
     json = request.get_json()
@@ -77,7 +87,11 @@ def password_auth():
         return jsonify(message="Unauthorized",
                         statusCode=401), 401
 
-# Updates the Auth Password
+# PUT /api/auth/password
+# Updates the auth password
+# Body:
+#   token => user token
+#   auth_pass => new password string
 @auth.route('/api/auth/password', methods=['PUT'])
 def password_update():
     json = request.get_json()

@@ -6,7 +6,7 @@ from src.functions.auth import is_token_authorized
 
 config = Blueprint('config', __name__)
 
-# Returns the delay
+# Returns the checks delay from database
 def get_delay():
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -14,7 +14,10 @@ def get_delay():
         result = cursor.fetchone()
         return result[0]
 
-# Returns the config
+# GET /api/config
+# Returns the delay between checks
+# Response:
+#   delay => current delay in seconds
 @config.route('/api/config', methods=['GET'])
 def config_get():
     with sqlite3.connect('shared/data.db') as conn:
@@ -23,7 +26,11 @@ def config_get():
         result = cursor.fetchone()
         return jsonify(delay=result[2]), 200
 
-# Updates the delay
+# PUT /api/config
+# Updates the delay between checks
+# Body:
+#   token => user token
+#   delay => new delay between checks
 @config.route('/api/config', methods=['PUT'])
 def config_update():
     json = request.get_json()
