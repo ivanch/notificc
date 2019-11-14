@@ -3,7 +3,7 @@ import json
 
 '''
 ###
-###     Multiple fields tests
+###     Auth tests
 ###
 '''
 
@@ -111,6 +111,38 @@ def test_password_updated():
         '/api/auth/password',
         data=json.dumps({
             'auth_pass': 'password1'
+        }),
+        content_type='application/json',
+    )
+    
+    assert response.status_code == 200
+    data = json.loads(response.get_data(as_text=True))
+    assert data != []
+    assert data['message'] == 'Authorized'
+    assert data['token'] is not None
+
+def test_password_update_valid_token():
+    global valid_token
+    
+    response = app.test_client().put(
+        '/api/auth/password',
+        data=json.dumps({
+            'token': valid_token,
+            'auth_pass': 'password'
+        }),
+        content_type='application/json',
+    )
+    
+    assert response.status_code == 200
+    data = json.loads(response.get_data(as_text=True))
+    assert data != []
+    assert data['message'] == 'Success'
+
+def test_password_updated():
+    response = app.test_client().post(
+        '/api/auth/password',
+        data=json.dumps({
+            'auth_pass': 'password'
         }),
         content_type='application/json',
     )

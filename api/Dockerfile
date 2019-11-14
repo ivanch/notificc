@@ -29,13 +29,13 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 # API files
 WORKDIR /api
 COPY . ./
-RUN mkdir shared && \
-    python -m pytest tests/* -vv && \
+RUN make tests && \
+    make clean
+RUN make setup && \
     addgroup www && \
     adduser -D -H -G www www && \
     chmod -R 770 ./ && \
-    chown -R www:www ./ && \
-    sh docker/keys.sh
+    chown -R www:www ./
 
 # Cleaning
 RUN apk del .build-dependencies && \
