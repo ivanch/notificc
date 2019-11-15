@@ -1,5 +1,3 @@
-PYTHON=python
-
 .PHONY: pull
 pull:
 	docker pull ivanch/notificc-web:builder
@@ -18,17 +16,15 @@ build-web-builder:
 	cd web
 	docker build \
 		--target builder \
-		--force-rm \
 		--cache-from ivanch/notificc-web:builder \
 		--tag ivanch/notificc-web:builder ./web
 
 .PHONY: build-web
 build: build-web-builder
-	docker build
-		--force-rm
-		--target stage
-		--cache-from ivanch/notificc-web:builder
-		--cache-from ivanch/notificc-web:latest
+	docker build \
+		--target stage \
+		--cache-from ivanch/notificc-web:builder \
+		--cache-from ivanch/notificc-web:latest \
 		--tag ivanch/notificc-web:latest ./web
 
 .PHONY: build

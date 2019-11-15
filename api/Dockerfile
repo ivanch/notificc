@@ -29,14 +29,21 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 # API files
 WORKDIR /api
 COPY . ./
-RUN make tests && \
-    make clean
 
-RUN make setup && \
+#RUN make tests && \
+#    make clean
+
+#RUN make setup && \
+#    addgroup www && \
+#    adduser -D -H -G www www && \
+#    chmod -R 770 ./ && \
+#    chown -R www:www ./
+
+RUN mkdir /api/shared && \
     addgroup www && \
     adduser -D -H -G www www && \
-    chmod -R 770 ./ && \
-    chown -R www:www ./
+    chmod -R 770 /api && \
+    chown -R www:www /api
 
 # Cleaning
 RUN apk del .build-dependencies && \

@@ -10,7 +10,7 @@ services:
     ports:
       - 8810:8080/tcp
     volumes:
-      - api:/opt/api/shared:rw
+      - api:/api/shared:rw
     restart: unless-stopped
   web:
     image: ivanch/notificc-web
