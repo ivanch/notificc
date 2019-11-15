@@ -38,17 +38,8 @@ export default class SettingsModal extends Component {
             }
         });
 
-        // Fetch password disabled
-        fetch(API_URL + '/api/auth/password', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                auth_pass: '0',
-            })
-        })
+        // Fetch if password is disabled
+        fetch(API_URL + '/api/auth/password/disabled')
         .then(_response => _response.json())
         .then(data => {
             this.setState({disablePass: data['message'] === 'Authorized'});

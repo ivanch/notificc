@@ -62,6 +62,24 @@ def token_delete():
     return jsonify(message="Success",
                 statusCode=200), 200
 
+# GET /api/auth/password/disabled
+# Checks if the password is disabled
+# Body:
+#   token => token to be checked
+@auth.route('/api/auth/password/disabled', methods=['GET'])
+def is_password_disabled():
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM config;")
+        result = cursor.fetchone()
+
+        if(result[1] == '0'):
+            return jsonify(message="Authorized",
+                    statusCode=200), 200
+        else:
+            return jsonify(message="Unauthorized",
+                statusCode=401), 401
+
 # POST /api/auth/password
 # Checks if the auth password is right
 # Body:
