@@ -16,7 +16,7 @@
     transition: all 250ms ease;
 }
 
-#logs .list-line {
+#logs .content-line {
     transition: all 750ms ease;
 }
 

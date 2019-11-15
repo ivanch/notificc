@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import './Registery.css';
+import './Register.css';
 
 import Warning from '../warning/Warning.js';
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
-export default class Registery extends Component {
+export default class Register extends Component {
     constructor(props) {
         super(props);
 
@@ -64,13 +64,12 @@ export default class Registery extends Component {
     isValid() {
         return !(this.state.invalidURL || 
                 this.state.invalidName || 
-                this.state.url === '' || 
-                this.props.apiStatus !== 'online');
+                this.state.url === '');
     }
 
     render() {
         return (
-            <div id='registry' className='box'>
+            <div id='register' className='box'>
                 <div className='centered'>
                     <span className='title'>
                         Register a website

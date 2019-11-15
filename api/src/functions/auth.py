@@ -6,12 +6,14 @@ import random
 
 auth = Blueprint('auth', __name__)
 
+# Registers a token on database
 def register_token(token):
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO tokens (token) VALUES (?);", (token,))
         conn.commit()
 
+# Returns True if the token is authorized
 def is_token_authorized(token):
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -28,7 +30,10 @@ def is_token_authorized(token):
             return False
         return True
 
+# POST /api/auth/token
 # Checks if a token is authorized
+# Body:
+#   token => token to be checked
 @auth.route('/api/auth/token', methods=['POST'])
 def token_auth():
     json = request.get_json()
@@ -40,22 +45,45 @@ def token_auth():
                     statusCode=200), 200
     else:
         return jsonify(message="Unauthorized",
-                statusCode=200), 200
+                statusCode=401), 401
 
-# Deletes a token from db
+# DELETE /api/auth/token?token=<token_string>
+# Deletes a token from database
+# Uses URL parameters
 @auth.route('/api/auth/token', methods=['DELETE'])
 def token_delete():
-    json = request.get_json()
+    token = request.args.get('token')
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM tokens WHERE token = ?;", (json['token'],))
+        cursor.execute("DELETE FROM tokens WHERE token = ?;", (token,))
         conn.commit()
 
     return jsonify(message="Success",
                 statusCode=200), 200
 
-# Checks if password is correct
+# GET /api/auth/password/disabled
+# Checks if the password is disabled
+# Body:
+#   token => token to be checked
+@auth.route('/api/auth/password/disabled', methods=['GET'])
+def is_password_disabled():
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM config;")
+        result = cursor.fetchone()
+
+        if(result[1] == '0'):
+            return jsonify(message="Authorized",
+                    statusCode=200), 200
+        else:
+            return jsonify(message="Unauthorized",
+                statusCode=401), 401
+
+# POST /api/auth/password
+# Checks if the auth password is right
+# Body:
+#   auth_pass => password string
 @auth.route('/api/auth/password', methods=['POST'])
 def password_auth():
     json = request.get_json()
@@ -75,9 +103,13 @@ def password_auth():
                             statusCode=200), 200
 
         return jsonify(message="Unauthorized",
-                        statusCode=200), 200
+                        statusCode=401), 401
 
-# Updates the Auth Password
+# PUT /api/auth/password
+# Updates the auth password
+# Body:
+#   token => user token
+#   auth_pass => new password string
 @auth.route('/api/auth/password', methods=['PUT'])
 def password_update():
     json = request.get_json()

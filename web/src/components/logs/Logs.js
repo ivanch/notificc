@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 
 import './Logs.css';
+import Push from '../push/Push.js';
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
+
+function n(n){
+    return n > 9 ? "" + n: "0" + n;
+}
 
 export default class Logs extends Component {
     constructor(props) {
@@ -38,10 +43,12 @@ export default class Logs extends Component {
         });
         setTimeout(() => {
             this.setState({background: 'white'});
-        }, 100);
+        }, 150);
     }
 
     handleRead = (event) => {
+        this.setState({background: '#23d160'});
+        console.log(event.target.id)
         fetch(API_URL + '/api/websites/logs', {
             method: 'PUT',
             headers: {
@@ -49,7 +56,7 @@ export default class Logs extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: localStorage.getItem('@notificc/access_token'),
+                token:  localStorage.getItem('@notificc/access_token'),
                 id:     event.target.id === 'readAll' ? 'all' :
                             this.state.data[event.target.id]['id'],
                 read:   event.target.id === 'readAll' ? '1' : 
@@ -64,6 +71,7 @@ export default class Logs extends Component {
     }
 
     handleDelete = (event) => {
+        this.setState({background: '#d12323'});
         fetch(API_URL + '/api/websites/logs', {
             method: 'DELETE',
             headers: {
@@ -84,7 +92,7 @@ export default class Logs extends Component {
 
     getDateFormatted = (timestamp) => {
         var date = new Date(timestamp);
-        return date.getDate() + '/' + date.getMonth() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        return n(date.getDate()) + '/' + n(date.getMonth()) + ' ' + n(date.getHours()) + ':' + n(date.getMinutes()) + ':' + n(date.getSeconds());
     }
 
     render() {
@@ -105,9 +113,9 @@ export default class Logs extends Component {
                     </span>
                 </div>
 
-                <div id='list'>
+                <div id='content'>
                     {this.state.data.map((x, index) => 
-                        <div className={'list-line ' + (x['read'] ? '' : 'unread')} key={x['id']}>
+                        <div className={'content-line ' + (x['read'] ? '' : 'unread')} key={x['id']}>
                             <span className='icon'>
                                 <i className='fa fa-book'></i>
                             </span>
@@ -120,20 +128,22 @@ export default class Logs extends Component {
                             : {x['title']}
                             </span>
 
-                            <div className='list-control'>
-                                <span className='list-control-item logs-time'>
+                            <div className='content-control'>
+                                <span className='registry-control-item logs-time'>
                                     {this.getDateFormatted(x['time'])}
                                 </span>
 
                                 {x['read'] ? 
-                                    <i className='list-control-item far fa-check-circle pointer' title='Mark as unread' id={index} onClick={this.handleRead}></i> :
-                                    <i className='list-control-item fas fa-check-circle pointer' title='Mark as read' id={index} onClick={this.handleRead}></i>
+                                    <i className='content-control-item far fa-check-circle pointer' title='Mark as unread' id={index} onClick={this.handleRead}></i> :
+                                    <i className='content-control-item fas fa-check-circle pointer' title='Mark as read' id={index} onClick={this.handleRead}></i>
                                 }
-                                <i className='list-control-item fas fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
+                                <i className='content-control-item fas fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
                             </div>
                         </div>
                     )}
                 </div>
+
+                <Push />
             </div>
         );
     }

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import './List.css';
+import './Registry.css';
+
+import Switch from '../switch/Switch.js';
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
-export default class List extends Component {
+export default class Registry extends Component {
     constructor(props) {
         super(props);
 
@@ -64,8 +66,6 @@ export default class List extends Component {
     }
 
     render() {
-        if(this.props.apiStatus !== 'online') return null;
-
         return (
             <div id='registered' className='box'>
                 <div className='header centered'>
@@ -74,9 +74,9 @@ export default class List extends Component {
                     </span>
                 </div>
 
-                <div id='list'>
+                <div id='content'>
                     {this.state.data.map(x => (
-                        <div className='list-line' key={x['id']}>
+                        <div className='content-line' key={x['id']}>
                             <span className='icon'>
                                 <i className='fa fa-bookmark'></i>
                             </span>
@@ -85,23 +85,14 @@ export default class List extends Component {
                                 {x['name']}
                             </a>
 
-                            <div className='list-control'>
-                                <div className='list-control-item switch'>
-                                    <input
-                                        type='checkbox'
-                                        className='switch-checkbox'
-                                        id={x['id']}
+                            <div className='content-control'>
+                                <Switch id={x['id']}
                                         onChange={this.handleClick}
                                         checked={x['enabled']}
-                                    />
-                                    <label
-                                        className='switch-label'
-                                        htmlFor={x['id']}
-                                        title={x['enabled'] ? 'Disable website' : 'Enable website'}>    
-                                    </label>
-                                </div>
+                                        title={x['enabled'] ? 'Disable website' : 'Enable website'}
+                                />
 
-                                <i className='list-control-item fa fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
+                                <i className='content-control-item fa fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
                             </div>
                         </div>
                     ))}

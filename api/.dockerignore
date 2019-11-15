@@ -1,4 +1,6 @@
 *.log
+Dockerfile
 screenshots
 shared
+keys
 */**/__pycache__

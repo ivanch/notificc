@@ -1,9 +1,13 @@
-.checkbox {
+#settings-modal .field p {
     color: black;
 }
 
-.field p {
-    color: black;
+#settings-modal .checkbox {
+    padding-top: 10px;
+}
+
+#settings-modal input {
+    margin-right: 3px;
 }
 
 .animated {

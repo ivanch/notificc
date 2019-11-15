@@ -17,15 +17,12 @@ export default class StatusBar extends Component {
     }
 
     handleLogout() {
-        fetch(API_URL + '/api/auth/token', {
+        fetch(API_URL + '/api/auth/token?token=' + localStorage.getItem('@notificc/access_token'), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: localStorage.getItem('@notificc/access_token'),
-            })
+            }
         })
         .then(() => {
             localStorage.removeItem('@notificc/access_token');
@@ -94,11 +91,11 @@ export default class StatusBar extends Component {
             
                     <div className='level-right'>
                         <div className='level-item'>
-                            <button className='button' name='settings' onClick={this.handleClick} disabled={this.props.apiStatus === 'online' ? false : true}>Settings</button>
+                            <button className='button' name='settings' onClick={this.handleClick}>Settings</button>
                         </div>
 
                         <div className='level-item'>
-                            <button className='button is-danger' name='logout' onClick={this.handleLogout} disabled={this.props.apiStatus === 'online' ? false : true}>Logout</button>
+                            <button className='button is-danger' name='logout' onClick={this.handleLogout}>Logout</button>
                         </div>
                     </div>
 

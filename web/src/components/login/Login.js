@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import Tag from '../tag/Tag.js';
 import './Login.css';
@@ -20,10 +19,10 @@ export default class Login extends Component {
     componentDidMount() {
         this.fetchAPI();
         this.checkAuth();
-        this.timer = setInterval(() => this.fetchAPI(), 5000);
+        this.timer = setInterval(() => this.fetchAPI(), 2500);
     }
 
-    async fetchAPI() {
+    fetchAPI() {
         fetch(API_URL + '/api/status')
         .then(_response => _response.json())
         .then(response => {
@@ -92,11 +91,6 @@ export default class Login extends Component {
     }
 
     render() {
-        if(this.state.auth){
-            clearInterval(this.timer);
-            return <Redirect to='/index' />
-        }
-
         return (
             <div id='login'>
                 <div id='login-box'>
