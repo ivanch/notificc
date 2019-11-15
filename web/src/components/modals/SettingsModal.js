@@ -142,7 +142,7 @@ export default class SettingsModal extends Component {
                                         checked={this.state.autostart}
                                         onChange={this.handleClick}
                                 />
-                                <span style={{marginLeft: '5px'}}>Enabled</span>
+                                <span style={{marginLeft: '5px'}}>Enable</span>
                             </div>
                         </div>
 
