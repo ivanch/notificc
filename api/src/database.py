@@ -22,6 +22,7 @@ def setup_db():
     cursor.execute("CREATE TABLE IF NOT EXISTS config (\
             id INTEGER PRIMARY KEY CHECK (id = 0),\
             auth_pass TEXT, \
+            autostart INTEGER, \
             delay INTEGER);")
 
     # Creates the 'logs' table
@@ -51,8 +52,8 @@ def setup_db():
     # Setup database, if new
     if(not os.path.isfile("shared/data.db")):
         # Inserts the initial (default) configuration into 'config' table
-        cursor.execute("INSERT INTO config  (id, auth_pass , delay) \
-                        VALUES              (0 , 'password', 120);")
+        cursor.execute("INSERT INTO config  (id, auth_pass , autostart, delay) \
+                        VALUES              (0 , 'password', 0        , 120);")
         
         conn.commit()
     else: # If database file already exists

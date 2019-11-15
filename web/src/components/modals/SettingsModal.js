@@ -15,6 +15,7 @@ export default class SettingsModal extends Component {
         this.state = {
             loginPass: '',
             disablePass: false,
+            autostart: false,
             delay:'',
         };
     }
@@ -31,7 +32,8 @@ export default class SettingsModal extends Component {
         .then(_response => _response.json())
         .then(response => {
             if(response != null){
-                this.setState({delay: response['delay']})
+                this.setState({delay: response['delay'],
+                               autostart: response['autostart']})
             }
         });
 
@@ -67,7 +69,7 @@ export default class SettingsModal extends Component {
     }
 
     handleClick = (event) => {
-        this.setState({disablePass: !this.state.disablePass});
+        this.setState({[event.target.name]: event.target.checked});
     }
 
     handleSubmit = () => {
@@ -94,6 +96,7 @@ export default class SettingsModal extends Component {
                 body: JSON.stringify({
                     token: localStorage.getItem('@notificc/access_token'),
                     delay: this.state.delay,
+                    autostart: this.state.autostart,
                 })
             });
         }
@@ -138,6 +141,20 @@ export default class SettingsModal extends Component {
                                         Disable
                                     </label>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className='field'>
+                            <label className='label'>Checker auto-start:</label>
+                            <div className='control'>
+                                <label className='checkbox'>
+                                    <input  type='checkbox'
+                                            name='autostart'
+                                            checked={this.state.autostart}
+                                            onChange={this.handleClick}        
+                                    />
+                                    Enabled
+                                </label>
                             </div>
                         </div>
 

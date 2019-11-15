@@ -14,23 +14,34 @@ def get_delay():
         result = cursor.fetchone()
         return result[0]
 
+# Returns the autostart option
+def get_autostart():
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT autostart FROM config;")
+        result = cursor.fetchone()
+        return result[0]
+
 # GET /api/config
 # Returns the delay between checks
 # Response:
 #   delay => current delay in seconds
+#   autostart => checker thread autostart
 @config.route('/api/config', methods=['GET'])
 def config_get():
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
-        return jsonify(delay=result[2]), 200
+        return jsonify(autostart=result[2],
+                       delay=result[3]), 200
 
 # PUT /api/config
-# Updates the delay between checks
+# Updates config
 # Body:
 #   token => user token
 #   delay => new delay between checks
+#   autostart => checker thread autostart
 @config.route('/api/config', methods=['PUT'])
 def config_update():
     json = request.get_json()
@@ -41,8 +52,8 @@ def config_update():
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("UPDATE config SET delay = ? WHERE id = 0;",
-                        (json['delay'],))
+        cursor.execute("UPDATE config SET delay = ?, autostart = ? WHERE id = 0;",
+                        (json['delay'], json['autostart']))
         conn.commit()
 
         return jsonify(message="Success",

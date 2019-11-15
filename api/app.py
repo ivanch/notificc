@@ -56,15 +56,17 @@ def turn_checker():
 def setup_checker():
     global stop_checker, checker_thread
 
+    stop_checker = not get_autostart()
+
     checker_thread = threading.Thread(target=checker.run, args=(lambda : stop_checker, ))
     checker_thread.daemon = True
 
     checker_thread.start()
 
-@app.before_first_request
-def setup():
-    setup_db()
-    setup_checker()
+#@app.before_first_request
+#def setup():
+setup_db()
+setup_checker()
 
 if __name__ == '__main__':
     app.run()
