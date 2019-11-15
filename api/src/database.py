@@ -3,6 +3,8 @@ import sqlite3
 
 # Setups the databse
 def setup_db():
+    # Stores True if the database doesn't exist
+    is_new = not os.path.isfile("shared/data.db")
 
     # Starts a connection
     conn = sqlite3.connect('shared/data.db')
@@ -49,8 +51,8 @@ def setup_db():
             p256dh TEXT NOT NULL, \
             auth TEXT NOT NULL);")
 
-    # Setup database, if new
-    if(not os.path.isfile("shared/data.db")):
+    # Setup database if new
+    if(is_new):
         # Inserts the initial (default) configuration into 'config' table
         cursor.execute("INSERT INTO config  (id, auth_pass , autostart, delay) \
                         VALUES              (0 , 'password', 0        , 120);")

@@ -31,6 +31,7 @@ WORKDIR /api
 COPY . ./
 RUN make tests && \
     make clean
+
 RUN make setup && \
     addgroup www && \
     adduser -D -H -G www www && \

@@ -63,10 +63,9 @@ def setup_checker():
 
     checker_thread.start()
 
-#@app.before_first_request
-#def setup():
-setup_db()
-setup_checker()
+if __name__ == 'app' or __name__ == '__main__':
+    setup_db()
+    setup_checker()
 
 if __name__ == '__main__':
     app.run()

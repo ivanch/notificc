@@ -28,7 +28,7 @@ def test_right_password():
 
     valid_token = data['token']
 
-def test_get_delay():
+def test_get_config():
     response = app.test_client().get(
         '/api/config'
     )
@@ -37,6 +37,7 @@ def test_get_delay():
     data = json.loads(response.get_data(as_text=True))
     assert data != []
     assert data['delay'] >= 60
+    assert data['autostart'] in [0, 1]
 
 def test_update_delay():
     global valid_token
@@ -45,7 +46,8 @@ def test_update_delay():
         '/api/config',
         data=json.dumps({
             'token': valid_token,
-            'delay': 1000
+            'delay': 1000,
+            'autostart': 1,
         }),
         content_type='application/json',
     )
@@ -64,3 +66,4 @@ def test_updated_delay():
     data = json.loads(response.get_data(as_text=True))
     assert data != []
     assert data['delay'] == 1000
+    assert data['autostart'] == 1
