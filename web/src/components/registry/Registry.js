@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Registry.css';
 
+import Switch from '../switch/Switch.js';
+
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export default class Registry extends Component {
@@ -84,20 +86,11 @@ export default class Registry extends Component {
                             </a>
 
                             <div className='content-control'>
-                                <div className='registry-control-item switch'>
-                                    <input
-                                        type='checkbox'
-                                        className='switch-checkbox'
-                                        id={x['id']}
+                                <Switch id={x['id']}
                                         onChange={this.handleClick}
                                         checked={x['enabled']}
-                                    />
-                                    <label
-                                        className='switch-label'
-                                        htmlFor={x['id']}
-                                        title={x['enabled'] ? 'Disable website' : 'Enable website'}>    
-                                    </label>
-                                </div>
+                                        title={x['enabled'] ? 'Disable website' : 'Enable website'}
+                                />
 
                                 <i className='content-control-item fa fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
                             </div>

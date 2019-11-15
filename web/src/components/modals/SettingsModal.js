@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './SettingsModal.css';
 
 import Warning from '../warning/Warning.js';
+import Switch from '../switch/Switch.js';
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
@@ -132,14 +133,12 @@ export default class SettingsModal extends Component {
                                     <Warning text='Make sure your password is at least 4 characters long.' enabled={!this.isPasswordValid()} />
                                 </div>
                                 <div className='column control'>
-                                    <label className='checkbox'>
-                                        <input  type='checkbox'
-                                                name='disablePass'
-                                                checked={this.state.disablePass}
-                                                onChange={this.handleClick}        
-                                        />
-                                        Disable
-                                    </label>
+                                    <Switch id='disablePass'
+                                            name='disablePass'
+                                            checked={this.state.disablePass}
+                                            onChange={this.handleClick}
+                                    />
+                                    <span style={{marginLeft: '5px'}}>Disable</span>
                                 </div>
                             </div>
                         </div>
@@ -147,14 +146,12 @@ export default class SettingsModal extends Component {
                         <div className='field'>
                             <label className='label'>Checker auto-start:</label>
                             <div className='control'>
-                                <label className='checkbox'>
-                                    <input  type='checkbox'
-                                            name='autostart'
-                                            checked={this.state.autostart}
-                                            onChange={this.handleClick}        
-                                    />
-                                    Enabled
-                                </label>
+                                <Switch id='autostart'
+                                        name='autostart'
+                                        checked={this.state.autostart}
+                                        onChange={this.handleClick}
+                                />
+                                <span style={{marginLeft: '5px'}}>Enabled</span>
                             </div>
                         </div>
 
