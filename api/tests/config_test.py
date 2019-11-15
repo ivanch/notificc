@@ -3,7 +3,7 @@ import json
 
 '''
 ###
-###     Auth tests
+###     Configuration tests
 ###
 '''
 
