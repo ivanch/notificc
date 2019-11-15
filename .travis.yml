@@ -3,27 +3,10 @@ services:
   - docker
 
 before_script:
-  - docker pull ivanch/notificc-web:builder
-  - docker pull ivanch/notificc-web:latest
-  - docker pull ivanch/notificc-api:latest
+  - make pull
 
 script:
-  - cd api &&
-    docker build
-      --cache-from ivanch/notificc-api:latest
-      --tag ivanch/notificc-api:latest . &&
-    cd ..
-  - cd web &&
-    docker build
-      --target builder
-      --cache-from ivanch/notificc-web:builder
-      --tag ivanch/notificc-web:builder .
-  - docker build
-      --target stage
-      --cache-from ivanch/notificc-web:builder
-      --cache-from ivanch/notificc-web:latest
-      --tag ivanch/notificc-web:latest . &&
-    cd ..
+  - make build
 
 deploy:
   provider: script
