@@ -14,7 +14,7 @@ def exists(url):
         cursor = conn.cursor()
         cursor.execute("SELECT id FROM urls WHERE url = ?", (url,))
 
-        if(len(cursor.fetchall()) > 0):
+        if len(cursor.fetchall()) > 0:
             return True
         return False
 
@@ -106,7 +106,7 @@ def websites_update():
         cursor.execute("UPDATE urls SET enabled = ? WHERE id = ?", (value, json['id']))
         conn.commit()
 
-        if(value == 0):
+        if value == 0:
             for file in glob.iglob("screenshots/*-%d.png" % (int(json['id']))):
                 os.remove(file)
 

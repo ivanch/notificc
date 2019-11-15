@@ -1,11 +1,9 @@
 from app import app
 import json
 
-'''
 ###
 ###     Websites registry tests
 ###
-'''
 
 valid_token = None
 
@@ -158,7 +156,7 @@ def test_get_websites_second_registered():
     assert data[1]['id'] == 2
     assert data[1]['name'] == 'test name second'
     assert data[1]['url'] == 'test url second'
-    assert data[1]['enabled'] == True
+    assert data[1]['enabled'] is True
 
 def test_update_second_website():
     global valid_token
@@ -190,4 +188,4 @@ def test_get_websites_second_updated():
     assert data[1]['id'] == 2
     assert data[1]['name'] == 'test name second'
     assert data[1]['url'] == 'test url second'
-    assert data[1]['enabled'] == False
+    assert data[1]['enabled'] is False

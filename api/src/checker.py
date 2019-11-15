@@ -34,13 +34,13 @@ def get_websites():
         results = cursor.fetchall()
         
         for result in results:
-            if(result[4] == 1): # if the url is enabled
+            if result[4] == 1: # if the url is enabled
                 urls.append({'id': result[0], 'name': result[1], 'url': result[2], 'threshold': result[3]})
     return urls
 
 # Check if 2 images are different
 def compare(index, thresh):
-    if(not os.path.isfile('screenshots/old-ss-%d.png' % (index))):
+    if not os.path.isfile('screenshots/old-ss-%d.png' % (index)):
         return False
 
     new = Image.open('screenshots/ss-%d.png' % (index))
@@ -66,7 +66,7 @@ def loop(stop_checker):
             start = time() # to "normalize" time
             DELAY = get_delay()
 
-            if(not stop_checker()):
+            if not stop_checker():
                 urls = get_websites()
 
                 options = Options()
@@ -89,7 +89,7 @@ def loop(stop_checker):
                     driver.save_screenshot('screenshots/ss-%d.png' % (uid))
 
                     r = compare(uid, url['threshold'])
-                    if(r): # has changed
+                    if r: # has changed
                         logWebsite(name, link, driver.title)
                         send_notification(name, uid)
                     
@@ -109,7 +109,7 @@ def loop(stop_checker):
 #   stop_checker => function that returns True if the checker thread is stopped, False otherwise
 def run(stop_checker):
     # Process files
-    if(not os.path.isdir("screenshots")):
+    if not os.path.isdir("screenshots"):
         os.mkdir("screenshots")
     for l_file in glob.iglob("screenshots/ss-*.png"):
         os.remove(l_file)
