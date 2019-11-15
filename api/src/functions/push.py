@@ -3,18 +3,37 @@ from flask import request, jsonify
 import os
 import json
 import time
+import sqlite3
 from pywebpush import webpush, WebPushException
 
 from src.functions.auth import is_token_authorized
 
 push = Blueprint('push', __name__)
 
-# Returns the Service Worker Subscription dict object
-def get_subscription():
-    with open('./keys/push.json', 'r') as file:
-        line = file.readline()
-        line = line.replace('\n','')
-        return json.loads(line)
+# Checks if a push manager subscription exists on the database
+# by checking its keys
+def pms_exists(keys):
+    with sqlite3.connect('shared/data.db') as conn:
+        conn.row_factory = sqlite3.Row
+
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM pms WHERE p256dh=? AND auth=? LIMIT 1", (keys['p256dh'], keys['auth']))
+        results = cursor.fetchall()
+
+        return len(results) > 0
+
+# Registers the push subscription information
+def create_push_subscription(info):
+    if pms_exists(info['keys']):
+        return
+    
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO pms (endpoint, base_endpoint, p256dh, auth) \
+                        VALUES          (?       , ?            , ?     , ?);",
+                        (info['endpoint'], get_base_url(info['endpoint']),
+                         info['keys']['p256dh'], info['keys']['auth']))
+        conn.commit()
 
 # Returns the base URL for a valid HTTP(S) URL
 # Input: https://youtube.com/watch?v=someid
@@ -23,34 +42,42 @@ def get_base_url(url):
     url = url.split('/')
     return '/'.join(url[:3])
 
-# Sends a push notification to the registered Service Worker
+# Sends a push notification to the registered Service(s) Worker(s)
 def send_notification(name, uid):
-    # the existence of this file means that the user has accepted the notifications
-    if not os.path.exists("./keys/push.json"):
-        return
-    
     message_data = {
       'title': 'NotificC',
-      'body': '%s has changed.' % (name),
-      'id': uid,
+      'body': '%s has changed.' % (name)
     }
-    subscription = get_subscription()
-    
-    try:
-        webpush(
-            subscription_info = {
-                'endpoint': subscription['endpoint'],
-                'keys': subscription['keys']
-            },
-            data = json.dumps(message_data),
-            vapid_private_key = './keys/private_key.pem',
-            vapid_claims = {"aud": get_base_url(subscription['endpoint']),
-                "exp": int(time.time()) + 86400,
-                "sub": "mailto:email@email.com" # dummy email
-            }
-        )
-    except WebPushException as exception:
-        print(exception.message)
+
+    with sqlite3.connect('shared/data.db') as conn:
+        conn.row_factory = sqlite3.Row
+
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM pms")
+        results = cursor.fetchall()
+
+        for result in results:
+            result = dict(result)
+
+            try:
+                webpush(
+                    subscription_info = {
+                        'endpoint': result['endpoint'],
+                        'keys': {
+                            'p256dh': result['p256dh'],
+                            'auth': result['auth']
+                        }
+                    },
+                    data = json.dumps(message_data),
+                    vapid_private_key = './keys/private_key.pem',
+                    vapid_claims = {"aud": result['base_endpoint'],
+                        "exp": int(time.time()) + 86400,
+                        "sub": "mailto:email@email.com" # dummy email
+                    }
+                )
+            except WebPushException as exception:
+                print(exception.message)
+
 
 # GET /api/push
 # Returns the application server key
@@ -66,8 +93,9 @@ def get_app_server_key():
                         key=key,
                         statusCode=200), 200
 
+
 # POST /api/push
-# Updates/sets the push subscription information
+# Creates a push subscription information
 # Body:
 #   token => user token
 #   subscription => Service Worker Subscription json just like its provided
@@ -82,8 +110,7 @@ def config_update2():
         return jsonify(message="Unauthorized",
                         statusCode=401), 401
 
-    with open('./keys/push.json', 'w') as file:
-        file.write(json.dumps(body['subscription']))
+    create_push_subscription(body['subscription'])
 
-        return jsonify(message="Success",
-                        statusCode=200), 200
+    return jsonify(message="Success",
+                    statusCode=200), 200

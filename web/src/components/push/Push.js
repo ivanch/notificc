@@ -18,6 +18,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 export default class Push extends Component {
+    
     componentDidMount() {
         window.Notification.requestPermission().then(perm => {
             if(perm === 'granted'){
