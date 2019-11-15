@@ -11,6 +11,7 @@ services:
       - 8810:8080/tcp
     volumes:
       - api:/opt/api/shared:rw
+    restart: unless-stopped
   web:
     image: ivanch/notificc-web
     build:
@@ -18,5 +19,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8800:80/tcp
+    restart: unless-stopped
 volumes:
   api: {}
