@@ -1,10 +1,13 @@
 version: '2.3'
+
 services:
+  ####
+  # API Service
+  ####
   api:
     image: ivanch/notificc-api
     build:
       context: ./api
-      dockerfile: Dockerfile
     cpus: 0.1
     mem_limit: 100M
     ports:
@@ -12,13 +15,19 @@ services:
     volumes:
       - api:/api/shared:rw
     restart: unless-stopped
+
+  ####
+  # Web Service
+  ####
   web:
     image: ivanch/notificc-web
     build:
       context: ./web
-      dockerfile: Dockerfile
     ports:
       - 8800:80/tcp
+    environment:
+      - API_ENDPOINT=http://localhost:8810
     restart: unless-stopped
+
 volumes:
   api: {}
