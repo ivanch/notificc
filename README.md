@@ -18,9 +18,10 @@
 * Website change logs
 
 ## Deploy (Docker)
-1. Run `curl https://raw.githubusercontent.com/ivanch/notificc/master/docker-compose.yaml > docker-compose.yaml`
+1. Clone this repo.
 2. Configure the docker compose file as you need it.
-3. Run `docker-compose up -d`.
+3. Configure the .env file with your endpoints/ports.
+4. Run `docker-compose up -d`.
 
 ## Deploy (Build Docker Image)
 1. Clone this repo with `git clone https://github.com/ivanch/notificc` and either:
@@ -31,21 +32,6 @@
 Default password is *password*, you can change or disable that later in Settings.
 
 Once at the index page, you can start/stop the checker by clicking at its status.
-
-## Reverse Proxy Example
-1. Sample **nginx** configuration:
-```nginx
-server {
-    location /notificc/ {
-        proxy_pass http://localhost:8800/;
-    }
-}
-```
-2. At `package.json`, `"homepage"` should be defined as `./notificc`
-
-After that, you should be able to access it from [http://localhost/notificc](http://localhost/notificc).
-
-Reverse proxying a *react-router* app isn't so easy, you'll have to [build the Web Image](#deploy-build-docker-image) again with your configuration.
 
 ## Screenshot
 

@@ -11,7 +11,7 @@ import * as serviceWorker from './serviceWorker';
 import Login from './components/login/Login';
 
 const routing = (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter>
         <RequiresAuth>
             <Switch>
                 <Route path='/' exact={true} component={App} />

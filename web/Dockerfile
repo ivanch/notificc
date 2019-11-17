@@ -4,6 +4,13 @@ WORKDIR /web
 COPY package* ./
 RUN npm install
 COPY . ./
+
+ARG PUBLIC_URL
+ARG API_URL
+
+ENV PUBLIC_URL ${PUBLIC_URL}
+ENV API_URL ${API_URL}
+
 RUN npm run build
 
 FROM nginx:stable-alpine as stage
