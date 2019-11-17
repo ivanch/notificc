@@ -122,7 +122,7 @@ def test_get_websites_one_registered():
     assert data[0]['id'] == 1
     assert data[0]['name'] == 'test name'
     assert data[0]['url'] == 'test url'
-    assert data[0]['enabled'] == True
+    assert data[0]['enabled'] is True
 
 def test_register_second_website():
     global valid_token
