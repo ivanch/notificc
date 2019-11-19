@@ -1,3 +1,21 @@
+#####
+## Build stage
+#####
+FROM node:alpine as builder
+
+WORKDIR /web
+COPY ./web/package* ./
+RUN npm install
+COPY ./web ./
+
+ARG PUBLIC_URL
+ENV PUBLIC_URL ${PUBLIC_URL}
+
+RUN npm run build
+
+#####
+## Server
+#####
 FROM python:3-alpine
 
 # Requirements
@@ -17,18 +35,20 @@ RUN apk add --virtual .build-dependencies \
             openssl-dev \
             libffi-dev
 
-COPY docker/requirements.txt requirements.txt
+# Python Requirements
+COPY assets/docker/requirements.txt requirements.txt
 RUN pip install -r requirements.txt && \
     python -c 'from PIL import Image; import selenium' && \
     rm requirements.txt && \
     mkdir /run/nginx
 
-# API server
-COPY docker/nginx.conf /etc/nginx/nginx.conf
+# Config
+COPY assets/docker/nginx.conf /etc/nginx/nginx.conf
+COPY assets/docker/exec.sh /exec.sh
 
 # API files
 WORKDIR /api
-COPY . ./
+COPY ./api ./
 
 RUN make tests && \
     make clean
@@ -39,12 +59,17 @@ RUN make setup && \
     chmod -R 770 ./ && \
     chown -R www:www ./
 
+# Web server
+COPY --from=builder /web/build /var/www
+
 # Cleaning
 RUN apk del .build-dependencies && \
     rm -rf /var/cache/apk/*
 
+# Service port
+EXPOSE 80
+
+# API volume
 VOLUME /api/shared
 
-EXPOSE 8080
-
-ENTRYPOINT ["sh", "/api/docker/exec.sh"]
+ENTRYPOINT ["sh", "/exec.sh"]

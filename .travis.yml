@@ -3,10 +3,10 @@ services:
   - docker
 
 before_script:
-  - make pull
+  - docker pull ivanch/notificc:latest
 
 script:
-  - make build
+  - docker build -t ivanch/notificc:latest --build-arg PUBLIC_URL=http://localhost:8800 .
 
 deploy:
   provider: script

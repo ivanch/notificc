@@ -31,3 +31,4 @@ api/screenshots
 api/shared/**
 api/.pytest*
 api/keys/**
+data
