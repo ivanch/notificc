@@ -72,4 +72,6 @@ EXPOSE 80
 # API volume
 VOLUME /api/shared
 
+VOLUME /etc/nginx/certs
+
 ENTRYPOINT ["sh", "/exec.sh"]

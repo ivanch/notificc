@@ -16,9 +16,21 @@
 ## Deploy (Docker)
 ```shell
 docker run --name notificc -d \
+-m 100m \
 -p 8800:80 \
 -v $PWD/data:/api/shared \
+ivanch/notificc:latest
+```
+
+With SSL:
+```shell
+docker run --name notificc -d \
 -m 100m \
+-p 8800:80 \
+-v $PWD/data:/api/shared \
+-v /path/to/certs:/etc/nginx/certs \
+--env SSL_CERT=example.com.crt
+--env SSL_KEY=example.com.key
 ivanch/notificc:latest
 ```
 
