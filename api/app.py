@@ -7,10 +7,10 @@ import threading
 
 from src import checker
 from src.database import setup_db
-from src.functions.auth import *
-from src.functions.websites import *
-from src.functions.config import *
-from src.functions.push import *
+from src.functions.auth import auth
+from src.functions.websites import websites
+from src.functions.config import config, get_autostart
+from src.functions.push import push
 
 app = Flask(__name__)
 CORS(app)
@@ -28,7 +28,7 @@ def main():
     global stop_checker
     checker_status = 'error' # with error by default
     
-    if not checker_thread is None: # if the thread exists
+    if checker_thread is not None: # if the thread exists
         if not checker_thread.is_alive():
             checker_status = 'offline' # thread died
         elif stop_checker:
@@ -44,12 +44,12 @@ def main():
 def turn_checker():
     global stop_checker, checker_thread
 
-    if(not checker_thread.is_alive()):
+    if not checker_thread.is_alive():
         setup_checker()
         stop_checker = False
     else:
         stop_checker = False if stop_checker else True
-    
+
     return jsonify(message="Success",
                 statusCode=200), 200
 

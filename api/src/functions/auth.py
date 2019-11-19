@@ -20,7 +20,7 @@ def is_token_authorized(token):
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
 
-        if(result[1] == '0'):
+        if result[1] == '0':
             return True
         
         cursor.execute("SELECT * FROM tokens WHERE token = ?;", (token,))
@@ -73,7 +73,7 @@ def is_password_disabled():
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
 
-        if(result[1] == '0'):
+        if result[1] == '0':
             return jsonify(message="Authorized",
                     statusCode=200), 200
         else:
@@ -93,7 +93,7 @@ def password_auth():
         cursor.execute("SELECT * FROM config;")
         result = cursor.fetchone()
 
-        if(result[1] == json['auth_pass']):
+        if result[1] == json['auth_pass']:
             letters = string.ascii_lowercase
             token = ''.join(random.choice(letters) for i in range(10))
 

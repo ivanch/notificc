@@ -1,11 +1,11 @@
 from app import app
 import json
 
-'''
+
 ###
 ###     Auth tests
 ###
-'''
+
 
 valid_token = None
 
@@ -89,7 +89,7 @@ def test_password_update_invalid_token():
     assert data != []
     assert data['message'] == 'Unauthorized'
 
-def test_password_update_valid_token():
+def test_password_update_1_valid_token():
     global valid_token
     
     response = app.test_client().put(
@@ -106,7 +106,7 @@ def test_password_update_valid_token():
     assert data != []
     assert data['message'] == 'Success'
 
-def test_password_updated():
+def test_password_updated_1():
     response = app.test_client().post(
         '/api/auth/password',
         data=json.dumps({
@@ -121,7 +121,7 @@ def test_password_updated():
     assert data['message'] == 'Authorized'
     assert data['token'] is not None
 
-def test_password_update_valid_token():
+def test_password_update_2_valid_token():
     global valid_token
     
     response = app.test_client().put(
@@ -138,7 +138,7 @@ def test_password_update_valid_token():
     assert data != []
     assert data['message'] == 'Success'
 
-def test_password_updated():
+def test_password_updated_2():
     response = app.test_client().post(
         '/api/auth/password',
         data=json.dumps({

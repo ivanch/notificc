@@ -52,7 +52,7 @@ def setup_db():
             auth TEXT NOT NULL);")
 
     # Setup database if new
-    if(is_new):
+    if is_new:
         # Inserts the initial (default) configuration into 'config' table
         cursor.execute("INSERT INTO config  (id, auth_pass , autostart, delay) \
                         VALUES              (0 , 'password', 0        , 120);")

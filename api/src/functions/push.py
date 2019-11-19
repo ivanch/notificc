@@ -1,6 +1,5 @@
 from flask import Blueprint
 from flask import request, jsonify
-import os
 import json
 import time
 import sqlite3
@@ -26,7 +25,7 @@ def pms_exists(keys):
 def create_push_subscription(info):
     if pms_exists(info['keys']):
         return
-    
+
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO pms (endpoint, base_endpoint, p256dh, auth) \

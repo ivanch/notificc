@@ -1,11 +1,9 @@
 from app import app
 import json
 
-'''
 ###
 ###     Configuration tests
 ###
-'''
 
 valid_token = None
 
