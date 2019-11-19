@@ -68,6 +68,7 @@ RUN apk del .build-dependencies && \
 
 # Service port
 EXPOSE 80
+EXPOSE 443
 
 # API volume
 VOLUME /api/shared
