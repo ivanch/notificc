@@ -43,7 +43,7 @@ RUN pip install -r requirements.txt && \
     mkdir /run/nginx
 
 # Config
-COPY assets/docker/nginx.conf /etc/nginx/nginx.conf
+COPY assets/docker/nginx* /etc/nginx/
 COPY assets/docker/exec.sh /exec.sh
 
 # API files

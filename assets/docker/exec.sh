@@ -1,4 +1,8 @@
 #!/bin/sh
 
-nginx
+if [[ -z "${SSL_CERT}" ]]; then
+    nginx
+else
+    nginx
+fi
 uwsgi --ini /api/wsgi.ini
