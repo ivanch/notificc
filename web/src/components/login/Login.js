@@ -12,7 +12,6 @@ export default class Login extends Component {
         this.state = {
             apiStatus: 'offline',
             authPass: '',
-            auth: false,
         };
     }
 
@@ -48,7 +47,6 @@ export default class Login extends Component {
         .then(_response => _response.json())
         .then(response => {
             var authorized = response['message'] === 'Authorized';
-            this.setState({auth: authorized});
             this.props.handleAuth(authorized);
         });
     }
@@ -68,7 +66,6 @@ export default class Login extends Component {
         .then(data => {
             if(data['message'] === 'Authorized'){
                 localStorage.setItem('@notificc/access_token', data['token']);
-                this.setState({auth: true});
                 this.props.handleAuth(true);
             }else{
                 alert('Wrong password!');
