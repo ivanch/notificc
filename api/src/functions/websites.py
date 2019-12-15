@@ -48,14 +48,12 @@ def websites_get():
 #   threshold => change threshold to trigger a notification
 # Response:
 #   message => "Unauthorized", "Success" or "Exists"
-#   statusCode => 401, 200 or 400
 @websites.route('/api/websites', methods=['POST'])
 def websites_register():
     json = request.get_json()
 
     if not is_token_authorized(json['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
     
     name = json['name']
     url = json['url']
@@ -68,11 +66,9 @@ def websites_register():
                             VALUES           (?   , ?   , ?         , 1);", (name, url, threshold))
             conn.commit()
 
-        return jsonify(message="Success",
-                    statusCode=200), 200
+        return jsonify(message="Success"), 200
     
-    return jsonify(message="Exists",
-                statusCode=400), 400
+    return jsonify(message="Exists"), 400
 
 # PUT /api/websites
 # Sets the checks enabled status of the website
@@ -81,14 +77,12 @@ def websites_register():
 #   id => website id
 # Response:
 #   message => "Unauthorized", "Not found" or "Success"
-#   statusCode => 401, 404, 200
 @websites.route('/api/websites', methods=['PUT'])
 def websites_update():
     json = request.get_json()
     
     if not is_token_authorized(json['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
     
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -110,8 +104,7 @@ def websites_update():
             for file in glob.iglob("screenshots/*-%d.png" % (int(json['id']))):
                 os.remove(file)
 
-    return jsonify(message="Success",
-                statusCode=200), 200
+    return jsonify(message="Success"), 200
 
 # DELETE /api/websites
 # Deletes a website from the database
@@ -120,14 +113,12 @@ def websites_update():
 #   id => website id
 # Response:
 #   message => "Unauthorized" or "Success"
-#   statusCode => 401, 200
 @websites.route('/api/websites', methods=['DELETE'])
 def websites_delete():
     json = request.get_json()
 
     if not is_token_authorized(json['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -137,8 +128,7 @@ def websites_delete():
     for file in glob.iglob("screenshots/*-%d.png" % (int(json['id']))):
         os.remove(file)
 
-    return jsonify(message="Success",
-                statusCode=200), 200
+    return jsonify(message="Success"), 200
 
 # GET /api/websites/logs
 # Returns the change logs from the database
@@ -171,14 +161,12 @@ def websitesLogs_get():
 #   id => website id or "all" to update all
 # Response:
 #   message => "Unauthorized" or "Success"
-#   statusCode => 401, 200
 @websites.route('/api/websites/logs', methods=['PUT'])
 def websitesLogs_update():
     json = request.get_json()
 
     if not is_token_authorized(json['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
     
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -190,8 +178,7 @@ def websitesLogs_update():
 
         conn.commit()
 
-    return jsonify(message="Success",
-                statusCode=200), 200
+    return jsonify(message="Success"), 200
 
 # DELETE /api/websites/logs
 # Removes a log from the database
@@ -200,14 +187,12 @@ def websitesLogs_update():
 #   id => website id or "all" to delete all
 # Response:
 #   message => "Unauthorized" or "Success"
-#   statusCode => 401, 200
 @websites.route('/api/websites/logs', methods=['DELETE'])
 def websitesLogs_delete():
     json = request.get_json()
 
     if not is_token_authorized(json['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -218,5 +203,4 @@ def websitesLogs_delete():
             cursor.execute("DELETE FROM logs WHERE id = ?", (json['id'],))
         conn.commit()
 
-    return jsonify(message="Success",
-                statusCode=200), 200
+    return jsonify(message="Success"), 200

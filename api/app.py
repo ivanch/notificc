@@ -50,8 +50,7 @@ def turn_checker():
     else:
         stop_checker = False if stop_checker else True
 
-    return jsonify(message="Success",
-                statusCode=200), 200
+    return jsonify(message="Success"), 200
 
 def setup_checker():
     global stop_checker, checker_thread

@@ -47,8 +47,7 @@ def config_update():
     json = request.get_json()
 
     if not is_token_authorized(json['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -56,5 +55,4 @@ def config_update():
                         (json['delay'], json['autostart']))
         conn.commit()
 
-        return jsonify(message="Success",
-                        statusCode=200), 200
+        return jsonify(message="Success"), 200

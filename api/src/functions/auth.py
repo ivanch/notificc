@@ -41,11 +41,9 @@ def token_auth():
     result = is_token_authorized(json['token'])
 
     if result:
-        return jsonify(message="Authorized",
-                    statusCode=200), 200
+        return jsonify(message="Authorized"), 200
     else:
-        return jsonify(message="Unauthorized",
-                statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
 
 # DELETE /api/auth/token?token=<token_string>
 # Deletes a token from database
@@ -59,8 +57,7 @@ def token_delete():
         cursor.execute("DELETE FROM tokens WHERE token = ?;", (token,))
         conn.commit()
 
-    return jsonify(message="Success",
-                statusCode=200), 200
+    return jsonify(message="Success"), 200
 
 # GET /api/auth/password/disabled
 # Checks if the password is disabled
@@ -74,11 +71,9 @@ def is_password_disabled():
         result = cursor.fetchone()
 
         if result[1] == '0':
-            return jsonify(message="Authorized",
-                    statusCode=200), 200
+            return jsonify(message="Authorized"), 200
         else:
-            return jsonify(message="Unauthorized",
-                statusCode=401), 401
+            return jsonify(message="Unauthorized"), 401
 
 # POST /api/auth/password
 # Checks if the auth password is right
@@ -99,11 +94,9 @@ def password_auth():
 
             register_token(token)
             return jsonify(message="Authorized",
-                            token=token,
-                            statusCode=200), 200
+                            token=token), 200
 
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
 
 # PUT /api/auth/password
 # Updates the auth password
@@ -115,8 +108,7 @@ def password_update():
     json = request.get_json()
 
     if not is_token_authorized(json['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -124,5 +116,4 @@ def password_update():
                         (json['auth_pass'],))
         conn.commit()
 
-        return jsonify(message="Success",
-                        statusCode=200), 200
+        return jsonify(message="Success"), 200

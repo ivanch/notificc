@@ -83,14 +83,13 @@ def send_notification(name, uid):
 # Response:
 #   message => 'Success'
 #   key => registered application server key
-#   statusCode => 200
+
 @push.route('/api/push', methods=['GET'])
 def get_app_server_key():
     with open('./keys/key', 'r') as keyfile:
         key = keyfile.readline().replace('\n','')
         return jsonify(message="Success",
-                        key=key,
-                        statusCode=200), 200
+                        key=key), 200
 
 
 # POST /api/push
@@ -100,16 +99,14 @@ def get_app_server_key():
 #   subscription => Service Worker Subscription json just like its provided
 # Response:
 #   message => 'Success'
-#   statusCode => 200
+
 @push.route('/api/push', methods=['POST'])
 def config_update2():
     body = request.get_json()
 
     if not is_token_authorized(body['token']):
-        return jsonify(message="Unauthorized",
-                        statusCode=401), 401
+        return jsonify(message="Unauthorized"), 401
 
     create_push_subscription(body['subscription'])
 
-    return jsonify(message="Success",
-                    statusCode=200), 200
+    return jsonify(message="Success"), 200
