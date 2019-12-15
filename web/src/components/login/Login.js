@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import Tag from '../tag/Tag.js';
 import './Login.css';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -22,19 +20,18 @@ export default class Login extends Component {
     }
 
     fetchAPI() {
-        fetch(API_URL + '/api/status')
+        fetch('/api/status')
         .then(_response => _response.json())
         .then(response => {
             this.setState({apiStatus: 'online'});
         })
         .catch(error => {
-            console.error(error);
             this.setState({apiStatus: 'offline'});
         });
     }
 
     checkAuth() {
-        fetch(API_URL + '/api/auth/token', {
+        fetch('/api/auth/token', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -51,8 +48,10 @@ export default class Login extends Component {
         });
     }
 
-    handleLogin = () => {
-        fetch(API_URL + '/api/auth/password', {
+    handleLogin = (event) => {
+        event.preventDefault();
+
+        fetch('/api/auth/password', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -62,8 +61,9 @@ export default class Login extends Component {
                 auth_pass: this.state.authPass,
             })
         })
-        .then(_response => _response.json())
+        .then(response => response.json())
         .then(data => {
+            console.log("dados:", data);
             if(data['message'] === 'Authorized'){
                 localStorage.setItem('@notificc/access_token', data['token']);
                 this.props.handleAuth(true);
@@ -95,16 +95,23 @@ export default class Login extends Component {
                         <h1>Auth</h1>
                         <Tag name='api' content={this.state.apiStatus} color={this.getAPIStatusColor()} />
                     </div>
-                    <div className='field'>                        
+                    <form className='field' onSubmit={this.handleLogin}>                        
                         <label className='label'>Password:</label>
-                        <div className='control'>
-                            <input className='input' type='password' name='authPass' value={this.state.authPass} onChange={this.handleChange}/>
-                        </div>
+                        <input  className='input'
+                                type='password'
+                                name='authPass'
+                                value={this.state.authPass}
+                                onChange={this.handleChange}
+                        />
 
-                        <div className='submit control'>
-                            <button className='button is-primary' onClick={this.handleLogin} disabled={this.state.apiStatus !== 'online'}>Login</button>
+                        <div className='submit'>
+                            <input  type='submit'
+                                    className='button is-primary'
+                                    disabled={this.state.apiStatus !== 'online'}
+                                    value='Login'
+                            />
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         );

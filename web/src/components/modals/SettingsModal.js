@@ -4,8 +4,6 @@ import './SettingsModal.css';
 import Warning from '../warning/Warning.js';
 import Switch from '../switch/Switch.js';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 const DELAY_MIN = 60; // 1 minute
 const DELAY_MAX = 86400; // 1 day
 
@@ -29,7 +27,7 @@ export default class SettingsModal extends Component {
       
     fetchData() {
         // Fetch delay
-        fetch(API_URL + '/api/config')
+        fetch('/api/config')
         .then(_response => _response.json())
         .then(response => {
             if(response != null){
@@ -39,7 +37,7 @@ export default class SettingsModal extends Component {
         });
 
         // Fetch if password is disabled
-        fetch(API_URL + '/api/auth/password/disabled')
+        fetch('/api/auth/password/disabled')
         .then(_response => _response.json())
         .then(data => {
             this.setState({disablePass: data['message'] === 'Authorized'});
@@ -66,7 +64,7 @@ export default class SettingsModal extends Component {
 
     handleSubmit = () => {
         if(this.state.loginPass !== '' || this.state.disablePass){
-            fetch(API_URL + '/api/auth/password', {
+            fetch('/api/auth/password', {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -79,7 +77,7 @@ export default class SettingsModal extends Component {
             });
         }
         if(this.state.delay !== ''){
-            fetch(API_URL + '/api/config', {
+            fetch('/api/config', {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -170,7 +168,7 @@ export default class SettingsModal extends Component {
                                         onClick={this.handleSubmit}
                                         disabled={!this.isDelayValid() || !this.isPasswordValid()}
                                 >
-                                    Submit
+                                    Save
                                 </button>
                             </div>
                         </div>

@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import './Logs.css';
 import Push from '../push/Push.js';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 function n(n){
     return n > 9 ? "" + n: "0" + n;
 }
@@ -25,7 +23,7 @@ export default class Logs extends Component {
     }
       
     setupTimer() {
-        fetch(API_URL + '/api/config')
+        fetch('/api/config')
         .then(_response => _response.json())
         .then(response => {
             if(response != null){
@@ -36,7 +34,7 @@ export default class Logs extends Component {
 
     fetchLogs = () => {
         this.setState({background: '#23d160'});
-        fetch(API_URL + '/api/websites/logs')
+        fetch('/api/websites/logs')
         .then(_response => _response.json())
         .then(response => {
             this.setState({ data: response });
@@ -49,7 +47,7 @@ export default class Logs extends Component {
     handleRead = (event) => {
         this.setState({background: '#23d160'});
         console.log(event.target.id)
-        fetch(API_URL + '/api/websites/logs', {
+        fetch('/api/websites/logs', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -72,7 +70,7 @@ export default class Logs extends Component {
 
     handleDelete = (event) => {
         this.setState({background: '#d12323'});
-        fetch(API_URL + '/api/websites/logs', {
+        fetch('/api/websites/logs', {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

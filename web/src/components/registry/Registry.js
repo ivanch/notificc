@@ -3,8 +3,6 @@ import './Registry.css';
 
 import Switch from '../switch/Switch.js';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 export default class Registry extends Component {
     constructor(props) {
         super(props);
@@ -19,7 +17,7 @@ export default class Registry extends Component {
     }
 
     fetchWebsites = () => {
-        fetch(API_URL + '/api/websites')
+        fetch('/api/websites')
         .then(_response => _response.json())
         .then(response => {
             this.setState({ data: response });
@@ -27,7 +25,7 @@ export default class Registry extends Component {
     }
 
     handleClick = (event) => {
-        fetch(API_URL + '/api/websites', {
+        fetch('/api/websites', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -48,7 +46,7 @@ export default class Registry extends Component {
     }
 
     handleDelete = (event) => {
-        fetch(API_URL + '/api/websites', {
+        fetch('/api/websites', {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

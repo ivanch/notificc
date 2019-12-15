@@ -8,8 +8,6 @@ import Register from './components/register/Register.js';
 import Logs from './components/logs/Logs.js';
 import Registry from './components/registry/Registry.js';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 export default class App extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +26,7 @@ export default class App extends Component {
     }
 
     fetchAPI = () => {
-        fetch(API_URL + '/api/status')
+        fetch('/api/status')
         .then(_response => _response.json())
         .then(response => {
             if(response != null){

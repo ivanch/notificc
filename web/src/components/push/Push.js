@@ -1,7 +1,5 @@
 import { Component } from 'react';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 function urlBase64ToUint8Array(base64String) {
     var padding = '='.repeat((4 - base64String.length % 4) % 4);
     var base64 = (base64String + padding)
@@ -23,7 +21,7 @@ export default class Push extends Component {
         window.Notification.requestPermission().then(perm => {
             if(perm === 'granted'){
                 navigator.serviceWorker.getRegistration(`${process.env.PUBLIC_URL}/sw.js`).then(sw => {                    
-                    fetch(API_URL + '/api/push')
+                    fetch('/api/push')
                     .then(_response => _response.json())
                     .then(response => {
                         return response['key'];
@@ -44,7 +42,7 @@ export default class Push extends Component {
         
         await sw.pushManager.subscribe(options).then(() => {
             sw.pushManager.getSubscription().then(pms => {
-                fetch(API_URL + '/api/push', {
+                fetch('/api/push', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',

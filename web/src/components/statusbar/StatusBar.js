@@ -5,8 +5,6 @@ import Tag from '../tag/Tag.js';
 
 import './StatusBar.css';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 export default class StatusBar extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +15,7 @@ export default class StatusBar extends Component {
     }
 
     handleLogout() {
-        fetch(API_URL + '/api/auth/token?token=' + localStorage.getItem('@notificc/access_token'), {
+        fetch('/api/auth/token?token=' + localStorage.getItem('@notificc/access_token'), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -39,7 +37,7 @@ export default class StatusBar extends Component {
     }
 
     handleClickChecker = () => {
-        fetch(API_URL + '/api/checker', {
+        fetch('/api/checker', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

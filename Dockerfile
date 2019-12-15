@@ -8,7 +8,7 @@ COPY ./web/package* ./
 RUN npm install
 COPY ./web ./
 
-ARG PUBLIC_URL
+ARG PUBLIC_URL=
 ENV PUBLIC_URL ${PUBLIC_URL}
 
 RUN npm run build

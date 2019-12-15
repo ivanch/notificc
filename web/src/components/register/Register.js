@@ -3,8 +3,6 @@ import './Register.css';
 
 import Warning from '../warning/Warning.js';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
-
 export default class Register extends Component {
     constructor(props) {
         super(props);
@@ -36,7 +34,7 @@ export default class Register extends Component {
     }
   
     handleSubmit = (event) => {
-        fetch(API_URL + '/api/websites', {
+        fetch('/api/websites', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
