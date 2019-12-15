@@ -91,8 +91,7 @@ def websites_update():
         result = cursor.fetchone()
         
         if result is None:
-            return jsonify(message="Not found",
-                        statusCode=404), 404
+            return jsonify(message="Not found"), 404
         
         enabled = result[0]
         value = 1 if enabled == 0 else 0
