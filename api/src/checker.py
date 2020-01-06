@@ -1,6 +1,7 @@
 from time import sleep, time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException
 from PIL import Image
 from PIL import ImageChops
 import sqlite3
@@ -25,7 +26,7 @@ def logWebsite(name, url, title):
                         VALUES           (?   , ?   , ?     , 0    , ?);", (name, url, title, now))
         conn.commit()
 
-# Returns the websites
+# Returns the websites from database
 def get_websites():
     urls = []
     with sqlite3.connect('shared/data.db') as conn:
@@ -38,7 +39,7 @@ def get_websites():
                 urls.append({'id': result[0], 'name': result[1], 'url': result[2], 'threshold': result[3]})
     return urls
 
-# Check if 2 images are different
+# Check if old and new images are different based on a threshold
 def compare(index, thresh):
     if not os.path.isfile('screenshots/old-ss-%d.png' % (index)):
         return False
@@ -57,9 +58,26 @@ def compare(index, thresh):
     
     return False
 
-# Main loop of the checker
+# Tries to get the url
 # Parameters:
-#   stop_checker => function that returns True if the checker thread is stopped, False otherwise
+#   driver => selenium webdriver
+#   url => website url
+# Returns:
+#   0 if the request timed out X times
+#   1 if made successful request
+def getURL(driver, url):
+    tries = 3
+    while tries > 0:
+        try:
+            driver.get(url)
+            return 1
+        except TimeoutException:
+            tries -= 1
+    return 0
+
+# Main loop for the checker thread
+# Parameters:
+#   stop_checker => function that returns True if the checker thread is paused, False otherwise
 def loop(stop_checker):
     while True:
         try:
@@ -67,7 +85,7 @@ def loop(stop_checker):
             DELAY = get_delay()
 
             if not stop_checker():
-                urls = get_websites()
+                websites = get_websites()
 
                 options = Options()
                 options.add_argument('--headless')
@@ -78,19 +96,19 @@ def loop(stop_checker):
                 driver = webdriver.Chrome(chrome_options=options)
 
                 driver.set_window_size(1920, 1080)
-                for url in urls:
+                for website in websites:
 
-                    uid = url['id']
-                    name = url['name']
-                    link = url['url']
+                    uid = website['id']
+                    name = website['name']
+                    url = website['url']
 
-                    driver.get(link)
+
                     sleep(1)
                     driver.save_screenshot('screenshots/ss-%d.png' % (uid))
 
                     r = compare(uid, url['threshold'])
                     if r: # has changed
-                        logWebsite(name, link, driver.title)
+                        logWebsite(name, url, driver.title)
                         send_notification(name, uid)
                     
                     os.rename("screenshots/ss-%d.png" % (uid), "screenshots/old-ss-%d.png" % (uid))
