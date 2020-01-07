@@ -8,7 +8,7 @@ COPY ./web/package* ./
 RUN npm install
 COPY ./web ./
 
-ARG PUBLIC_URL=
+ARG PUBLIC_URL=./
 ENV PUBLIC_URL ${PUBLIC_URL}
 
 RUN npm run build
@@ -36,10 +36,8 @@ RUN apk add --virtual .build-dependencies \
             libffi-dev
 
 # Python Requirements
-COPY assets/docker/requirements.txt requirements.txt
+COPY api/requirements.txt requirements.txt
 RUN pip install -r requirements.txt && \
-    python -c 'from PIL import Image; import selenium' && \
-    rm requirements.txt && \
     mkdir /run/nginx
 
 # Config
@@ -66,7 +64,7 @@ COPY --from=builder /web/build /var/www
 RUN apk del .build-dependencies && \
     rm -rf /var/cache/apk/*
 
-# Service port
+# Web port
 EXPOSE 80
 EXPOSE 443
 
