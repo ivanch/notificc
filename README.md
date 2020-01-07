@@ -37,9 +37,8 @@ docker run --name notificc -d \
 ## Build Docker Image
 **You'll have to build the image again if you don't want to use default http://example.domain as the service URL.**
 1. Clone this repo with `git clone https://github.com/ivanch/notificc`
-2. Pull the latest image to use the cached images `docker pull ivanch/notificc:latest`
-3. Run `docker build -t ivanch/notificc:latest --build-arg PUBLIC_URL=http://DOMAIN/PATH .`
-4. [Deploy](#deploy-docker)
+2. Run `docker build -t ivanch/notificc:latest --build-arg PUBLIC_URL=http://DOMAIN/PATH .`
+3. [Deploy](#deploy-docker)
 
 ## Usage
 Default password is *password*, you can change or disable that later in Settings.
