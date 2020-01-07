@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SettingsModal from '../modals/SettingsModal.js';
 import Tag from '../tag/Tag.js';
 
@@ -48,7 +50,7 @@ export default class StatusBar extends Component {
             this.props.fetchAPI();
         })
         .catch(error => {
-            alert('Error: ' + error);
+            toast.error('Error: ' + error);
         });
     }
 

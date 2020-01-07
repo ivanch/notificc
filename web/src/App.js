@@ -74,7 +74,7 @@ export default class App extends Component {
                         <Registry websites={this.state.websites} fetchWebsites={this.fetchWebsites} />
                     </div>
                     <div className='column'>
-                        <Logs apiStatus={this.state.apiStatus}/>
+                        <Logs />
                     </div>
                 </div>
             </div>

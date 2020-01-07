@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function urlBase64ToUint8Array(base64String) {
     var padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -54,11 +56,12 @@ export default class Push extends Component {
                     })
                 })
                 .catch(() => {
-                    alert('Error while trying to save push details');
+                    toast.error('Error while trying to save push details.');
                 });
             });
         }).catch(err => {
-            if(err instanceof DOMException && twice === false){ // Already registered, unregister and try again, last time
+            // Already registered, unregister and try again, last time
+            if(err instanceof DOMException && twice === false){
                 sw.pushManager.getSubscription().then(pms => {
                     pms.unsubscribe();
                 }).then(() => {

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './Logs.css';
 import Push from '../push/Push.js';
 
@@ -62,7 +64,7 @@ export default class Logs extends Component {
             })
         })
         .catch(() => {
-            alert('Error while trying to change read log: ' + event.target.id);
+            toast.error('Error while trying to change read log: ' + event.target.id);
         }).then(() => {
             this.fetchLogs();
         });
@@ -82,7 +84,7 @@ export default class Logs extends Component {
             })
         })
         .catch(() => {
-            alert('Error while trying to delete log: ' + event.target.id);
+            toast.error('Error while trying to delete log: ' + event.target.id);
         }).then(() => {
             this.fetchLogs();
         });
@@ -94,8 +96,6 @@ export default class Logs extends Component {
     }
 
     render() {
-        if(this.props.apiStatus !== 'online') return null;
-
         return (
             <div id='logs' className='box' style={{backgroundColor: this.state.background}}>
 
