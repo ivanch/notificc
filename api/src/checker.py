@@ -106,7 +106,7 @@ def loop(stop_checker):
                     sleep(1)
                     driver.save_screenshot('screenshots/ss-%d.png' % (uid))
 
-                    r = compare(uid, url['threshold'])
+                    r = compare(uid, website['threshold'])
                     if r: # has changed
                         logWebsite(name, url, driver.title)
                         send_notification(name, uid)
