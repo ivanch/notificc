@@ -47,6 +47,8 @@ export default class Login extends Component {
         .then(response => {
             var authorized = response['message'] === 'Authorized';
             this.props.handleAuth(authorized);
+            if(authorized)
+                toast.success("Logged in!");
         });
     }
 
