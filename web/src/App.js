@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import 'react-bulma-components/full';
 import 'bloomer-extensions';
 
@@ -8,6 +9,12 @@ import Register from './components/register/Register.js';
 import Logs from './components/logs/Logs.js';
 import Registry from './components/registry/Registry.js';
 
+toast.configure({
+    draggable: false,
+    position: 'bottom-center',
+    autoClose: 2000
+});
+
 export default class App extends Component {
     constructor(props) {
         super(props);
@@ -15,6 +22,7 @@ export default class App extends Component {
         this.state = {
             apiStatus: 'offline',
             checkerStatus: 'offline',
+            websites: [],
         };
     }
 
@@ -23,6 +31,7 @@ export default class App extends Component {
         this.timer = setInterval(() => {
             this.fetchAPI();
         }, 10000);
+        this.fetchWebsites();
     }
 
     fetchAPI = () => {
@@ -40,18 +49,29 @@ export default class App extends Component {
         .catch(() => {
             this.setState({apiStatus: 'offline'});
             this.setState({checkerStatus: 'offline'});
-            this.props.history.push('/login');
+        });
+    }
+
+    fetchWebsites = () => {
+        fetch('/api/websites')
+        .then(_response => _response.json())
+        .then(response => {
+            this.setState({ websites: response });
         });
     }
 
     render() {
         return (
             <div className='App'>
-                <StatusBar apiStatus={this.state.apiStatus} checkerStatus={this.state.checkerStatus} fetchAPI={this.fetchAPI}/>
+                <StatusBar 
+                    apiStatus={this.state.apiStatus}
+                    checkerStatus={this.state.checkerStatus}
+                    fetchAPI={this.fetchAPI}
+                />
                 <div className='columns is-multiline' style={{'marginTop': '0.5rem'}}>
                     <div className='column is-half'>
-                        <Register/>
-                        <Registry />
+                        <Register fetchWebsites={this.fetchWebsites} />
+                        <Registry websites={this.state.websites} fetchWebsites={this.fetchWebsites} />
                     </div>
                     <div className='column'>
                         <Logs apiStatus={this.state.apiStatus}/>

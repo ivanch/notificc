@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Register.css';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Warning from '../warning/Warning.js';
 
 export default class Register extends Component {
@@ -50,12 +52,16 @@ export default class Register extends Component {
         .then(response => response.json())
         .then(response => {
             if(response['message'] === 'Success'){
-                window.location.reload(false);
+                this.props.fetchWebsites();
+                toast.success('Success.');
             }else if(response['message'] === 'Exists'){
-                alert('Website is already registered!');
+                toast.info('Website is already registered!');
             }else{
-                alert('Unknown error.');
+                toast.error('Unknown error.');
             }
+        })
+        .catch(err => {
+            toast.error(err + '.');
         });
     }
 

@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
 import './SettingsModal.css';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Warning from '../warning/Warning.js';
 import Switch from '../switch/Switch.js';
 
 const DELAY_MIN = 60; // 1 minute
 const DELAY_MAX = 86400; // 1 day
 
+const initialState = {
+    loginPass: '',
+    disablePass: false,
+    autostart: false,
+    delay: '',
+}
+
 export default class SettingsModal extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            loginPass: '',
-            disablePass: false,
-            autostart: false,
-            delay:'',
-        };
+        this.state = initialState;
     }
 
     componentDidUpdate(prevProps) {
@@ -62,7 +66,8 @@ export default class SettingsModal extends Component {
         this.setState({[event.target.name]: event.target.checked});
     }
 
-    handleSubmit = () => {
+    handleSubmit = (event) => {
+        event.preventDefault();
         if(this.state.loginPass !== '' || this.state.disablePass){
             fetch('/api/auth/password', {
                 method: 'PUT',
@@ -74,6 +79,12 @@ export default class SettingsModal extends Component {
                     token: localStorage.getItem('@notificc/access_token'),
                     auth_pass: this.state.disablePass ? '0' : this.state.loginPass,
                 })
+            })
+            .then(_response => _response.json())
+            .then(response => {
+                toast.success(response['message'] + '.');
+            }).catch(err => {
+                toast.error(err);
             });
         }
         if(this.state.delay !== ''){
@@ -88,12 +99,19 @@ export default class SettingsModal extends Component {
                     delay: this.state.delay,
                     autostart: this.state.autostart,
                 })
+            })
+            .then(_response => _response.json())
+            .then(response => {
+                toast.success(response['message'] + '.');
+            }).catch(err => {
+                toast.error(err);
             });
         }
         this.handleClose();
     }
 
-    handleClose = () => {
+    handleClose = (event) => {
+        this.setState(initialState);
         this.props.handleClose('settings');
     }
 
@@ -102,7 +120,7 @@ export default class SettingsModal extends Component {
             <div id='settings-modal' className={'modal animated ' + (this.props.active ? 'is-active fadeIn' : '')}>
                 <div className='modal-background' onClick={this.handleClose}></div>
                 <div className='modal-content'>
-                    <div id='settings' className='box'>
+                    <form id='settings' className='box'>
                         <div className='header centered'>
                             <span className='title'>
                                 Settings
@@ -172,7 +190,7 @@ export default class SettingsModal extends Component {
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 <button className='modal-close is-large' aria-label='close' onClick={this.handleClose}></button>
             </div>

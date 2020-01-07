@@ -14,7 +14,7 @@ export default class StatusBar extends Component {
         };
     }
 
-    handleLogout() {
+    handleLogout = () => {
         fetch('/api/auth/token?token=' + localStorage.getItem('@notificc/access_token'), {
             method: 'DELETE',
             headers: {
@@ -24,7 +24,7 @@ export default class StatusBar extends Component {
         })
         .then(() => {
             localStorage.removeItem('@notificc/access_token');
-            window.location.reload(false);
+            window.location.reload();
         });
     }
 
@@ -43,7 +43,8 @@ export default class StatusBar extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-        }).then(() => {
+        })
+        .then(() => {
             this.props.fetchAPI();
         })
         .catch(error => {

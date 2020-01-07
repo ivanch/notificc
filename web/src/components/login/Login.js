@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Tag from '../tag/Tag.js';
 import './Login.css';
 
@@ -30,7 +32,7 @@ export default class Login extends Component {
         });
     }
 
-    checkAuth() {
+    checkAuth = () => {
         fetch('/api/auth/token', {
             method: 'POST',
             headers: {
@@ -63,12 +65,12 @@ export default class Login extends Component {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("dados:", data);
             if(data['message'] === 'Authorized'){
                 localStorage.setItem('@notificc/access_token', data['token']);
                 this.props.handleAuth(true);
+                toast.success("Logged in!");
             }else{
-                alert('Wrong password!');
+                toast.error("Wrong password!");
             }
         });
     }

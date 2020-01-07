@@ -1,29 +1,11 @@
 import React, { Component } from 'react';
 import './Registry.css';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Switch from '../switch/Switch.js';
 
 export default class Registry extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            data: [],
-        };
-    }
-
-    componentDidMount() {
-        this.fetchWebsites();
-    }
-
-    fetchWebsites = () => {
-        fetch('/api/websites')
-        .then(_response => _response.json())
-        .then(response => {
-            this.setState({ data: response });
-        });
-    }
-
     handleClick = (event) => {
         fetch('/api/websites', {
             method: 'PUT',
@@ -37,10 +19,10 @@ export default class Registry extends Component {
             })
         })
         .catch(() => {
-            alert('Error while trying to turn on/off website: ' + event.target.id);
+            toast.error('Error while trying to turn on/off website: ' + event.target.id);
         }).then(() => {
             setTimeout(() => {
-                this.fetchWebsites();
+                this.props.fetchWebsites();
             }, 25);
         });
     }
@@ -57,10 +39,12 @@ export default class Registry extends Component {
                 id: event.target.id,
             })
         })
+        .then(() => {
+            this.props.fetchWebsites();
+        })
         .catch(() => {
-            alert('Error while trying to delete website: ' + event.target.id);
+            toast.error('Error while trying to delete website: ' + event.target.id);
         });
-        window.location.reload(false);
     }
 
     render() {
@@ -73,7 +57,7 @@ export default class Registry extends Component {
                 </div>
 
                 <div id='content'>
-                    {this.state.data.map(x => (
+                    {this.props.websites.map(x => (
                         <div className='content-line' key={x['id']}>
                             <span className='icon'>
                                 <i className='fa fa-bookmark'></i>
