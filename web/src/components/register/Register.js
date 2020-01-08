@@ -5,17 +5,40 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Warning from '../warning/Warning.js';
 
+const initialState = {
+    name: '',
+    url: '',
+    thresh: '5',
+    invalidURL: false,
+    invalidName: false,
+};
+
 export default class Register extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            name: '',
-            url: '',
-            thresh: '5',
-            invalidURL: false,
-            invalidName: false,
-        };
+        this.state = initialState;
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.editing !== prevProps.editing && this.props.editing !== -1) {
+            this.fetchWebsite(this.props.editing);
+        }
+    }
+
+    fetchWebsite = (id) => {
+        fetch('/api/website?id=' + id)
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            
+            this.setState({ name: response['name'],
+                            url: response['url'],
+                            thresh: response['thresh']  });
+        })
+        .catch(err => {
+            toast.error(err + '.');
+        });
     }
 
     handleChange = (event) => {
@@ -36,14 +59,15 @@ export default class Register extends Component {
     }
   
     handleSubmit = (event) => {
-        fetch('/api/websites', {
-            method: 'POST',
+        fetch(this.props.editing === -1 ? '/api/websites' : '/api/website', {
+            method: this.props.editing === -1 ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 token: localStorage.getItem('@notificc/access_token'),
+                id: this.props.editing, // will be used only if != -1
                 name: this.state.name,
                 url: this.state.url,
                 threshold: parseInt(this.state.thresh),
@@ -65,6 +89,11 @@ export default class Register extends Component {
         });
     }
 
+    cancelEdit = () => {
+        this.props.setEditing(-1);
+        this.setState(initialState);
+    }
+
     isValid() {
         return !(this.state.invalidURL || 
                 this.state.invalidName || 
@@ -76,7 +105,7 @@ export default class Register extends Component {
             <div id='register' className='box'>
                 <div className='centered'>
                     <span className='title'>
-                        Register a website
+                        {this.props.editing === -1 ? 'Register' : 'Edit' } a website
                     </span>
                 </div>
 
@@ -99,7 +128,7 @@ export default class Register extends Component {
                             type='text'
                             name='url'
                             placeholder='URL'
-                            value={this.state.value}
+                            value={this.state.url}
                             onChange={this.handleChange}    
                         />
                     </div>
@@ -124,10 +153,19 @@ export default class Register extends Component {
                         </div>
                     </div>
                     
-                    <div className='submit control'>
-                        <button className='button is-primary'
-                            onClick={this.handleSubmit}
-                            disabled={!(this.isValid())}>Submit</button>
+                    <div className='field is-grouped is-grouped-centered'>
+                        <div className='submit control'>
+                            <button className='button is-primary'
+                                onClick={this.handleSubmit}
+                                disabled={!(this.isValid())}>Submit</button>
+                        </div>
+
+                        {this.props.editing !== -1 ? (
+                            <div className='submit control'>
+                                <button className='button is-danger'
+                                    onClick={this.cancelEdit}>Cancel</button>
+                            </div>
+                        ) : null }
                     </div>
                 </div>
             </div>

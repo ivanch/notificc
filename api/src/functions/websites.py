@@ -18,6 +18,31 @@ def exists(url):
             return True
         return False
 
+# GET /api/website
+# Returns a registered website details
+# Response:
+#   id => website id in database
+#   name => registered name
+#   url => website url
+#   enabled => true if website is enabled, false if it's not
+@websites.route('/api/website', methods=['GET'])
+def website_get():
+    website_id = request.args.get('id')
+
+    response = {}
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM urls WHERE id = ?", (website_id,))
+        result = cursor.fetchone()
+
+        response = {'id':result[0],
+                    'name': result[1],
+                    'url':result[2],
+                    'thresh':result[3],
+                    'enabled': True if result[4] == 1 else False}
+
+    return jsonify(response), 200
+
 # GET /api/websites
 # Returns the registered websites
 # Response:
@@ -94,14 +119,45 @@ def websites_update():
             return jsonify(message="Not found"), 404
         
         enabled = result[0]
-        value = 1 if enabled == 0 else 0
+        enabled = 1 if enabled == 0 else 0
 
-        cursor.execute("UPDATE urls SET enabled = ? WHERE id = ?", (value, json['id']))
+        cursor.execute("UPDATE urls SET enabled = ? WHERE id = ?", (enabled, json['id']))
         conn.commit()
 
         if value == 0:
             for file in glob.iglob("screenshots/*-%d.png" % (int(json['id']))):
                 os.remove(file)
+
+    return jsonify(message="Success"), 200
+
+# PUT /api/website
+# Updates a single website
+# Body:
+#   token => user token
+#   id => website id to be updated
+#   name => new name
+#   url => new url
+#   thresh => new treshold
+# Response:
+#   message => "Unauthorized", "Not found" or "Success"
+@websites.route('/api/website', methods=['PUT'])
+def website_update():
+    json = request.get_json()
+    
+    if not is_token_authorized(json['token']):
+        return jsonify(message="Unauthorized"), 401
+    
+    with sqlite3.connect('shared/data.db') as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT enabled FROM urls WHERE id = ?", (json['id'], ))
+        result = cursor.fetchone()
+        
+        if result is None:
+            return jsonify(message="Not found"), 404
+
+        cursor.execute("UPDATE urls SET name = ?, url = ?, threshold = ? WHERE id = ?", (json['name'], json['url'], json['threshold'], json['id']))
+        conn.commit()
 
     return jsonify(message="Success"), 200
 

@@ -23,6 +23,7 @@ export default class App extends Component {
             apiStatus: 'offline',
             checkerStatus: 'offline',
             websites: [],
+            editing: -1,
         };
     }
 
@@ -60,6 +61,10 @@ export default class App extends Component {
         });
     }
 
+    setEditing = (id) => {
+        this.setState({editing: id});
+    }
+
     render() {
         return (
             <div className='App'>
@@ -70,8 +75,17 @@ export default class App extends Component {
                 />
                 <div className='columns is-multiline' style={{'marginTop': '0.5rem'}}>
                     <div className='column is-half'>
-                        <Register fetchWebsites={this.fetchWebsites} />
-                        <Registry websites={this.state.websites} fetchWebsites={this.fetchWebsites} />
+                        <Register 
+                            fetchWebsites={this.fetchWebsites}
+                            editing={this.state.editing}
+                            setEditing={this.setEditing}
+                        />
+                        <Registry 
+                            websites={this.state.websites}
+                            fetchWebsites={this.fetchWebsites}
+                            editing={this.state.editing}
+                            setEditing={this.setEditing}
+                        />
                     </div>
                     <div className='column'>
                         <Logs />

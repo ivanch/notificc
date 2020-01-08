@@ -47,6 +47,10 @@ export default class Registry extends Component {
         });
     }
 
+    handleEdit = (event) => {
+        this.props.setEditing(event.target.id);
+    }
+
     render() {
         return (
             <div id='registered' className='box'>
@@ -73,6 +77,8 @@ export default class Registry extends Component {
                                         checked={x['enabled']}
                                         title={x['enabled'] ? 'Disable website' : 'Enable website'}
                                 />
+
+                                <i className='content-control-item fa fa-edit pointer' title='Edit' id={x['id']} onClick={this.handleEdit}></i>
 
                                 <i className='content-control-item fa fa-times pointer' title='Delete' id={x['id']} onClick={this.handleDelete}></i>
                             </div>

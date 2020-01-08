@@ -30,7 +30,7 @@ export default class SettingsModal extends Component {
     }
       
     fetchData() {
-        // Fetch delay
+        // Fetch delay and autostart
         fetch('/api/config')
         .then(_response => _response.json())
         .then(response => {
