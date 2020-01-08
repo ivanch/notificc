@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import './Switch.css';
 
 
-/*  Switch
+/*  Switch component
     props:
         id
+        name
+        title
         onChange
         checked
-        title
 */
 export default class Switch extends Component {
     

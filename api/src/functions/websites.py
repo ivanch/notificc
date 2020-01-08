@@ -124,7 +124,7 @@ def websites_update():
         cursor.execute("UPDATE urls SET enabled = ? WHERE id = ?", (enabled, json['id']))
         conn.commit()
 
-        if value == 0:
+        if enabled == 0:
             for file in glob.iglob("screenshots/*-%d.png" % (int(json['id']))):
                 os.remove(file)
 
