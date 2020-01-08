@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Theme from '../theme/Theme.js';
 import SettingsModal from '../modals/SettingsModal.js';
 import Tag from '../tag/Tag.js';
 
@@ -91,6 +92,10 @@ export default class StatusBar extends Component {
                     </div>
             
                     <div className='level-right'>
+                        <div className='level-item'>
+                            <Theme />
+                        </div>
+
                         <div className='level-item'>
                             <button className='button' name='settings' onClick={this.handleClick}>Settings</button>
                         </div>
