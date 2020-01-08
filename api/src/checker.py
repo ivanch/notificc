@@ -86,24 +86,28 @@ def loop(stop_checker):
 
             if not stop_checker():
                 websites = get_websites()
+                driver = None
 
-                options = Options()
-                options.add_argument('--headless')
-                options.add_argument('--no-sandbox')
-                options.add_argument('--disable-dev-shm-usage')
-                options.add_argument('--disable-features=VizDisplayCompositor')
- 
-                driver = webdriver.Chrome(chrome_options=options)
+                if len(websites) == 0:
+                    options = Options()
+                    options.add_argument('--headless')
+                    options.add_argument('--no-sandbox')
+                    options.add_argument('--disable-dev-shm-usage')
+                    options.add_argument('--disable-features=VizDisplayCompositor')
+    
+                    driver = webdriver.Chrome(chrome_options=options)
 
-                driver.set_window_size(1920, 1080)
+                    driver.set_window_size(1920, 1080)
+                
                 for website in websites:
-
                     uid = website['id']
                     name = website['name']
                     url = website['url']
 
+                    driver.get(url)
 
                     sleep(1)
+                    
                     driver.save_screenshot('screenshots/ss-%d.png' % (uid))
 
                     r = compare(uid, website['threshold'])
