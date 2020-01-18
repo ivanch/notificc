@@ -50,6 +50,6 @@ Once at the index page, you can start/stop the checker by clicking at its status
 ![Index page](assets/index.png)
 
 ## Development
-1. Run `pip install assets/docker/requirements.txt` to install all the requirements.
+1. Run `pip install -r api/requirements.txt` to install all the requirements.
 2. Go to `web` folder, run `npm install` to install dependencies and `npm start` to start the development server.
 3. Go to `api` folder and run `python app.py` to start the API server.
