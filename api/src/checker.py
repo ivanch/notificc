@@ -1,13 +1,12 @@
 from time import sleep, time
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import TimeoutException
 from PIL import Image
 from PIL import ImageChops
 import sqlite3
 import glob
 import os
 import datetime
+
+from .driver import get_driver
 
 from .functions.config import get_delay
 from .functions.push import send_notification
@@ -88,15 +87,7 @@ def loop(stop_checker):
             
             if (not stop_checker()) and (len(websites) > 0):
                 
-                options = Options()
-                options.add_argument('--headless')
-                options.add_argument('--no-sandbox')
-                options.add_argument('--disable-dev-shm-usage')
-                options.add_argument('--disable-features=VizDisplayCompositor')
-
-                driver = webdriver.Chrome(chrome_options=options)
-
-                driver.set_window_size(1920, 1080)
+                driver = get_driver()
                 
                 for website in websites:
                     uid = website['id']
