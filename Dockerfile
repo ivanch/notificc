@@ -57,9 +57,6 @@ RUN make setup && \
     chmod -R 770 ./ && \
     chown -R www:www ./
 
-# Web server
-COPY --from=builder /web/build /var/www
-
 # Cleaning
 RUN apk del .build-dependencies && \
     rm -rf /var/cache/apk/*
@@ -72,5 +69,8 @@ EXPOSE 443
 VOLUME /api/shared
 
 VOLUME /etc/nginx/certs
+
+# Web server
+COPY --from=builder /web/build /var/www
 
 ENTRYPOINT ["sh", "/exec.sh"]
