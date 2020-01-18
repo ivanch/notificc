@@ -55,6 +55,12 @@ export default class Push extends Component {
                         subscription: pms
                     })
                 })
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response);
+                    if(response['message'] === 'Success')
+                        toast.success('Successfully registered push manager.')
+                })
                 .catch(() => {
                     toast.error('Error while trying to save push details.');
                 });

@@ -22,9 +22,10 @@ def pms_exists(keys):
         return len(results) > 0
 
 # Registers the push subscription information
+# Returns -1 if it already exists, 1 if success
 def create_push_subscription(info):
     if pms_exists(info['keys']):
-        return
+        return -1
 
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
@@ -33,6 +34,8 @@ def create_push_subscription(info):
                         (info['endpoint'], get_base_url(info['endpoint']),
                          info['keys']['p256dh'], info['keys']['auth']))
         conn.commit()
+    
+    return 1
 
 # Returns the base URL for a valid HTTP(S) URL
 # Input: https://youtube.com/watch?v=someid
@@ -107,6 +110,9 @@ def config_update2():
     if not is_token_authorized(body['token']):
         return jsonify(message="Unauthorized"), 401
 
-    create_push_subscription(body['subscription'])
+    status = create_push_subscription(body['subscription'])
+
+    if status == -1:
+        return jsonify(message="Exists"), 200
 
     return jsonify(message="Success"), 200
