@@ -16,7 +16,7 @@
 ## Deploy (Docker)
 ```shell
 docker run --name notificc -d \
-    -m 100m \
+    -m 150m \
     -p 8800:80 \
     -v $PWD/data:/api/shared \
     ivanch/notificc:latest
@@ -25,7 +25,7 @@ docker run --name notificc -d \
 With SSL:
 ```shell
 docker run --name notificc -d \
-    -m 100m \
+    -m 150m \
     -p 8800:80 \
     -v $PWD/data:/api/shared \
     -v /path/to/certs:/etc/nginx/certs \
