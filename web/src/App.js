@@ -39,7 +39,7 @@ export default class App extends Component {
         fetch('/api/status')
         .then(_response => _response.json())
         .then(response => {
-            if(response != null){
+            if(response !== null){
                 this.setState({apiStatus: 'online'});
                 this.setState({checkerStatus: response['checker_status']});
             }else{

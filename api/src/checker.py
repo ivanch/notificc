@@ -84,20 +84,19 @@ def loop(stop_checker):
             start = time() # to "normalize" time
             DELAY = get_delay()
 
-            if not stop_checker():
-                websites = get_websites()
-                driver = None
+            websites = get_websites()
+            
+            if (not stop_checker()) and (len(websites) > 0):
+                
+                options = Options()
+                options.add_argument('--headless')
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-dev-shm-usage')
+                options.add_argument('--disable-features=VizDisplayCompositor')
 
-                if len(websites) == 0:
-                    options = Options()
-                    options.add_argument('--headless')
-                    options.add_argument('--no-sandbox')
-                    options.add_argument('--disable-dev-shm-usage')
-                    options.add_argument('--disable-features=VizDisplayCompositor')
-    
-                    driver = webdriver.Chrome(chrome_options=options)
+                driver = webdriver.Chrome(chrome_options=options)
 
-                    driver.set_window_size(1920, 1080)
+                driver.set_window_size(1920, 1080)
                 
                 for website in websites:
                     uid = website['id']
@@ -106,7 +105,7 @@ def loop(stop_checker):
 
                     driver.get(url)
 
-                    sleep(1)
+                    sleep(2)
                     
                     driver.save_screenshot('screenshots/ss-%d.png' % (uid))
 

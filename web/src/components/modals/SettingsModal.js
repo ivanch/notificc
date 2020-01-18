@@ -34,7 +34,7 @@ export default class SettingsModal extends Component {
         fetch('/api/config')
         .then(_response => _response.json())
         .then(response => {
-            if(response != null){
+            if(response !== null){
                 this.setState({delay: response['delay'],
                                autostart: response['autostart']})
             }

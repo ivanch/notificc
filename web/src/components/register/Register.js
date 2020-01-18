@@ -29,9 +29,7 @@ export default class Register extends Component {
     fetchWebsite = (id) => {
         fetch('/api/website?id=' + id)
         .then(response => response.json())
-        .then(response => {
-            console.log(response);
-            
+        .then(response => {            
             this.setState({ name: response['name'],
                             url: response['url'],
                             thresh: response['thresh']  });
@@ -77,6 +75,7 @@ export default class Register extends Component {
         .then(response => {
             if(response['message'] === 'Success'){
                 this.props.fetchWebsites();
+                this.resetState();
                 toast.success('Success.');
             }else if(response['message'] === 'Exists'){
                 toast.info('Website is already registered!');
@@ -89,7 +88,7 @@ export default class Register extends Component {
         });
     }
 
-    cancelEdit = () => {
+    resetState = () => {
         this.props.setEditing(-1);
         this.setState(initialState);
     }
@@ -163,7 +162,7 @@ export default class Register extends Component {
                         {this.props.editing !== -1 ? (
                             <div className='submit control'>
                                 <button className='button is-danger'
-                                    onClick={this.cancelEdit}>Cancel</button>
+                                    onClick={this.resetState}>Cancel</button>
                             </div>
                         ) : null }
                     </div>

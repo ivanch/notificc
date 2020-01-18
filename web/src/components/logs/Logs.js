@@ -28,7 +28,7 @@ export default class Logs extends Component {
         fetch('/api/config')
         .then(_response => _response.json())
         .then(response => {
-            if(response != null){
+            if(response !== null){
                 this.timer = setInterval(() => this.fetchLogs(), (response['delay']*1000)/2);
             }
         });
@@ -48,7 +48,6 @@ export default class Logs extends Component {
 
     handleRead = (event) => {
         this.setState({background: '#23d160'});
-        console.log(event.target.id)
         fetch('/api/websites/logs', {
             method: 'PUT',
             headers: {
