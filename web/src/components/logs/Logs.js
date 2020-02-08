@@ -23,7 +23,7 @@ export default class Logs extends Component {
         this.fetchLogs();
         this.setupTimer();
     }
-      
+
     setupTimer() {
         fetch('/api/config')
         .then(_response => _response.json())
@@ -58,7 +58,7 @@ export default class Logs extends Component {
                 token:  localStorage.getItem('@notificc/access_token'),
                 id:     event.target.id === 'readAll' ? 'all' :
                             this.state.data[event.target.id]['id'],
-                read:   event.target.id === 'readAll' ? '1' : 
+                read:   event.target.id === 'readAll' ? '1' :
                             this.state.data[event.target.id]['read'] === 0 ? 1 : 0,
             })
         })
@@ -111,12 +111,12 @@ export default class Logs extends Component {
                 </div>
 
                 <div id='content'>
-                    {this.state.data.map((x, index) => 
+                    {this.state.data.map((x, index) =>
                         <div className={'content-line ' + (x['read'] ? '' : 'unread')} key={x['id']}>
                             <span className='icon'>
                                 <i className='fa fa-book'></i>
                             </span>
-                            
+
                             <a href={x['url']}>
                                 {x['name']}
                             </a>
@@ -130,7 +130,7 @@ export default class Logs extends Component {
                                     {this.getDateFormatted(x['time'])}
                                 </span>
 
-                                {x['read'] ? 
+                                {x['read'] ?
                                     <i className='content-control-item far fa-check-circle pointer' title='Mark as unread' id={index} onClick={this.handleRead}></i> :
                                     <i className='content-control-item fas fa-check-circle pointer' title='Mark as read' id={index} onClick={this.handleRead}></i>
                                 }

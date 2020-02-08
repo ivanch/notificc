@@ -27,7 +27,7 @@ stop_checker = True
 def main():
     global stop_checker
     checker_status = 'error' # with error by default
-    
+
     if checker_thread is not None: # if the thread exists
         if not checker_thread.is_alive():
             checker_status = 'offline' # thread died
@@ -37,7 +37,7 @@ def main():
             checker_status = 'online' # all good
 
     response = {'checker_status': checker_status}
-    
+
     return jsonify(response), 200
 
 @app.route('/api/checker', methods=['POST'])

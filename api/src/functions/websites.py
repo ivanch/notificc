@@ -79,7 +79,7 @@ def websites_register():
 
     if not is_token_authorized(json['token']):
         return jsonify(message="Unauthorized"), 401
-    
+
     name = json['name']
     url = json['url']
     threshold = json['threshold']
@@ -92,7 +92,7 @@ def websites_register():
             conn.commit()
 
         return jsonify(message="Success"), 200
-    
+
     return jsonify(message="Exists"), 400
 
 # PUT /api/websites
@@ -105,19 +105,19 @@ def websites_register():
 @websites.route('/api/websites', methods=['PUT'])
 def websites_update():
     json = request.get_json()
-    
+
     if not is_token_authorized(json['token']):
         return jsonify(message="Unauthorized"), 401
-    
+
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
 
         cursor.execute("SELECT enabled FROM urls WHERE id = ?", (json['id'], ))
         result = cursor.fetchone()
-        
+
         if result is None:
             return jsonify(message="Not found"), 404
-        
+
         enabled = result[0]
         enabled = 1 if enabled == 0 else 0
 
@@ -143,16 +143,16 @@ def websites_update():
 @websites.route('/api/website', methods=['PUT'])
 def website_update():
     json = request.get_json()
-    
+
     if not is_token_authorized(json['token']):
         return jsonify(message="Unauthorized"), 401
-    
+
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
 
         cursor.execute("SELECT enabled FROM urls WHERE id = ?", (json['id'], ))
         result = cursor.fetchone()
-        
+
         if result is None:
             return jsonify(message="Not found"), 404
 
@@ -206,7 +206,7 @@ def websitesLogs_get():
 
         for result in results:
             response.append({'id': result[0], 'name': result[1], 'url': result[2], 'title': result[3], 'read': result[4], 'time': result[5]})
-    
+
     return jsonify(response), 200
 
 # PUT /api/websites/logs
@@ -222,7 +222,7 @@ def websitesLogs_update():
 
     if not is_token_authorized(json['token']):
         return jsonify(message="Unauthorized"), 401
-    
+
     with sqlite3.connect('shared/data.db') as conn:
         cursor = conn.cursor()
 

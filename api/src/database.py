@@ -41,7 +41,7 @@ def setup_db():
     # Stores the access tokens
     cursor.execute("CREATE TABLE IF NOT EXISTS tokens (\
             token TEXT NOT NULL PRIMARY KEY);")
-    
+
     # Creates the 'pms' table
     # Stores the push managers subscriptions
     cursor.execute("CREATE TABLE IF NOT EXISTS pms (\
@@ -56,10 +56,10 @@ def setup_db():
         # Inserts the initial (default) configuration into 'config' table
         cursor.execute("INSERT INTO config  (id, auth_pass , autostart, delay) \
                         VALUES              (0 , 'password', 0        , 120);")
-        
+
         conn.commit()
     else: # If database file already exists
-        
+
         # Remove all access tokens
         with sqlite3.connect('shared/data.db') as conn:
             cursor = conn.cursor()

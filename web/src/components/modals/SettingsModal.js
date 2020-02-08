@@ -28,7 +28,7 @@ export default class SettingsModal extends Component {
             this.fetchData();
         }
     }
-      
+
     fetchData() {
         // Fetch delay and autostart
         fetch('/api/config')

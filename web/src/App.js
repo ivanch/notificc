@@ -68,19 +68,19 @@ export default class App extends Component {
     render() {
         return (
             <div className='App'>
-                <StatusBar 
+                <StatusBar
                     apiStatus={this.state.apiStatus}
                     checkerStatus={this.state.checkerStatus}
                     fetchAPI={this.fetchAPI}
                 />
                 <div className='columns is-multiline' style={{'marginTop': '0.5rem'}}>
                     <div className='column is-half'>
-                        <Register 
+                        <Register
                             fetchWebsites={this.fetchWebsites}
                             editing={this.state.editing}
                             setEditing={this.setEditing}
                         />
-                        <Registry 
+                        <Registry
                             websites={this.state.websites}
                             fetchWebsites={this.fetchWebsites}
                             editing={this.state.editing}

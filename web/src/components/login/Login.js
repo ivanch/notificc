@@ -99,7 +99,7 @@ export default class Login extends Component {
                         <h1>Auth</h1>
                         <Tag name='api' content={this.state.apiStatus} color={this.getAPIStatusColor()} />
                     </div>
-                    <form className='field' onSubmit={this.handleLogin}>                        
+                    <form className='field' onSubmit={this.handleLogin}>
                         <label className='label'>Password:</label>
                         <input  className='input'
                                 type='password'

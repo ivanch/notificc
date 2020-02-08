@@ -7,6 +7,7 @@ import os
 import datetime
 
 from .driver import get_driver
+from selenium.common.exceptions import TimeoutException
 
 from .functions.config import get_delay
 from .functions.push import send_notification
@@ -32,7 +33,7 @@ def get_websites():
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM urls")
         results = cursor.fetchall()
-        
+
         for result in results:
             if result[4] == 1: # if the url is enabled
                 urls.append({'id': result[0], 'name': result[1], 'url': result[2], 'threshold': result[3]})
@@ -45,7 +46,7 @@ def compare(index, thresh):
 
     new = Image.open('screenshots/ss-%d.png' % (index))
     old = Image.open('screenshots/old-ss-%d.png' % (index))
-    
+
     diff = ImageChops.difference(old, new)
     if diff.getbbox():
         bbox = diff.getbbox()
@@ -54,7 +55,7 @@ def compare(index, thresh):
         total_diff = ( (bbox[2]*bbox[3])/total_size ) * 100
 
         return total_diff > thresh
-    
+
     return False
 
 # Tries to get the url
@@ -84,11 +85,11 @@ def loop(stop_checker):
             DELAY = get_delay()
 
             websites = get_websites()
-            
+
             if (not stop_checker()) and (len(websites) > 0):
-                
+
                 driver = get_driver()
-                
+
                 for website in websites:
                     uid = website['id']
                     name = website['name']
@@ -97,14 +98,14 @@ def loop(stop_checker):
                     driver.get(url)
 
                     sleep(2)
-                    
+
                     driver.save_screenshot('screenshots/ss-%d.png' % (uid))
 
                     r = compare(uid, website['threshold'])
                     if r: # has changed
                         logWebsite(name, url, driver.title)
                         send_notification(name, uid)
-                    
+
                     os.rename("screenshots/ss-%d.png" % (uid), "screenshots/old-ss-%d.png" % (uid))
 
                 driver.quit()
