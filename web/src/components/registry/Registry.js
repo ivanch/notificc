@@ -66,7 +66,7 @@ export default class Registry extends Component {
                             <span className='icon'>
                                 <i className='fa fa-bookmark'></i>
                             </span>
-                            
+
                             <a href={x['url']}>
                                 {x['name']}
                             </a>

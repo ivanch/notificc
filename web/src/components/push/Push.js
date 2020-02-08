@@ -18,11 +18,11 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 export default class Push extends Component {
-    
+
     componentDidMount() {
         window.Notification.requestPermission().then(perm => {
             if(perm === 'granted'){
-                navigator.serviceWorker.getRegistration(`${process.env.PUBLIC_URL}/sw.js`).then(sw => {                    
+                navigator.serviceWorker.getRegistration(`${process.env.PUBLIC_URL}/sw.js`).then(sw => {
                     fetch('/api/push')
                     .then(_response => _response.json())
                     .then(response => {
@@ -41,7 +41,7 @@ export default class Push extends Component {
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(key)
         };
-        
+
         await sw.pushManager.subscribe(options).then(() => {
             sw.pushManager.getSubscription().then(pms => {
                 fetch('/api/push', {
@@ -57,7 +57,6 @@ export default class Push extends Component {
                 })
                 .then(response => response.json())
                 .then(response => {
-                    console.log(response);
                     if(response['message'] === 'Success')
                         toast.success('Successfully registered push manager.')
                 })
@@ -75,7 +74,7 @@ export default class Push extends Component {
                 })
             }
         });
-        
+
     }
 
     render() {

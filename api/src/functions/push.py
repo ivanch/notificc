@@ -34,7 +34,7 @@ def create_push_subscription(info):
                         (info['endpoint'], get_base_url(info['endpoint']),
                          info['keys']['p256dh'], info['keys']['auth']))
         conn.commit()
-    
+
     return 1
 
 # Returns the base URL for a valid HTTP(S) URL

@@ -29,7 +29,7 @@ export default class Register extends Component {
     fetchWebsite = (id) => {
         fetch('/api/website?id=' + id)
         .then(response => response.json())
-        .then(response => {            
+        .then(response => {
             this.setState({ name: response['name'],
                             url: response['url'],
                             thresh: response['thresh']  });
@@ -50,12 +50,12 @@ export default class Register extends Component {
             });
         }else if(event.target.name === 'name'){
             this.setState({
-                invalidName:   (event.target.value.length === 0 || 
+                invalidName:   (event.target.value.length === 0 ||
                                 event.target.value.length > 24)
             });
         }
     }
-  
+
     handleSubmit = (event) => {
         fetch(this.props.editing === -1 ? '/api/websites' : '/api/website', {
             method: this.props.editing === -1 ? 'POST' : 'PUT',
@@ -94,8 +94,8 @@ export default class Register extends Component {
     }
 
     isValid() {
-        return !(this.state.invalidURL || 
-                this.state.invalidName || 
+        return !(this.state.invalidURL ||
+                this.state.invalidName ||
                 this.state.url === '');
     }
 
@@ -128,7 +128,7 @@ export default class Register extends Component {
                             name='url'
                             placeholder='URL'
                             value={this.state.url}
-                            onChange={this.handleChange}    
+                            onChange={this.handleChange}
                         />
                     </div>
                     <Warning enabled={this.state.invalidURL} text='Invalid URL.' />
@@ -151,7 +151,7 @@ export default class Register extends Component {
                             <label className='label'>{this.state.thresh}%</label>
                         </div>
                     </div>
-                    
+
                     <div className='field is-grouped is-grouped-centered'>
                         <div className='submit control'>
                             <button className='button is-primary'

@@ -12,7 +12,7 @@ import './Switch.css';
         checked
 */
 export default class Switch extends Component {
-    
+
     render(){
         return(
             <div className='switch'>
@@ -27,7 +27,7 @@ export default class Switch extends Component {
                 <label
                     className='switch-label'
                     htmlFor={this.props.id}
-                    title={this.props.title}>    
+                    title={this.props.title}>
                 </label>
             </div>
         )
