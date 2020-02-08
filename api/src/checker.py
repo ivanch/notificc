@@ -7,6 +7,7 @@ import os
 import datetime
 
 from .driver import get_driver
+from selenium.common.exceptions import TimeoutException
 
 from .functions.config import get_delay
 from .functions.push import send_notification
