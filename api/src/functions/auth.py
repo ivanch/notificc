@@ -22,7 +22,7 @@ def is_token_authorized(token):
 
         if result[1] == '0':
             return True
-        
+
         cursor.execute("SELECT * FROM tokens WHERE token = ?;", (token,))
         result = cursor.fetchone()
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Tag.css';
 
 export default class Tag extends Component {
-    
+
     getTagContent() {
         if(this.props.click){
             return <span

@@ -89,7 +89,7 @@ export default class StatusBar extends Component {
                             <Tag name='checker' content={this.props.checkerStatus} color={this.getCheckerStatusColor()} click={this.handleClickChecker}/>
                         </div>
                     </div>
-            
+
                     <div className='level-right'>
                         <div className='level-item'>
                             <button className='button' name='settings' onClick={this.handleClick}>Settings</button>
