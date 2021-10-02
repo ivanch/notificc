@@ -9,6 +9,9 @@
 </p>
 
 ## Features
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3d64fe24485f43c8ba59b036f617ecd2)](https://app.codacy.com/gh/ivanch/notificc?utm_source=github.com&utm_medium=referral&utm_content=ivanch/notificc&utm_campaign=Badge_Grade_Settings)
+
 * Auth Page
 * Push Notifications (allows multiple devices)
 * Website change logs
