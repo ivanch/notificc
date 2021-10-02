@@ -37,8 +37,7 @@ RUN apk add --virtual .build-dependencies \
 
 # Python Requirements
 COPY api/requirements.txt requirements.txt
-RUN pip install -r requirements.txt && \
-    mkdir /run/nginx
+RUN pip install -r requirements.txt
 
 # Config
 COPY assets/docker/nginx* /etc/nginx/
