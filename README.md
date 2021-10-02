@@ -2,9 +2,9 @@
   <p align="center">NotificC - Get notified when a website changes</p>
 </h1>
 <p align="center">
-  <a href="https://travis-ci.com/ivanch/notificc"><img src="https://travis-ci.com/ivanch/notificc.svg?token=EiwZJLp9isLBJ89qdmD6&branch=master"/></a>
-  <a href="https://hub.docker.com/r/ivanch/notificc"><img src="https://images.microbadger.com/badges/image/ivanch/notificc.svg"/></a>
-  <a href="https://app.codacy.com/manual/joseivanchechen/notificc/dashboard"><img alt="Codacy grade" src="https://img.shields.io/codacy/grade/4ab5b78493614268a7d6aa73ea41bcb6"></a>
+  <a href="https://github.com/ivanch/notificc/actions/workflows/main.yml"><img src="https://github.com/ivanch/notificc/actions/workflows/main.yml/badge.svg"/></a>
+  <a href="https://hub.docker.com/r/ivanch/notificc"><img src="https://img.shields.io/docker/image-size/ivanch/notificc"/></a>
+  <a href="https://www.codacy.com/gh/ivanch/notificc/dashboard"><img alt="Codacy grade" src="https://app.codacy.com/project/badge/Grade/4ab5b78493614268a7d6aa73ea41bcb6"></a>
   <a href="https://lgtm.com/projects/g/ivanch/notificc/"><img alt="LGTM Alerts" src="https://img.shields.io/lgtm/alerts/github/ivanch/notificc"></a>
 </p>
 
