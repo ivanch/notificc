@@ -1,13 +1,13 @@
 # dependencies
-web/node_modules
-web/.pnp
-web/.pnp.js
+**/node_modules
+**/.pnp
+**/.pnp.js
 
 # testing
-web/coverage
+**/coverage
 
 # production
-web/build
+**/build
 
 # misc
 .DS_Store
@@ -23,12 +23,12 @@ yarn-debug.log*
 yarn-error.log*
 
 # API related
-api/**/*.db
-api/**/__pycache__
-api/**/*.log
-api/**/*.sock
-api/screenshots
-api/shared/**
-api/.pytest*
-api/keys/**
+**/*.db
+**/__pycache__
+**/*.log
+**/*.sock
+**/screenshots
+**/shared/*
+**/.pytest*
+**/keys/*
 data
